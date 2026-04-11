@@ -1,0 +1,426 @@
+方法概览
+
+现在 RFunipassLab 的调优方法，本质上是一个：
+
+以 pass 序列为搜索对象
+以随机森林作为代理模型
+以 EI 作为采集函数
+以遗传算法在代理模型上做候选生成
+以 validation 选最终序列
+最后再做一次贪心消融压缩
+的“实验级序列调优框架”。
+
+核心主流程在：
+
+RFunipassLab/boca_exp/runner.py:41
+RFunipassLab/boca_exp/search.py:159
+RFunipassLab/boca_exp/selection.py:105
+一、现在的调优方法到底怎么工作
+
+1. 不是调单个 pass，而是调一整条 pass 序列
+
+搜索对象不是“某个 pass 开/关”，而是一个变长、有顺序、可重复的 pass 序列。
+这比传统 bit-vector 配置更接近真实 LLVM pipeline。
+对应代码：
+RFunipassLab/boca_exp/operators.py:13
+RFunipassLab/boca_exp/features.py:13
+这意味着当前方法天然允许：
+
+pass 顺序变化
+pass 重复使用
+module / function / cgscc / loop 级 pass 混合出现
+这点是它和很多早期“配置型 pass tuning”方法最大的不同。
+
+2. 初始搜索不是从空白开始，而是从历史好序列出发
+数据来自 tuning_results.csv 和 Step3_EnumeratedPairs.csv：
+
+tuning_results.csv 提供：
+程序路径
+历史 best sequence
+Step3_EnumeratedPairs.csv 提供：
+pass 协同关系图
+对应代码：
+
+RFunipassLab/boca_exp/data.py:34
+RFunipassLab/boca_exp/data.py:117
+RFunipassLab/boca_exp/data.py:171
+具体做法是：
+
+先从 CSV 里读取所有有效样本
+对程序去重、对序列去重
+随机抽训练程序集和测试程序集
+初始 seed 序列只从训练集对应的 best sequence 中抽
+这一步的目的，是让 BO/GA 从“有经验的次优解附近”开始，而不是完全随机瞎搜。
+
+3. 用协同图构造 pass 词表和先验结构
+系统会把：
+
+历史 seed 序列里出现过的 pass
+synergy CSV 里出现过的 pass
+合并成统一词表。
+
+对应代码：
+
+RFunipassLab/boca_exp/data.py:219
+同时会构造：
+
+synergy_graph
+synergy_edges
+synergy_self
+含义是：
+
+哪些 pass 放在另一个 pass 前面通常更好
+哪些 pass 自身重复使用可能有益
+这一步相当于把“领域知识”显式注入搜索。
+
+4. 把训练程序再切成 search_train 和 validation
+当前不是直接在整个训练集上选最终序列，而是先切分：
+
+search_train：给 BO/GA 迭代搜索用
+validation：最后选“通用序列”用
+对应代码：
+
+RFunipassLab/boca_exp/data.py:248
+RFunipassLab/boca_exp/runner.py:84
+这是一个很重要的设计：
+
+surrogate 的学习和采样决策只看 search_train
+模型选择阶段看 validation
+这比“直接在训练集上选最好序列”更接近机器学习里的训练/验证分离。
+
+5. 所有评价都相对 -Oz 做归一化
+每个程序先算一个 -Oz 指令数基准，再拿候选序列去比较。
+
+对应代码：
+
+RFunipassLab/boca_exp/data.py:284
+RFunipassLab/boca_exp/objective.py:32
+评价指标主要是：
+
+mean_norm：平均归一化指令数
+median_norm
+worsen_rate：比 -Oz 更差的比例
+improved/tied/worsened
+最后把目标标量化成：
+
+objective = mean_norm + OBJ_WORSEN_WEIGHT * worsen_rate
+对应代码：
+
+RFunipassLab/boca_exp/objective.py:13
+也就是说，当前方法不是纯优化平均值，而是：
+
+平均效果要好
+退化样本不能太多
+6. 随机森林并不是直接看 pass 名字，而是看序列特征
+当前 RF 的输入不是原始字符串序列，而是手工构造的固定维特征。
+
+对应代码：
+
+RFunipassLab/boca_exp/features.py:13
+特征包括五类：
+
+pass 频率
+协同边满足向量
+协同满足率
+序列长度
+每个 pass 的首次出现位置
+总维度是：
+
+2|V| + |E| + 2
+也就是说，这个方法不是端到端模型，而是典型的：
+
+结构化人工特征 + 传统 surrogate
+7. 代理模型是随机森林，采集函数是 EI
+每一轮 BO 会做：
+
+用已评估序列训练 RandomForestRegressor
+用森林中各棵树的预测方差近似不确定性
+用 Expected Improvement 选下一条值得真实评估的序列
+对应代码：
+
+RFunipassLab/boca_exp/search.py:168
+RFunipassLab/boca_exp/objective.py:135
+所以严格讲，它不是 GP-BO，而是：
+
+RF surrogate-based Bayesian optimization
+8. 候选序列不是直接枚举，而是用 GA 在 surrogate 上搜索
+这一层是当前方法最有特点的地方。
+
+GA 不在真实程序上跑，而是在 RF surrogate 上跑：
+
+先用 RF 快速预测大量候选
+再用 EI 排序
+再把最值得的那条拿去做真实 LLVM 评估
+对应代码：
+
+RFunipassLab/boca_exp/search.py:33
+RFunipassLab/boca_exp/search.py:159
+GA 的交叉和变异都是“序列级”的，不是 bit 翻转：
+
+单点交叉
+子序列插入
+联合拼接
+协同引导合并
+精英频率采样
+插入 / 删除 / 交换 / 替换 / 协同重排
+对应代码：
+
+RFunipassLab/boca_exp/operators.py:13
+RFunipassLab/boca_exp/operators.py:100
+RFunipassLab/boca_exp/operators.py:129
+RFunipassLab/boca_exp/operators.py:185
+这说明当前方法已经不是“传统 BO 只在连续空间做优化”，而是一个：
+
+BO + EA 的混合序列搜索框架
+9. 最终结果不是直接拿 search_best，而是重新选
+当前方法区分三种“好”：
+
+search_best：在 search_train 上 BO 目标最小
+validation_best：在 validation 上更泛化
+final_seq：最后选择并消融后的对外结果
+最终排序规则在：
+
+RFunipassLab/boca_exp/selection.py:16
+大体是：
+
+先看 validation 上的 objective
+再看 validation 的 mean
+再看 validation 的 worsen_rate
+再偏好更短序列
+最后再看 train objective
+这实际上已经体现出“通用性优先于训练集最优”。
+
+10. 结尾还会做一次贪心消融
+这是一个非常实用的工程设计。
+
+做法是：
+
+从后往前尝试删每个 pass
+如果删掉后 objective 不变或更好，就永久删除
+对应代码：
+
+RFunipassLab/boca_exp/selection.py:105
+这一步不是搜索主过程的一部分，而是后处理。
+它的意义是：
+
+去冗余
+让最终序列更短
+提高可解释性
+更适合论文展示
+二、这套方法的优点
+
+1. 搜索对象定义得更对
+最大的优点是：
+
+它搜索的是“真实 pass 序列”
+而不是简化成无序的 pass 子集
+这让它能够表达：
+
+顺序效应
+重复效应
+阶段性效应
+这是非常符合编译器优化本质的。
+
+2. 利用了已有经验，而不是完全冷启动
+seed 序列来自历史 best sequence，synergy 图来自已有协同对。
+
+优点是：
+
+初始点质量高
+搜索更快进入有效区域
+比完全随机搜索更省预算
+对于实验资源有限的情况，这非常重要。
+
+3. 把领域知识显式写进了搜索过程
+协同图不仅用于特征，也用于交叉/重排算子。
+
+这相当于把“编译器知识”注入到了搜索里，而不是完全黑箱。
+
+优点是：
+
+候选更像“编译器工程师会写出的序列”
+减少纯随机无意义组合
+4. 训练/验证分离比原始做法更科学
+这一点是当前 Lab 版本相对很多原始实验脚本的明显进步。
+
+它避免了：
+
+直接按训练集最优序列对外汇报
+把 search overfitting 误当“通用序列”
+对于论文来说，这一点也更容易自圆其说。
+
+5. 多目标目标函数比单纯平均值更稳
+如果只优化 mean_norm，很容易得到：
+
+对大多数程序好
+但对少数程序灾难性退化
+现在至少加入了 worsen_rate，这已经比纯平均值更接近“通用优化”的含义。
+
+6. RF + EI + GA 的组合很实用
+这个组合的优点是平衡得不错：
+
+RF：训练快、对人工特征友好
+EI：有探索/利用平衡
+GA：适合离散、变长、非规则序列空间
+换句话说，这套方法不是最理论优雅的，但很适合实验型框架。
+
+7. 后处理消融非常加分
+它能显著减少最终序列长度，提升解释性。
+
+这在研究里很重要，因为你最后需要回答的不只是：
+
+“什么序列效果好？”
+还包括：
+
+“为什么它好？”
+“里面哪些 pass 真正关键？”
+三、这套方法的缺点
+
+1. 目标函数仍然太简单
+现在的目标只有：
+
+mean_norm
+worsen_rate
+没有显式考虑：
+
+crash_rate
+worst-case tail risk
+sequence complexity
+compile-time cost
+这意味着它仍然是一个“偏均值导向”的优化器，而不是严格的“鲁棒通用序列”优化器。
+
+2. crash 现在只是被当成坏样本，不是硬约束
+从实现上看，opt 失败后：
+
+当前样本记作 ratio=inf
+最终只体现在 worsen_rate 和均值上
+对应：
+
+RFunipassLab/boca_exp/objective.py:81
+这会导致：
+
+会崩溃的序列不一定被彻底淘汰
+编译器稳定性没有被当成第一优先级
+从“通用 LLVM pass 序列”的角度看，这是一个很大的弱点。
+
+3. 特征虽然比 bit-vector 强，但仍然比较粗糙
+现在的特征只建模了：
+
+频率
+是否满足协同边
+首次出现位置
+但它没有真正建模：
+
+pass family 的阶段结构
+更高阶的局部 motif
+pass manager 的层级合法性
+多次重复出现之间的上下文差异
+所以 RF 看到的仍然是一个比较粗粒度的近似世界。
+
+4. synergy 图是静态正先验，容易过度引导
+它默认“协同边越多越好”。
+
+但真实情况是：
+
+有些正协同只在某些目标/架构/IR 上成立
+有些组合会触发 crash 或负迁移
+synergy 可能是条件性的，不是普遍成立的
+所以当前方法容易把“历史有益关系”过度泛化成“普遍有益关系”。
+
+5. GA 会天然偏向长序列和重复堆叠
+从算子设计上看：
+
+union concat
+subsequence insert
+frequency sampling
+synergy guided merge
+都比较容易让序列越变越长。
+
+虽然有 delete mutation 和后处理消融，
+但主搜索阶段仍明显有“堆 pass”倾向。
+
+结果就是：
+
+surrogate 容易高估超长序列
+最终再靠消融把冗余删掉
+说明搜索阶段本身还不够干净
+6. surrogate 的不确定性建模并不强
+EI 是建立在“均值 + 方差”基础上的，
+但这里的方差只是森林树之间的预测分歧。
+
+这和真正的概率模型不一样。
+
+所以：
+
+EI 的数值未必真的可靠
+在复杂离散序列空间里，探索方向可能并不稳
+7. 最终选择虽然更合理，但仍可能对单一 validation split 过拟合
+现在 validation 只切一次，随机种子固定。
+
+这有好处：可复现
+但也有问题：
+
+结论依赖这一刀怎么切
+如果 validation 恰好偏某类程序，最终通用序列会被带偏
+所以它更像“单次 hold-out 选择”，不是充分稳健的模型选择。
+
+8. 后处理消融是贪心的，不一定全局最优
+它只做：
+
+从后往前
+单 pass 删除
+不变坏就删
+这很实用，但局限明显：
+
+两个 pass 单独删都会变差，但一起删可能更好
+只能删，不能换顺序
+只能局部优化，不是全局重构
+所以它更像压缩技巧，不是严格的二阶段优化。
+
+9. 计算代价依然很高
+虽然有 surrogate，但每次真实评估仍然要：
+
+对一条候选序列
+在很多程序上实际跑 opt
+再算指令数
+这决定了：
+
+搜索仍然昂贵
+预算非常有限
+方法对缓存、崩溃处理、去重策略很敏感
+四、用一句话概括这套方法
+
+如果让我用一句话总结：
+
+它是一种“带协同知识先验的、基于随机森林代理模型和遗传算法的 LLVM pass 序列搜索方法”，重点不是找单程序最优序列，而是找在一组程序上相对通用的序列。
+它的优点是：
+
+设计合理
+有编译器意识
+比简单黑箱搜索更聪明
+比只看平均值的方法更稳
+它的缺点是：
+
+稳定性建模还不够强
+搜索空间仍然太松
+surrogate 近似比较粗
+对 crash、负协同、超长冗余的处理还不够系统
+五、从研究角度怎么看它当前所处的位置
+
+我会把它定位成：
+
+一个非常不错的实验原型
+已经具备论文雏形
+但距离“成熟的通用 pass 序列优化方法”还有几步关键补强
+最缺的不是“再调几个超参数”，而是三类能力：
+
+稳定性建模
+风险感知目标
+更结构化的序列表示
+如果你愿意，我下一步可以继续帮你把这套“当前方法”整理成一段论文里的 Method 部分草稿，包括：
+
+问题定义
+算法流程
+目标函数
+surrogate + GA 细节
+优缺点如何在论文里表述得更自然

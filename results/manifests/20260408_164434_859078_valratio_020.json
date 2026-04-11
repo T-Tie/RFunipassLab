@@ -1,0 +1,41 @@
+{
+  "run_id": "20260408_164434_859078_valratio_020",
+  "name": "valratio_020",
+  "group": "validation_split",
+  "description": "减小验证集占比，观察搜索样本更充足时的表现。",
+  "changed": "VAL_RATIO=0.2",
+  "overrides": {
+    "VAL_RATIO": "0.2"
+  },
+  "control_env": {
+    "RUNS": "1",
+    "TRAIN_TOPK": "20",
+    "TEST_TOPK": "40",
+    "SEED_TOPK": "20",
+    "MIN_VAL_PROGRAMS": "4",
+    "ITERS": "6",
+    "VAL_RATIO": "0.2",
+    "OBJ_WORSEN_W": "0.15",
+    "GA_POP": "30",
+    "GA_GEN": "3",
+    "GA_MUT": "0.8",
+    "GA_ELITE": "0.1",
+    "GA_TOUR": "3",
+    "MAX_SEQ_LEN": "60",
+    "RNUM": "256",
+    "DECAY": "0.5",
+    "SCALE": "10",
+    "OFFSET": "20"
+  },
+  "command": [
+    "/root/miniconda3/bin/python3",
+    "/root/exp/RFunipass/boca.py"
+  ],
+  "cwd": "/root/exp/RFunipass",
+  "target_script": "/root/exp/RFunipass/boca.py",
+  "log_path": "/root/exp/RFunipassLab/results/logs/20260408_164434_859078_valratio_020.log",
+  "started_at": "2026-04-08T16:44:34",
+  "finished_at": "2026-04-08T16:44:34",
+  "wall_runtime_s": 0.0,
+  "exit_code": 0
+}

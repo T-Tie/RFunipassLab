@@ -1,0 +1,49 @@
+{
+  "run_id": "20260409_150335_979076_orig_boca",
+  "name": "orig_boca",
+  "group": "reproduce",
+  "description": "复现原始 RFunipass/boca.py 默认实验参数。",
+  "changed": "GA_GEN=5, GA_POP=200, ITERS=200, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5",
+  "overrides": {
+    "TRAIN_TOPK": "200",
+    "TEST_TOPK": "50",
+    "SEED_TOPK": "0",
+    "MIN_VAL_PROGRAMS": "5",
+    "ITERS": "200",
+    "VAL_RATIO": "0.5",
+    "GA_POP": "200",
+    "GA_GEN": "5",
+    "MAX_SEQ_LEN": "120"
+  },
+  "control_env": {
+    "RUNS": "1",
+    "TRAIN_TOPK": "200",
+    "TEST_TOPK": "50",
+    "SEED_TOPK": "0",
+    "MIN_VAL_PROGRAMS": "5",
+    "ITERS": "200",
+    "VAL_RATIO": "0.5",
+    "OBJ_WORSEN_W": "0.15",
+    "GA_POP": "200",
+    "GA_GEN": "5",
+    "GA_MUT": "0.8",
+    "GA_ELITE": "0.1",
+    "GA_TOUR": "3",
+    "MAX_SEQ_LEN": "120",
+    "RNUM": "256",
+    "DECAY": "0.5",
+    "SCALE": "10",
+    "OFFSET": "20"
+  },
+  "command": [
+    "/root/miniconda3/envs/RL/bin/python3",
+    "/root/exp/RFunipassLab/boca.py"
+  ],
+  "cwd": "/root/exp/RFunipassLab",
+  "target_script": "/root/exp/RFunipassLab/boca.py",
+  "log_path": "/root/exp/RFunipassLab/results/logs/20260409_150335_979076_orig_boca.log",
+  "started_at": "2026-04-09T15:03:35",
+  "finished_at": "2026-04-09T15:03:36",
+  "wall_runtime_s": 0.490576,
+  "exit_code": 1
+}

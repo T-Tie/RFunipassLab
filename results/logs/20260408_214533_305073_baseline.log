@@ -1,0 +1,90 @@
+# run_id: 20260408_214533_305073_baseline
+# name: baseline
+# group: baseline
+# description: 参考基线配置，不覆盖任何默认参数。
+# changed: baseline
+# started_at: 2026-04-08T21:45:33
+# control_env:
+#   DECAY=0.5
+#   GA_ELITE=0.1
+#   GA_GEN=3
+#   GA_MUT=0.8
+#   GA_POP=30
+#   GA_TOUR=3
+#   ITERS=6
+#   MAX_SEQ_LEN=60
+#   MIN_VAL_PROGRAMS=4
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   RNUM=256
+#   RUNS=1
+#   SCALE=10
+#   SEED_TOPK=20
+#   TEST_TOPK=40
+#   TRAIN_TOPK=20
+#   VAL_RATIO=0.3
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       20
+Loaded initial seed seqs:    15
+Loaded test programs:        40
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'function(dse)', 'module(globalopt)', 'module(attributor)', 'cgscc(attributor-cgscc)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(dce)', 'function(newgvn)', 'function(instsimplify)', 'function(mem2reg)', 'function(jump-threading)', 'function(gvn-hoist)', 'function(gvn-sink)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+Synergy edges: 176
+Self-loop passes: {'function(newgvn)', 'cgscc(attributor-cgscc)', 'module(attributor)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+输入程序数:    20
+输入次优序列数: 15
+测试程序数:    40
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  60
+RF 特征维度:   216
+词表: ['module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'function(dse)', 'module(globalopt)', 'module(attributor)', 'cgscc(attributor-cgscc)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(dce)', 'function(newgvn)', 'function(instsimplify)', 'function(mem2reg)', 'function(jump-threading)', 'function(gvn-hoist)', 'function(gvn-sink)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+多目标权重:    mean=1.0, worsen=0.15
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 14
+  validation 程序数:   6
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 15 条）...
+
+[Step 4] 开始贝叶斯优化（6 轮）...
+Traceback (most recent call last):
+  File "/root/exp/RFunipassLab/boca.py", line 25, in <module>
+    raise SystemExit(cli_main())
+                     ~~~~~~~~^^
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 359, in cli_main
+    run_result = main(
+        programs,
+    ...<2 lines>...
+        topn=top_n,
+    )
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 146, in main
+    new_seq, ei_val = get_nd_solutions(
+                      ~~~~~~~~~~~~~~~~^
+        evaluated_sequences, evaluated_scores, search_best_objective, rnum, suboptimal_sequences
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/root/exp/RFunipassLab/boca_exp/search.py", line 179, in get_nd_solutions
+    candidates = ga_search(
+        evaluated_sequences, evaluated_scores, model, eta,
+        ga_pop, GA_GENERATIONS, init_sequences
+    )
+  File "/root/exp/RFunipassLab/boca_exp/search.py", line 129, in ga_search
+    child = xover_frequency_sampling(elite_sequences)
+  File "/root/exp/RFunipassLab/boca_exp/operators.py", line 116, in xover_frequency_sampling
+    avg_len = max(1, int(np.mean([len(s) for s in elite_sequences])))
+                         ^^
+NameError: name 'np' is not defined

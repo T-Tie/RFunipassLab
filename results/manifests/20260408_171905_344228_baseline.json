@@ -1,0 +1,39 @@
+{
+  "run_id": "20260408_171905_344228_baseline",
+  "name": "baseline",
+  "group": "baseline",
+  "description": "参考基线配置，不覆盖任何默认参数。",
+  "changed": "baseline",
+  "overrides": {},
+  "control_env": {
+    "RUNS": "1",
+    "TRAIN_TOPK": "20",
+    "TEST_TOPK": "40",
+    "SEED_TOPK": "20",
+    "MIN_VAL_PROGRAMS": "4",
+    "ITERS": "6",
+    "VAL_RATIO": "0.3",
+    "OBJ_WORSEN_W": "0.15",
+    "GA_POP": "30",
+    "GA_GEN": "3",
+    "GA_MUT": "0.8",
+    "GA_ELITE": "0.1",
+    "GA_TOUR": "3",
+    "MAX_SEQ_LEN": "60",
+    "RNUM": "256",
+    "DECAY": "0.5",
+    "SCALE": "10",
+    "OFFSET": "20"
+  },
+  "command": [
+    "/root/miniconda3/bin/python3",
+    "/root/exp/RFunipassLab/boca.py"
+  ],
+  "cwd": "/root/exp/RFunipassLab",
+  "target_script": "/root/exp/RFunipassLab/boca.py",
+  "log_path": "/root/exp/RFunipassLab/results/logs/20260408_171905_344228_baseline.log",
+  "started_at": "2026-04-08T17:19:05",
+  "finished_at": "2026-04-08T17:19:05",
+  "wall_runtime_s": 0.0,
+  "exit_code": 0
+}

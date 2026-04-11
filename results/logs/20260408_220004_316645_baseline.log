@@ -1,0 +1,117 @@
+# run_id: 20260408_220004_316645_baseline
+# name: baseline
+# group: baseline
+# description: 参考基线配置，不覆盖任何默认参数。
+# changed: baseline
+# started_at: 2026-04-08T22:00:04
+# control_env:
+#   DECAY=0.5
+#   GA_ELITE=0.1
+#   GA_GEN=3
+#   GA_MUT=0.8
+#   GA_POP=30
+#   GA_TOUR=3
+#   ITERS=6
+#   MAX_SEQ_LEN=60
+#   MIN_VAL_PROGRAMS=4
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   RNUM=256
+#   RUNS=1
+#   SCALE=10
+#   SEED_TOPK=20
+#   TEST_TOPK=40
+#   TRAIN_TOPK=20
+#   VAL_RATIO=0.3
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       20
+Loaded initial seed seqs:    15
+Loaded test programs:        40
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'function(dse)', 'module(globalopt)', 'module(attributor)', 'cgscc(attributor-cgscc)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(dce)', 'function(newgvn)', 'function(instsimplify)', 'function(mem2reg)', 'function(jump-threading)', 'function(gvn-hoist)', 'function(gvn-sink)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+Synergy edges: 176
+Self-loop passes: {'module(attributor)', 'cgscc(attributor-cgscc)', 'function(newgvn)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+输入程序数:    20
+输入次优序列数: 15
+测试程序数:    40
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  60
+RF 特征维度:   216
+词表: ['module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'function(dse)', 'module(globalopt)', 'module(attributor)', 'cgscc(attributor-cgscc)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(dce)', 'function(newgvn)', 'function(instsimplify)', 'function(mem2reg)', 'function(jump-threading)', 'function(gvn-hoist)', 'function(gvn-sink)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+多目标权重:    mean=1.0, worsen=0.15
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 14
+  validation 程序数:   6
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 15 条）...
+
+[Step 4] 开始贝叶斯优化（6 轮）...
+GA search time: 0.69s, candidates: 286
+  [iter   1/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=59  syn_rate=0.59  mean=1.0000  worsen=0.00%
+GA search time: 0.65s, candidates: 286
+  [iter   2/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=14  syn_rate=0.03  mean=1.0000  worsen=0.00%
+GA search time: 0.71s, candidates: 286
+  [iter   3/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=41  syn_rate=0.62  mean=1.0000  worsen=0.00%
+GA search time: 0.77s, candidates: 286
+  [iter   4/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=45  syn_rate=0.89  mean=1.0000  worsen=0.00%
+GA search time: 0.65s, candidates: 286
+  [iter   5/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=22  syn_rate=0.58  mean=1.0000  worsen=0.00%
+GA search time: 0.73s, candidates: 286
+  [iter   6/6] search_obj=1.0000  search_best=1.0000  validation_best=1.0000  EI=0.0000  rnum=256.0  len=20  syn_rate=0.35  mean=1.0000  worsen=0.00%
+
+[Step 5] 按 validation 选择最终通用序列...
+  选择结果:
+    search_train_obj=1.0000, search_train_mean=1.0000, search_train_worsen=0.00%
+    validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%
+
+[Step 6] 在 validation 上执行消融后处理...
+
+[Ablation-validation] 初始序列长度: 6, objective: 1.0000, mean_norm: 1.0000, worsen_rate: 0.00%
+  移除 [5] function(newgvn): objective 1.0000, mean_norm 1.0000, worsen_rate 0.00% (保留移除)
+  移除 [4] module(scc-oz-module-inliner): objective 1.0000, mean_norm 1.0000, worsen_rate 0.00% (保留移除)
+  移除 [3] module(elim-avail-extern): objective 1.0000, mean_norm 1.0000, worsen_rate 0.00% (保留移除)
+  移除 [2] module(globalopt): objective 1.0000, mean_norm 1.0000, worsen_rate 0.00% (保留移除)
+  移除 [1] cgscc(attributor-cgscc): objective 0.7914, mean_norm 0.7914, worsen_rate 0.00% (保留移除)
+[Ablation-validation] 最终序列长度: 1, objective: 0.7914, mean_norm: 0.7914, worsen_rate: 0.00%, 移除了 5 个 pass
+  消融有效: 6 → 1 passes, validation_objective: 1.0000 → 0.7914
+
+最终通用 pass 序列（1 个 pass, syn_rate=0.00）:
+  module(elim-avail-extern)
+  search_train_obj=0.8476, search_train_mean=0.8476, search_train_worsen=0.00%
+  validation_obj=0.7914, validation_mean=0.7914, validation_worsen=0.00%
+  test_obj=0.9275, test_mean=0.9275, test_worsen=0.00%
+
+Top-5 最佳序列（按 validation 多目标 objective 升序）:
+  #1: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, train_obj=1.0000, train_mean=1.0000, len=6, syn_rate=0.06, test_obj=1.0000, test_mean=1.0000, test_worsen=0.00%
+     module(elim-avail-extern) → cgscc(attributor-cgscc) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn)
+  #2: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, train_obj=1.0000, train_mean=1.0000, len=6, syn_rate=0.08, test_obj=1.0000, test_mean=1.0000, test_worsen=0.00%
+     module(scc-oz-module-inliner) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(iroutliner) → module(attributor) → function(newgvn)
+  #3: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, train_obj=1.0000, train_mean=1.0000, len=9, syn_rate=0.15, test_obj=1.0000, test_mean=1.0000, test_worsen=0.00%
+     module(elim-avail-extern) → module(scc-oz-module-inliner) → function(instsimplify) → function(memcpyopt) → function(newgvn) → function(reassociate) → function(jump-threading) → module(globalopt) → function(gvn-sink)
+  #4: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, train_obj=1.0000, train_mean=1.0000, len=11, syn_rate=0.14, test_obj=1.0000, test_mean=1.0000, test_worsen=0.00%
+     module(attributor) → module(scc-oz-module-inliner) → module(attributor) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(memcpyopt) → function(instsimplify) → function(jump-threading) → module(globalopt) → function(mem2reg)
+  #5: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, train_obj=1.0000, train_mean=1.0000, len=12, syn_rate=0.22, test_obj=1.0000, test_mean=1.0000, test_worsen=0.00%
+     module(elim-avail-extern) → module(globalopt) → module(attributor) → function(dse) → module(iroutliner) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(reassociate) → function(gvn-hoist) → function(memcpyopt)
+
+============================================================
+所有轮次中最优 validation objective: 0.7914
+最优通用 pass 序列 (1 passes):
+  module(elim-avail-extern)
+  search_train: obj=0.8476, mean=0.8476, worsen=0.00%
+  validation:   obj=0.7914, mean=0.7914, worsen=0.00%
+  test:         obj=0.9275, mean=0.9275, worsen=0.00%
+总运行时间: 12.69 秒
