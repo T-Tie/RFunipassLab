@@ -33,14 +33,24 @@ INITIAL_SEED_TOPK = int(os.environ.get('SEED_TOPK', 0))
 OBJ_WORSEN_WEIGHT = float(os.environ.get('OBJ_WORSEN_W', 0.15))
 
 # 特征编码模式
-#
-# 目前保留两种模式：
-# - full: 原始完整版特征，尽量保留更多顺序/协同细节
-# - lite: 实验版轻量特征，用更少维度表达序列结构
-#
-# 这里故意只用一个简单字符串开关，不引入额外配置系统，
-# 这样做消融实验时最直接。
 FEATURE_MODE = os.environ.get('FEATURE_MODE', 'full').strip().lower()
+
+# 目标与数据池模式
+OBJECTIVE_KIND = os.environ.get('OBJECTIVE_KIND', 'instrcount').strip().lower()
+PROGRAM_POOL_KIND = os.environ.get('PROGRAM_POOL_KIND', 'auto').strip().lower()
 
 # LLVM 工具路径
 llvm_tools_path = os.environ.get('LLVM_TOOLS_PATH', '/root/opt/rv64gc_llvm_21/bin')
+BACKEND_OPT_LEVEL = os.environ.get('BACKEND_OPT_LEVEL', '-O0').strip()
+
+# runtime 目标相关参数
+RUNTIME_TIMEOUT_SEC = float(os.environ.get('RUNTIME_TIMEOUT_SEC', 2.0))
+RUNTIME_SAMPLES = int(os.environ.get('RUNTIME_SAMPLES', 5))
+RUNTIME_TARGET_SAMPLE_MS = float(os.environ.get('RUNTIME_TARGET_SAMPLE_MS', 30.0))
+RUNTIME_MAX_VARIANCE_PCT = float(os.environ.get('RUNTIME_MAX_VARIANCE_PCT', 10.0))
+RUNTIME_EVAL_MAX_VARIANCE_PCT = float(os.environ.get('RUNTIME_EVAL_MAX_VARIANCE_PCT', 15.0))
+RUNTIME_MAX_INNER_REPEATS = int(os.environ.get('RUNTIME_MAX_INNER_REPEATS', 64))
+RUNTIME_REQUIRED_ROWS = int(os.environ.get('RUNTIME_REQUIRED_ROWS', 0))
+REBUILD_RUNTIME_MANIFEST = os.environ.get('REBUILD_RUNTIME_MANIFEST', '').strip().lower() in {
+    '1', 'true', 'yes', 'on'
+}

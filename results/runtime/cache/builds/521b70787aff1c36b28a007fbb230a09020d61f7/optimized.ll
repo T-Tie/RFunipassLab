@@ -1,0 +1,216 @@
+; ModuleID = '<stdin>'
+source_filename = "/tmp/tmpu7l11tvx.cpp"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+module asm ".globl _ZSt21ios_base_library_initv"
+
+@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+
+; Function Attrs: mustprogress norecurse uwtable
+define dso_local noundef i32 @main(i32 noundef %argc, ptr nofree noundef readnone captures(none) %argv) local_unnamed_addr #0 {
+entry:
+  %n = alloca i32, align 4
+  %i = alloca i32, align 4
+  %j = alloca i32, align 4
+  %x1 = alloca i32, align 4
+  %x2 = alloca i32, align 4
+  %y1 = alloca i32, align 4
+  %y2 = alloca i32, align 4
+  %a = alloca [1000 x [1000 x i32]], align 16
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %n) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %i) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %j) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %x1) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %x2) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %y1) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %y2) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4000000, ptr noundef %a) #4
+  %call = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef @.str, ptr noundef align 4 %n)
+  store i32 1, ptr %i, align 4, !tbaa !5
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc7, %entry
+  %0 = load i32, ptr %i, align 4, !tbaa !5
+  %1 = load i32, ptr %n, align 4, !tbaa !5
+  %cmp = icmp sle i32 %0, %1
+  br i1 %cmp, label %for.body, label %for.end9
+
+for.body:                                         ; preds = %for.cond
+  store i32 1, ptr %j, align 4, !tbaa !5
+  br label %for.cond1
+
+for.cond1:                                        ; preds = %for.inc, %for.body
+  %2 = load i32, ptr %j, align 4, !tbaa !5
+  %3 = load i32, ptr %n, align 4, !tbaa !5
+  %cmp2 = icmp sle i32 %2, %3
+  br i1 %cmp2, label %for.inc, label %for.inc7
+
+for.inc:                                          ; preds = %for.cond1
+  %idxprom = sext i32 %0 to i64
+  %arrayidx = getelementptr inbounds [1000 x [1000 x i32]], ptr %a, i64 0, i64 %idxprom
+  %idxprom4 = sext i32 %2 to i64
+  %arrayidx5 = getelementptr inbounds [1000 x i32], ptr %arrayidx, i64 0, i64 %idxprom4
+  %call6 = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef @.str, ptr noundef %arrayidx5)
+  %inc = add nsw i32 %2, 1
+  store i32 %inc, ptr %j, align 4, !tbaa !5
+  br label %for.cond1, !llvm.loop !9
+
+for.inc7:                                         ; preds = %for.cond1
+  %inc8 = add nsw i32 %0, 1
+  store i32 %inc8, ptr %i, align 4, !tbaa !5
+  br label %for.cond, !llvm.loop !12
+
+for.end9:                                         ; preds = %for.cond
+  store i32 0, ptr %x1, align 4, !tbaa !5
+  store i32 1, ptr %i, align 4, !tbaa !5
+  br label %for.cond10
+
+for.cond10:                                       ; preds = %for.inc27, %for.end9
+  %4 = load i32, ptr %i, align 4, !tbaa !5
+  %cmp11 = icmp sle i32 %4, %1
+  br i1 %cmp11, label %for.body12, label %for.end29
+
+for.body12:                                       ; preds = %for.cond10
+  store i32 1, ptr %j, align 4, !tbaa !5
+  br label %for.cond13
+
+for.cond13:                                       ; preds = %for.inc21, %for.body12
+  %5 = load i32, ptr %j, align 4, !tbaa !5
+  %cmp14 = icmp sle i32 %5, %1
+  br i1 %cmp14, label %for.body15, label %for.end23thread-pre-split
+
+for.body15:                                       ; preds = %for.cond13
+  %idxprom16 = sext i32 %4 to i64
+  %arrayidx17 = getelementptr inbounds [1000 x [1000 x i32]], ptr %a, i64 0, i64 %idxprom16
+  %idxprom18 = sext i32 %5 to i64
+  %arrayidx19 = getelementptr inbounds [1000 x i32], ptr %arrayidx17, i64 0, i64 %idxprom18
+  %6 = load i32, ptr %arrayidx19, align 4, !tbaa !5, !invariant.load !13
+  %cmp20 = icmp eq i32 %6, 0
+  br i1 %cmp20, label %if.then, label %for.inc21
+
+if.then:                                          ; preds = %for.body15
+  store i32 %4, ptr %y1, align 4, !tbaa !5
+  store i32 %5, ptr %x1, align 4, !tbaa !5
+  br label %for.end23
+
+for.inc21:                                        ; preds = %for.body15
+  %inc22 = add nsw i32 %5, 1
+  store i32 %inc22, ptr %j, align 4, !tbaa !5
+  br label %for.cond13, !llvm.loop !14
+
+for.end23thread-pre-split:                        ; preds = %for.cond13
+  %.pr = load i32, ptr %x1, align 4, !tbaa !5
+  br label %for.end23
+
+for.end23:                                        ; preds = %for.end23thread-pre-split, %if.then
+  %7 = phi i32 [ %.pr, %for.end23thread-pre-split ], [ %5, %if.then ]
+  %cmp24 = icmp ne i32 %7, 0
+  br i1 %cmp24, label %for.end29, label %for.inc27
+
+for.inc27:                                        ; preds = %for.end23
+  %inc28 = add nsw i32 %4, 1
+  store i32 %inc28, ptr %i, align 4, !tbaa !5
+  br label %for.cond10, !llvm.loop !15
+
+for.end29:                                        ; preds = %for.end23, %for.cond10
+  store i32 0, ptr %x2, align 4, !tbaa !5
+  br label %for.cond30
+
+for.cond30:                                       ; preds = %for.inc48, %for.end29
+  %8 = phi i32 [ %dec49, %for.inc48 ], [ %1, %for.end29 ]
+  %cmp31 = icmp sge i32 %8, 1
+  br i1 %cmp31, label %for.body32, label %for.end50
+
+for.body32:                                       ; preds = %for.cond30
+  br label %for.cond33
+
+for.cond33:                                       ; preds = %for.inc43, %for.body32
+  %9 = phi i32 [ %dec, %for.inc43 ], [ %1, %for.body32 ]
+  %cmp34 = icmp sge i32 %9, 1
+  br i1 %cmp34, label %for.body35, label %for.inc48
+
+for.body35:                                       ; preds = %for.cond33
+  %idxprom36 = sext i32 %8 to i64
+  %arrayidx37 = getelementptr inbounds [1000 x [1000 x i32]], ptr %a, i64 0, i64 %idxprom36
+  %idxprom38 = sext i32 %9 to i64
+  %arrayidx39 = getelementptr inbounds [1000 x i32], ptr %arrayidx37, i64 0, i64 %idxprom38
+  %10 = load i32, ptr %arrayidx39, align 4, !tbaa !5, !invariant.load !13
+  %cmp40 = icmp eq i32 %10, 0
+  br i1 %cmp40, label %for.end44.thread, label %for.inc43
+
+for.end44.thread:                                 ; preds = %for.body35
+  store i32 %8, ptr %y2, align 4, !tbaa !5
+  store i32 %9, ptr %x2, align 4, !tbaa !5
+  br label %for.end50
+
+for.inc43:                                        ; preds = %for.body35
+  %dec = add nsw i32 %9, -1
+  br label %for.cond33, !llvm.loop !16
+
+for.inc48:                                        ; preds = %for.cond33
+  %dec49 = add nsw i32 %8, -1
+  br label %for.cond30, !llvm.loop !17
+
+for.end50:                                        ; preds = %for.end44.thread, %for.cond30
+  %11 = load i32, ptr %x2, align 4, !tbaa !5
+  %12 = load i32, ptr %x1, align 4, !tbaa !5
+  %sub = sub nsw i32 %11, %12
+  %sub51 = sub nsw i32 %sub, 1
+  %13 = load i32, ptr %y2, align 4, !tbaa !5
+  %14 = load i32, ptr %y1, align 4, !tbaa !5
+  %sub52 = sub nsw i32 %13, %14
+  %sub53 = sub nsw i32 %sub52, 1
+  %mul = mul nsw i32 %sub51, %sub53
+  %call54 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %mul) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4000000, ptr noundef %a) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %y2) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %y1) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %x2) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %x1) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %j) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %i) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %n) #5
+  ret i32 0
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+declare i32 @__isoc23_scanf(ptr noundef, ...) local_unnamed_addr #2
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #3
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+attributes #0 = { mustprogress norecurse uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { nofree nounwind }
+attributes #5 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2, !3}
+!llvm.ident = !{!4}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 8, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{i32 7, !"uwtable", i32 2}
+!4 = !{!"clang version 21.1.8 (https://github.com/llvm/llvm-project.git 2078da43e25a4623cab2d0d60decddf709aaea28)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}
+!13 = !{}
+!14 = distinct !{!14, !10, !11}
+!15 = distinct !{!15, !10, !11}
+!16 = distinct !{!16, !10, !11}
+!17 = distinct !{!17, !10, !11}

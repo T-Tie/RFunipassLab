@@ -1,0 +1,176 @@
+; ModuleID = '<stdin>'
+source_filename = "/tmp/tmpu7l11tvx.cpp"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+module asm ".globl _ZSt21ios_base_library_initv"
+
+@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d\0A\00", align 1
+
+; Function Attrs: mustprogress norecurse uwtable
+define dso_local noundef i32 @main(i32 noundef %argc, ptr nofree noundef readnone captures(none) %argv) local_unnamed_addr #0 {
+entry:
+  %n = alloca i32, align 4
+  %a = alloca [1000 x [1000 x i32]], align 16
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef nonnull align 4 %n) #5
+  call void @llvm.lifetime.start.p0(i64 noundef 4000000, ptr noundef nonnull %a) #5
+  %call = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef nonnull @.str, ptr noundef nonnull align 4 %n)
+  %.pre = load i32, ptr %n, align 4, !tbaa !5
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.end, %entry
+  %0 = phi i32 [ %3, %for.end ], [ %.pre, %entry ]
+  %indvars.iv53 = phi i64 [ %indvars.iv.next54, %for.end ], [ 1, %entry ]
+  %1 = sext i32 %0 to i64
+  %cmp.not = icmp sgt i64 %indvars.iv53, %1
+  br i1 %cmp.not, label %for.cond10.preheader, label %for.cond1
+
+for.cond10.preheader:                             ; preds = %for.cond
+  %2 = add i32 %0, 1
+  %smax = call i32 @llvm.smax.i32(i32 %0, i32 noundef 0)
+  %narrow = add nuw i32 %smax, 1
+  %wide.trip.count64 = zext i32 %narrow to i64
+  %wide.trip.count = zext i32 %2 to i64
+  br label %for.cond10
+
+for.cond1:                                        ; preds = %for.cond, %for.body3
+  %3 = phi i32 [ %.pre70, %for.body3 ], [ %0, %for.cond ]
+  %indvars.iv = phi i64 [ %indvars.iv.next, %for.body3 ], [ 1, %for.cond ]
+  %4 = sext i32 %3 to i64
+  %cmp2.not = icmp sgt i64 %indvars.iv, %4
+  br i1 %cmp2.not, label %for.end, label %for.body3
+
+for.body3:                                        ; preds = %for.cond1
+  %arrayidx5 = getelementptr inbounds nuw [1000 x [1000 x i32]], ptr %a, i64 0, i64 %indvars.iv53, i64 %indvars.iv
+  %call6 = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef nonnull @.str, ptr noundef nonnull %arrayidx5)
+  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
+  %.pre70 = load i32, ptr %n, align 4, !tbaa !5
+  br label %for.cond1, !llvm.loop !9
+
+for.end:                                          ; preds = %for.cond1
+  %indvars.iv.next54 = add nuw nsw i64 %indvars.iv53, 1
+  br label %for.cond, !llvm.loop !12
+
+for.cond10:                                       ; preds = %for.cond10.preheader, %if.end26
+  %indvars.iv60 = phi i64 [ 1, %for.cond10.preheader ], [ %indvars.iv.next61, %if.end26 ]
+  %exitcond65 = icmp eq i64 %indvars.iv60, %wide.trip.count64
+  br i1 %exitcond65, label %for.end29, label %for.cond13
+
+for.cond13:                                       ; preds = %for.cond10, %if.end
+  %indvars.iv56 = phi i64 [ %indvars.iv.next57, %if.end ], [ 1, %for.cond10 ]
+  %exitcond = icmp eq i64 %indvars.iv56, %wide.trip.count
+  br i1 %exitcond, label %if.end26, label %for.body15
+
+for.body15:                                       ; preds = %for.cond13
+  %arrayidx19 = getelementptr inbounds nuw [1000 x [1000 x i32]], ptr %a, i64 0, i64 %indvars.iv60, i64 %indvars.iv56
+  %5 = load i32, ptr %arrayidx19, align 4, !tbaa !5, !invariant.load !13
+  %cmp20 = icmp eq i32 %5, 0
+  br i1 %cmp20, label %for.end29.loopexit, label %if.end
+
+if.end:                                           ; preds = %for.body15
+  %indvars.iv.next57 = add nuw nsw i64 %indvars.iv56, 1
+  br label %for.cond13, !llvm.loop !14
+
+if.end26:                                         ; preds = %for.cond13
+  %indvars.iv.next61 = add nuw nsw i64 %indvars.iv60, 1
+  br label %for.cond10, !llvm.loop !15
+
+for.end29.loopexit:                               ; preds = %for.body15
+  %6 = trunc nuw nsw i64 %indvars.iv60 to i32
+  %7 = trunc nuw nsw i64 %indvars.iv56 to i32
+  %8 = xor i32 %7, -1
+  br label %for.end29
+
+for.end29:                                        ; preds = %for.cond10, %for.end29.loopexit
+  %i.151 = phi i32 [ %6, %for.end29.loopexit ], [ %narrow, %for.cond10 ]
+  %x1.1 = phi i32 [ %8, %for.end29.loopexit ], [ -1, %for.cond10 ]
+  %9 = zext i32 %0 to i64
+  %smin = call i32 @llvm.smin.i32(i32 %0, i32 noundef 0)
+  br label %for.cond30
+
+for.cond30:                                       ; preds = %if.end47, %for.end29
+  %indvars.iv67 = phi i64 [ %indvars.iv.next68, %if.end47 ], [ %9, %for.end29 ]
+  %10 = trunc nuw i64 %indvars.iv67 to i32
+  %cmp31 = icmp sgt i32 %10, 0
+  br i1 %cmp31, label %for.cond33, label %for.end50
+
+for.cond33:                                       ; preds = %for.cond30, %if.end42
+  %j.2 = phi i32 [ %dec, %if.end42 ], [ %0, %for.cond30 ]
+  %cmp34 = icmp sgt i32 %j.2, 0
+  br i1 %cmp34, label %for.body35, label %if.end47
+
+for.body35:                                       ; preds = %for.cond33
+  %idxprom38 = zext nneg i32 %j.2 to i64
+  %arrayidx39 = getelementptr inbounds nuw [1000 x [1000 x i32]], ptr %a, i64 0, i64 %indvars.iv67, i64 %idxprom38
+  %11 = load i32, ptr %arrayidx39, align 4, !tbaa !5, !invariant.load !13
+  %cmp40 = icmp eq i32 %11, 0
+  br i1 %cmp40, label %for.end50, label %if.end42
+
+if.end42:                                         ; preds = %for.body35
+  %dec = add nsw i32 %j.2, -1
+  br label %for.cond33, !llvm.loop !16
+
+if.end47:                                         ; preds = %for.cond33
+  %indvars.iv.next68 = add nsw i64 %indvars.iv67, -1
+  br label %for.cond30, !llvm.loop !17
+
+for.end50:                                        ; preds = %for.cond30, %for.body35
+  %12 = phi i32 [ %10, %for.body35 ], [ %smin, %for.cond30 ]
+  %x2.1 = phi i32 [ %j.2, %for.body35 ], [ 0, %for.cond30 ]
+  %sub51 = add nsw i32 %x2.1, %x1.1
+  %13 = xor i32 %i.151, -1
+  %sub53 = add i32 %12, %13
+  %mul = mul nsw i32 %sub51, %sub53
+  %call54 = call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.1, i32 noundef %mul) #6
+  call void @llvm.lifetime.end.p0(i64 noundef 4000000, ptr noundef nonnull %a) #6
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef nonnull %n) #6
+  ret i32 0
+}
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+declare i32 @__isoc23_scanf(ptr noundef, ...) local_unnamed_addr #2
+
+; Function Attrs: nofree nounwind
+declare noundef i32 @printf(ptr noundef readonly captures(none), ...) local_unnamed_addr #3
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.smax.i32(i32, i32) #4
+
+; Function Attrs: mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.smin.i32(i32, i32) #4
+
+attributes #0 = { mustprogress norecurse uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { mustprogress nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nofree nounwind "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { mustprogress nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #5 = { nofree nounwind }
+attributes #6 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2, !3}
+!llvm.ident = !{!4}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 8, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{i32 7, !"uwtable", i32 2}
+!4 = !{!"clang version 21.1.8 (https://github.com/llvm/llvm-project.git 2078da43e25a4623cab2d0d60decddf709aaea28)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}
+!13 = !{}
+!14 = distinct !{!14, !10, !11}
+!15 = distinct !{!15, !10, !11}
+!16 = distinct !{!16, !10, !11}
+!17 = distinct !{!17, !10, !11}

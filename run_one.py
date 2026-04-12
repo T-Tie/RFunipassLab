@@ -1,24 +1,25 @@
 """
-运行单个 RFunipass 实验。
+运行单个 RFunipassLab 实验。
 
-这个脚本是整个轻量实验框架的最小执行入口。
-它只做四件事：
+这个脚本是整个轻量实验框架的最小执行入口。它只做四件事：
 
 1. 读取一个实验配置；
 2. 解析出最终环境变量；
 3. 调用 `RFunipassLab/boca.py`；
-4. 保存日志与 manifest。
+4. 保存日志、外层 manifest，并把结构化 result json 路径传给实验进程。
 
-之所以把“单实验运行”单独做成一个文件，是因为它有两个直接好处：
-
-- 调试时最方便：先把单个实验跑通；
-- 批量运行时最稳定：`run_sweep.py` 直接复用这里的逻辑即可。
+注意：
+- 外层日志/manifest 仍统一放在 `results/logs` 与 `results/manifests`；
+- 实验内部 result json 会根据 OBJECTIVE_KIND 自动分到：
+  - `results/instrcount/summaries/`
+  - `results/runtime/summaries/`
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -32,6 +33,7 @@ from configs import (
     TARGET_PROJECT_DIR,
     TARGET_SCRIPT,
     build_process_env,
+    default_result_path_for_run,
     ensure_layout,
     format_env_block,
     get_experiment,
@@ -44,11 +46,7 @@ def build_run_id(experiment_name: str) -> str:
     """
     为一次运行生成唯一标识。
 
-    这里用时间戳 + 实验名，是因为：
-    - 人类可读；
-    - 文件名稳定；
-    - 不需要再引入 uuid；
-    - 足够满足实验场景的唯一性需求。
+    时间戳 + 实验名的好处是人类可读、文件名稳定，而且足够满足实验场景唯一性。
     """
     now = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     return f"{now}_{experiment_name}"
@@ -59,13 +57,9 @@ def build_manifest(
     control_env: Dict[str, str],
     run_id: str,
     log_path: Path,
+    result_json_path: Path,
 ) -> Dict[str, Any]:
-    """
-    生成本次实验的 manifest 初始内容。
-
-    manifest 是轻量实验框架里非常划算的一项设计：
-    实现简单，但对复现、追踪和论文整理都很有帮助。
-    """
+    """生成本次实验的外层 manifest 初始内容。"""
     command = [sys.executable, str(TARGET_SCRIPT)]
     return {
         "run_id": run_id,
@@ -79,6 +73,7 @@ def build_manifest(
         "cwd": str(TARGET_PROJECT_DIR),
         "target_script": str(TARGET_SCRIPT),
         "log_path": str(log_path),
+        "result_json_path": str(result_json_path),
         "started_at": datetime.now().isoformat(timespec="seconds"),
         "finished_at": None,
         "wall_runtime_s": None,
@@ -99,24 +94,32 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
     执行一个实验，并返回运行信息。
 
     参数说明：
-    - experiment_name: 预设实验名字
-    - dry_run:         只展示将要执行的内容，不真正调用 boca.py
-    - show_env:        额外打印解析后的环境变量
+    - experiment_name: 预设实验名字；
+    - dry_run:         只展示将要执行的内容，不真正调用 boca.py；
+    - show_env:        额外打印解析后的环境变量。
     """
     ensure_layout()
 
     experiment = get_experiment(experiment_name)
     control_env = resolve_control_env(experiment["overrides"])
-    process_env = build_process_env(control_env)
 
     run_id = build_run_id(experiment_name)
+    default_result_json = default_result_path_for_run(run_id, control_env)
+    result_json_path = Path(os.environ.get("RESULT_JSON", str(default_result_json)))
+
+    process_env = build_process_env(control_env)
+    process_env["RUN_ID"] = run_id
+    process_env["RESULT_JSON"] = str(result_json_path)
+
     log_path = LOGS_DIR / f"{run_id}.log"
     manifest_path = MANIFESTS_DIR / f"{run_id}.json"
-    manifest = build_manifest(experiment, control_env, run_id, log_path)
+    manifest = build_manifest(experiment, control_env, run_id, log_path, result_json_path)
 
     if show_env:
         print(f"[env] resolved environment for '{experiment_name}':")
         print(format_env_block(control_env))
+        print(f"RUN_ID={run_id}")
+        print(f"RESULT_JSON={result_json_path}")
         print()
 
     if dry_run:
@@ -126,6 +129,7 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
         write_manifest(manifest, manifest_path)
         print(f"[dry-run] experiment='{experiment_name}'")
         print(f"[dry-run] target={TARGET_SCRIPT}")
+        print(f"[dry-run] result_json={result_json_path}")
         print(f"[dry-run] manifest={manifest_path}")
         return manifest
 
@@ -138,6 +142,7 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
         log_file.write(f"# group: {experiment['group']}\n")
         log_file.write(f"# description: {experiment['description']}\n")
         log_file.write(f"# changed: {experiment['changed']}\n")
+        log_file.write(f"# result_json: {result_json_path}\n")
         log_file.write(f"# started_at: {manifest['started_at']}\n")
         log_file.write("# control_env:\n")
         for line in format_env_block(control_env).splitlines():
@@ -166,6 +171,7 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
         f"runtime={manifest['wall_runtime_s']:.2f}s"
     )
     print(f"[done] log={log_path}")
+    print(f"[done] result_json={result_json_path}")
     print(f"[done] manifest={manifest_path}")
 
     return manifest
@@ -173,7 +179,7 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
 
 def build_arg_parser() -> argparse.ArgumentParser:
     """构建命令行参数。"""
-    parser = argparse.ArgumentParser(description="Run one RFunipass experiment preset.")
+    parser = argparse.ArgumentParser(description="Run one RFunipassLab experiment preset.")
     parser.add_argument("--name", help="Experiment name defined in configs.py.")
     parser.add_argument("--list", action="store_true", help="List available experiment presets and exit.")
     parser.add_argument("--dry-run", action="store_true", help="Resolve config but do not actually run boca.py.")

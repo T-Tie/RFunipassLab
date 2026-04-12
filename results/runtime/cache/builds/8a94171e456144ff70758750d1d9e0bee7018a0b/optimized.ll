@@ -1,0 +1,270 @@
+; ModuleID = '<stdin>'
+source_filename = "/tmp/tmp_0i0bqcz.cpp"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+module asm ".globl _ZSt21ios_base_library_initv"
+
+%"class.std::basic_ostream" = type { ptr, %"class.std::basic_ios" }
+%"class.std::basic_ios" = type { %"class.std::ios_base", ptr, i8, i8, ptr, ptr, ptr, ptr }
+%"class.std::ios_base" = type { ptr, i64, i64, i32, i32, i32, ptr, %"struct.std::ios_base::_Words", [8 x %"struct.std::ios_base::_Words"], i32, ptr, %"class.std::locale" }
+%"struct.std::ios_base::_Words" = type { ptr, i64 }
+%"class.std::locale" = type { ptr }
+%"class.std::basic_istream" = type { ptr, i64, %"class.std::basic_ios" }
+
+$_ZNKSt8ios_base5widthEv = comdat any
+
+$_ZNSt11char_traitsIcE6lengthEPKc = comdat any
+
+$_ZStorSt12_Ios_IostateS_ = comdat any
+
+$_ZSt13__check_facetISt5ctypeIcEERKT_PS3_ = comdat any
+
+$_ZNKSt5ctypeIcE5widenEc = comdat any
+
+@s = dso_local global [110 x i8] zeroinitializer, align 16
+@_ZSt4cout = external global %"class.std::basic_ostream", align 8
+@.str = private unnamed_addr constant [2 x i8] c" \00", align 1
+@_ZSt3cin = external global %"class.std::basic_istream", align 8
+
+; Function Attrs: mustprogress uwtable
+define dso_local void @_Z7operatev() #0 {
+entry:
+  %call = tail call i64 @strlen(ptr noundef nonnull dereferenceable(1) @s) #10
+  %conv = trunc i64 %call to i32
+  %0 = shl i64 %call, 32
+  %sext = add i64 %0, -4294967296
+  %1 = ashr exact i64 %sext, 32
+  %2 = and i64 %call, 4294967295
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc11, %entry
+  %indvars.iv15 = phi i64 [ %indvars.iv.next16, %for.inc11 ], [ %2, %entry ]
+  %indvars.iv = phi i64 [ %indvars.iv.next, %for.inc11 ], [ %1, %entry ]
+  %pre.0 = phi i32 [ %pre.1, %for.inc11 ], [ %conv, %entry ]
+  %indvars.iv.next16 = add nsw i64 %indvars.iv15, -1
+  %indvars = trunc i64 %indvars.iv.next16 to i32
+  %3 = trunc nuw i64 %indvars.iv15 to i32
+  %cmp = icmp sgt i32 %3, 0
+  br i1 %cmp, label %for.body, label %for.cond14.preheader
+
+for.cond14.preheader:                             ; preds = %for.cond
+  %smax = call i32 @llvm.smax.i32(i32 %pre.0, i32 noundef 0)
+  %wide.trip.count = zext nneg i32 %smax to i64
+  br label %for.cond14
+
+for.body:                                         ; preds = %for.cond
+  %idxprom = and i64 %indvars.iv.next16, 4294967295
+  %arrayidx = getelementptr inbounds nuw [110 x i8], ptr @s, i64 0, i64 %idxprom
+  %4 = load i8, ptr %arrayidx, align 1, !tbaa !5, !invariant.load !8
+  %cmp2 = icmp eq i8 %4, 32
+  br i1 %cmp2, label %for.cond3.preheader, label %for.inc11
+
+for.cond3.preheader:                              ; preds = %for.body
+  %5 = sext i32 %pre.0 to i64
+  br label %for.cond3
+
+for.cond3:                                        ; preds = %for.cond3.preheader, %for.inc
+  %indvars.iv12 = phi i64 [ %indvars.iv, %for.cond3.preheader ], [ %indvars.iv.next13, %for.inc ]
+  %indvars.iv.next13 = add nsw i64 %indvars.iv12, 1
+  %cmp4 = icmp slt i64 %indvars.iv.next13, %5
+  br i1 %cmp4, label %for.inc, label %for.end
+
+for.inc:                                          ; preds = %for.cond3
+  %arrayidx8 = getelementptr inbounds [110 x i8], ptr @s, i64 0, i64 %indvars.iv.next13
+  %6 = load i8, ptr %arrayidx8, align 1, !tbaa !5, !invariant.load !8
+  %call9 = tail call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(272) @_ZSt4cout, i8 noundef signext %6)
+  br label %for.cond3, !llvm.loop !9
+
+for.end:                                          ; preds = %for.cond3
+  %call10 = tail call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(272) @_ZSt4cout, ptr noundef nonnull dereferenceable(2) @.str)
+  br label %for.inc11
+
+for.inc11:                                        ; preds = %for.body, %for.end
+  %pre.1 = phi i32 [ %indvars, %for.end ], [ %pre.0, %for.body ]
+  %indvars.iv.next = add nsw i64 %indvars.iv, -1
+  br label %for.cond, !llvm.loop !12
+
+for.cond14:                                       ; preds = %for.cond14.preheader, %for.inc21
+  %indvars.iv18 = phi i64 [ 0, %for.cond14.preheader ], [ %indvars.iv.next19, %for.inc21 ]
+  %exitcond.not = icmp eq i64 %indvars.iv18, %wide.trip.count
+  br i1 %exitcond.not, label %for.end23, label %for.inc21
+
+for.inc21:                                        ; preds = %for.cond14
+  %arrayidx19 = getelementptr inbounds nuw [110 x i8], ptr @s, i64 0, i64 %indvars.iv18
+  %7 = load i8, ptr %arrayidx19, align 1, !tbaa !5, !invariant.load !8
+  %call20 = tail call noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(272) @_ZSt4cout, i8 noundef signext %7)
+  %indvars.iv.next19 = add nuw nsw i64 %indvars.iv18, 1
+  br label %for.cond14, !llvm.loop !13
+
+for.end23:                                        ; preds = %for.cond14
+  ret void
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: nounwind willreturn memory(read)
+declare i64 @strlen(ptr noundef) #2
+
+; Function Attrs: inlinehint mustprogress uwtable
+declare noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_c(ptr noundef nonnull align 8 dereferenceable(8), i8 noundef signext) #3
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+; Function Attrs: inlinehint mustprogress uwtable
+declare noundef nonnull align 8 dereferenceable(8) ptr @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(ptr noundef nonnull align 8 dereferenceable(8), ptr noundef) #3
+
+; Function Attrs: mustprogress norecurse uwtable
+define dso_local noundef i32 @main() #4 {
+entry:
+  %call = tail call noundef nonnull align 8 dereferenceable(16) ptr @_ZNSi7getlineEPcl(ptr noundef nonnull align 8 dereferenceable(280) @_ZSt3cin, ptr noundef nonnull align 16 dereferenceable(110) @s, i64 noundef 110)
+  tail call void @_Z7operatev()
+  ret i32 0
+}
+
+; Function Attrs: mustprogress uwtable
+declare noundef nonnull align 8 dereferenceable(16) ptr @_ZNSi7getlineEPcl(ptr noundef nonnull align 8 dereferenceable(16), ptr noundef, i64 noundef) #0 align 2
+
+; Function Attrs: mustprogress nounwind uwtable
+define linkonce_odr dso_local noundef i64 @_ZNKSt8ios_base5widthEv(ptr noundef nonnull align 8 dereferenceable(216) %this) #5 comdat align 2 {
+entry:
+  %_M_width = getelementptr inbounds nuw i8, ptr %this, i64 16
+  %0 = load i64, ptr %_M_width, align 8, !tbaa !14, !invariant.load !8
+  ret i64 %0
+}
+
+declare noundef nonnull align 8 dereferenceable(8) ptr @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(ptr noundef nonnull align 8 dereferenceable(8), ptr noundef, i64 noundef) #6
+
+declare noundef nonnull align 8 dereferenceable(8) ptr @_ZNSo3putEc(ptr noundef nonnull align 8 dereferenceable(8), i8 noundef signext) #6
+
+; Function Attrs: mustprogress uwtable
+declare void @_ZNSt9basic_iosIcSt11char_traitsIcEE8setstateESt12_Ios_Iostate(ptr noundef nonnull align 8 dereferenceable(264), i32 noundef) #0 align 2
+
+; Function Attrs: mustprogress nounwind uwtable
+define linkonce_odr dso_local noundef i64 @_ZNSt11char_traitsIcE6lengthEPKc(ptr noundef %__s) #5 comdat align 2 {
+entry:
+  %call = tail call i64 @strlen(ptr noundef nonnull dereferenceable(1) %__s) #11
+  ret i64 %call
+}
+
+declare void @_ZNSt9basic_iosIcSt11char_traitsIcEE5clearESt12_Ios_Iostate(ptr noundef nonnull align 8 dereferenceable(264), i32 noundef) #6
+
+; Function Attrs: inlinehint mustprogress nounwind uwtable
+define linkonce_odr dso_local noundef i32 @_ZStorSt12_Ios_IostateS_(i32 noundef %__a, i32 noundef %__b) #7 comdat {
+entry:
+  %or = or i32 %__b, %__a
+  ret i32 %or
+}
+
+; Function Attrs: mustprogress nounwind uwtable
+declare noundef i32 @_ZNKSt9basic_iosIcSt11char_traitsIcEE7rdstateEv(ptr noundef nonnull align 8 dereferenceable(264)) #5 align 2
+
+declare noundef nonnull align 8 dereferenceable(16) ptr @_ZNSi7getlineEPclc(ptr noundef nonnull align 8 dereferenceable(16), ptr noundef, i64 noundef, i8 noundef signext) #6
+
+; Function Attrs: mustprogress uwtable
+declare noundef signext i8 @_ZNKSt9basic_iosIcSt11char_traitsIcEE5widenEc(ptr noundef nonnull align 8 dereferenceable(264), i8 noundef signext) #0 align 2
+
+; Function Attrs: inlinehint mustprogress uwtable
+define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(570) ptr @_ZSt13__check_facetISt5ctypeIcEERKT_PS3_(ptr noundef %__f) #3 comdat {
+entry:
+  %tobool.not = icmp eq ptr %__f, null
+  br i1 %tobool.not, label %if.then, label %if.end
+
+if.then:                                          ; preds = %entry
+  tail call void @_ZSt16__throw_bad_castv() #12
+  unreachable
+
+if.end:                                           ; preds = %entry
+  ret ptr %__f
+}
+
+; Function Attrs: mustprogress uwtable
+define linkonce_odr dso_local noundef signext i8 @_ZNKSt5ctypeIcE5widenEc(ptr noundef nonnull align 8 dereferenceable(570) %this, i8 noundef signext %__c) #0 comdat align 2 {
+entry:
+  %_M_widen_ok = getelementptr inbounds nuw i8, ptr %this, i64 56
+  %0 = load i8, ptr %_M_widen_ok, align 8, !tbaa !26, !invariant.load !8
+  %tobool.not = icmp eq i8 %0, 0
+  br i1 %tobool.not, label %if.end, label %if.then
+
+if.then:                                          ; preds = %entry
+  %_M_widen = getelementptr inbounds nuw i8, ptr %this, i64 57
+  %idxprom = zext i8 %__c to i64
+  %arrayidx = getelementptr inbounds nuw [256 x i8], ptr %_M_widen, i64 0, i64 %idxprom
+  %1 = load i8, ptr %arrayidx, align 1, !tbaa !5, !invariant.load !8
+  br label %return
+
+if.end:                                           ; preds = %entry
+  tail call void @_ZNKSt5ctypeIcE13_M_widen_initEv(ptr noundef nonnull align 8 dereferenceable(570) %this)
+  %vtable = load ptr, ptr %this, align 8, !tbaa !33, !invariant.load !8
+  %vfn = getelementptr inbounds nuw i8, ptr %vtable, i64 48
+  %2 = load ptr, ptr %vfn, align 8, !invariant.load !8
+  %call = tail call noundef signext i8 %2(ptr noundef nonnull align 8 dereferenceable(570) %this, i8 noundef signext %__c)
+  br label %return
+
+return:                                           ; preds = %if.end, %if.then
+  %retval.0 = phi i8 [ %1, %if.then ], [ %call, %if.end ]
+  ret i8 %retval.0
+}
+
+; Function Attrs: noreturn
+declare void @_ZSt16__throw_bad_castv() #8
+
+declare void @_ZNKSt5ctypeIcE13_M_widen_initEv(ptr noundef nonnull align 8 dereferenceable(570)) #6
+
+; Function Attrs: nocallback nofree nosync nounwind speculatable willreturn memory(none)
+declare i32 @llvm.smax.i32(i32, i32) #9
+
+attributes #0 = { mustprogress uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { nounwind willreturn memory(read) "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { inlinehint mustprogress uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #4 = { mustprogress norecurse uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { mustprogress nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #6 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #7 = { inlinehint mustprogress nounwind uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #8 = { noreturn "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #9 = { nocallback nofree nosync nounwind speculatable willreturn memory(none) }
+attributes #10 = { nosync nounwind willreturn memory(read) }
+attributes #11 = { nounwind }
+attributes #12 = { noreturn }
+
+!llvm.module.flags = !{!0, !1, !2, !3}
+!llvm.ident = !{!4}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 8, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{i32 7, !"uwtable", i32 2}
+!4 = !{!"clang version 21.1.8 (https://github.com/llvm/llvm-project.git 2078da43e25a4623cab2d0d60decddf709aaea28)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"omnipotent char", !7, i64 0}
+!7 = !{!"Simple C++ TBAA"}
+!8 = !{}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}
+!13 = distinct !{!13, !10, !11}
+!14 = !{!15, !16, i64 16}
+!15 = !{!"_ZTSSt8ios_base", !16, i64 8, !16, i64 16, !17, i64 24, !18, i64 28, !18, i64 32, !19, i64 40, !21, i64 48, !6, i64 64, !22, i64 192, !23, i64 200, !24, i64 208}
+!16 = !{!"long", !6, i64 0}
+!17 = !{!"_ZTSSt13_Ios_Fmtflags", !6, i64 0}
+!18 = !{!"_ZTSSt12_Ios_Iostate", !6, i64 0}
+!19 = !{!"p1 _ZTSNSt8ios_base14_Callback_listE", !20, i64 0}
+!20 = !{!"any pointer", !6, i64 0}
+!21 = !{!"_ZTSNSt8ios_base6_WordsE", !20, i64 0, !16, i64 8}
+!22 = !{!"int", !6, i64 0}
+!23 = !{!"p1 _ZTSNSt8ios_base6_WordsE", !20, i64 0}
+!24 = !{!"_ZTSSt6locale", !25, i64 0}
+!25 = !{!"p1 _ZTSNSt6locale5_ImplE", !20, i64 0}
+!26 = !{!27, !6, i64 56}
+!27 = !{!"_ZTSSt5ctypeIcE", !28, i64 0, !29, i64 16, !30, i64 24, !31, i64 32, !31, i64 40, !32, i64 48, !6, i64 56, !6, i64 57, !6, i64 313, !6, i64 569}
+!28 = !{!"_ZTSNSt6locale5facetE", !22, i64 8}
+!29 = !{!"p1 _ZTS15__locale_struct", !20, i64 0}
+!30 = !{!"bool", !6, i64 0}
+!31 = !{!"p1 int", !20, i64 0}
+!32 = !{!"p1 short", !20, i64 0}
+!33 = !{!34, !34, i64 0}
+!34 = !{!"vtable pointer", !7, i64 0}

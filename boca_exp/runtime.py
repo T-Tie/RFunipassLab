@@ -1,4 +1,4 @@
-"""LLVM / autophase 指令计数相关的底层运行时工具。"""
+"""LLVM / autophase / IR 变换相关的底层运行时工具。"""
 
 from __future__ import annotations
 
@@ -20,23 +20,25 @@ _AUTOPHASE_LIB = None
 
 
 class AutophaseDataStruct(ctypes.Structure):
-    _fields_ = [("name", ctypes.c_char * 64), ("value", ctypes.c_int)]
+    _fields_ = [('name', ctypes.c_char * 64), ('value', ctypes.c_int)]
+
 
 
 def _load_autophase_lib():
-    """延迟加载 autophase 动态库，避免每次统计指令数都重新打开一次。"""
+    """延迟加载 autophase 动态库。"""
     global _AUTOPHASE_LIB
     if _AUTOPHASE_LIB is None:
         if not AUTOPHASE_LIB_PATH.is_file():
             raise FileNotFoundError(
-                f"Autophase library not found: {AUTOPHASE_LIB_PATH}. "
-                "Set AUTOPHASE_LIB to a valid .so path before running boca.py."
+                f'Autophase library not found: {AUTOPHASE_LIB_PATH}. '
+                'Set AUTOPHASE_LIB to a valid .so path before running boca.py.'
             )
         _AUTOPHASE_LIB = ctypes.CDLL(str(AUTOPHASE_LIB_PATH))
     return _AUTOPHASE_LIB
 
 
-def get_inst_count(ir_code):
+
+def get_inst_count(ir_code: str) -> int:
     """调用本地 autophase 动态库，返回 IR 的 TotalInsts。"""
     autophase_lib = _load_autophase_lib()
     result_array = (AutophaseDataStruct * 56)()
@@ -45,13 +47,9 @@ def get_inst_count(ir_code):
     return result_dict['TotalInsts']
 
 
-def detect_target_triple(ir_code: str) -> str | None:
-    """
-    从 LLVM IR 头部提取 `target triple`。
 
-    这样 `RFunipassLab` 就不需要再假设所有输入都是 RISC-V IR，
-    而是可以根据数据集自身的 triple 自动选择合适的 `--mtriple`。
-    """
+def detect_target_triple(ir_code: str) -> str | None:
+    """从 LLVM IR 头部提取 `target triple`。"""
     for raw_line in ir_code.splitlines():
         line = raw_line.strip()
         if not line:
@@ -68,14 +66,25 @@ def detect_target_triple(ir_code: str) -> str | None:
     return None
 
 
-def fix_loop_nesting(pipeline: str) -> str:
-    """
-    把 loop pass 嵌套进离它最近的前一个 function pass 中。
 
-    LLVM 新 PM 里 loop pass 不能孤立地直接放在顶层 pipeline 中使用，
-    因此在把 pass 序列拼成 `-passes=` 字符串之前，需要先做一次修正。
-    """
-    passes = [p.strip() for p in pipeline.split(',')]
+def normalize_pass_sequence(pass_sequence) -> list[str]:
+    """把字符串或序列形式的 pipeline 统一转成 list[str]。"""
+    if pass_sequence is None:
+        return []
+    if isinstance(pass_sequence, str):
+        text = pass_sequence.strip()
+        if not text:
+            return []
+        if text in {'-Oz', '-O3', 'default<Oz>'}:
+            return [text]
+        return [item.strip() for item in text.split(',') if item.strip()]
+    return [str(item).strip() for item in pass_sequence if str(item).strip()]
+
+
+
+def fix_loop_nesting(pipeline: str) -> str:
+    """把 loop pass 嵌套进离它最近的前一个 function pass 中。"""
+    passes = [p.strip() for p in pipeline.split(',') if p.strip()]
 
     fixed_passes = []
     last_function_index = -1
@@ -129,9 +138,9 @@ def fix_loop_nesting(pipeline: str) -> str:
     return ','.join(fixed_passes)
 
 
+
 def _build_opt_command(opt_path: str, pipeline: str, resolved_target_triple: str | None):
-    """根据 pipeline 类型构建 opt 命令。"""
-    if pipeline == 'default<Oz>' or pipeline == '-Oz':
+    if pipeline in {'default<Oz>', '-Oz'}:
         cmd_opt = [opt_path, '-Oz', '-S']
     elif pipeline == '-O3':
         cmd_opt = [opt_path, '-O3', '-S']
@@ -143,8 +152,8 @@ def _build_opt_command(opt_path: str, pipeline: str, resolved_target_triple: str
     return cmd_opt
 
 
+
 def _format_opt_failure(cmd_opt, pipeline: str, resolved_target_triple: str | None, result) -> str:
-    """格式化 opt 失败信息，避免错误被静默吞掉。"""
     stderr_text = (result.stderr or '').strip()
     stdout_text = (result.stdout or '').strip()
     detail = stderr_text or stdout_text or '<no stdout/stderr captured>'
@@ -153,28 +162,19 @@ def _format_opt_failure(cmd_opt, pipeline: str, resolved_target_triple: str | No
         f"opt failed for pipeline={pipeline!r}, "
         f"target_triple={resolved_target_triple or '<not found>'}, "
         f"returncode={result.returncode}, cmd={' '.join(cmd_opt)}\n"
-        f"{detail_lines}"
+        f'{detail_lines}'
     )
 
 
-def get_instrcount(ir_code, opt_flags, llvm_tools_path, target_triple: str | None = None):
-    """
-    对一段 IR 应用给定 pipeline，然后返回优化后的 TotalInsts。
 
-    与旧版不同，这里做了两件更适合“多数据集实验”的改动：
-    1. 默认从 IR 头部自动识别 `target triple`
-    2. `opt` 失败时不再静默回退到原始 IR，而是直接抛错
+def transform_ir_strict(ir_code: str, pass_sequence, llvm_tools_path: str, target_triple: str | None = None) -> str:
+    """对一段 IR 应用给定 pipeline，失败时直接抛错。"""
+    sequence_list = normalize_pass_sequence(pass_sequence)
+    if not sequence_list:
+        return ir_code
 
-    这样一来：
-    - x86 / RISC-V / 其他 triple 的 IR 都能更自然地共用同一套实验代码
-    - 一旦 pipeline 或 triple 有问题，日志里会立刻看到真实 stderr
-    """
-    pipeline = ','.join(opt_flags)
+    pipeline = ','.join(sequence_list)
     opt_path = os.path.join(llvm_tools_path, 'opt') if llvm_tools_path else 'opt'
-
-    if opt_flags == []:
-        return get_inst_count(ir_code)
-
     resolved_target_triple = target_triple or detect_target_triple(ir_code)
 
     if pipeline not in {'default<Oz>', '-Oz', '-O3'}:
@@ -189,7 +189,6 @@ def get_instrcount(ir_code, opt_flags, llvm_tools_path, target_triple: str | Non
         stderr=subprocess.PIPE,
         check=False,
     )
-
     if result.returncode != 0:
         raise RuntimeError(
             _format_opt_failure(
@@ -199,5 +198,25 @@ def get_instrcount(ir_code, opt_flags, llvm_tools_path, target_triple: str | Non
                 result,
             )
         )
+    return result.stdout
 
-    return get_inst_count(result.stdout)
+
+
+def transform_ir_lenient(ir_code: str, pass_sequence, llvm_tools_path: str, target_triple: str | None = None) -> str:
+    """应用 pipeline；若失败则回退到原始 IR。"""
+    try:
+        return transform_ir_strict(ir_code, pass_sequence, llvm_tools_path, target_triple=target_triple)
+    except Exception:
+        return ir_code
+
+
+
+def get_instrcount(ir_code, opt_flags, llvm_tools_path, target_triple: str | None = None):
+    """对一段 IR 应用给定 pipeline，然后返回优化后的 TotalInsts。"""
+    optimized_ir = transform_ir_strict(
+        ir_code,
+        opt_flags,
+        llvm_tools_path,
+        target_triple=target_triple,
+    )
+    return get_inst_count(optimized_ir)

@@ -1,161 +1,94 @@
-"""目标函数、评估指标与 EI 采集函数。"""
+"""目标后端选择层：向搜索主流程暴露统一接口。"""
 
 from __future__ import annotations
 
-from concurrent.futures import ThreadPoolExecutor
-import math
+from .objective_common import compose_multi_objective, get_ei
+from .objective_instr import InstructionCountBackend
+from .objective_time import ProgramRuntimeHarness, RuntimeObjectiveBackend
+from .paths import RUNTIME_CACHE_DIR
+from .settings import OBJECTIVE_KIND
 
-import numpy as np
+_ACTIVE_BACKEND = None
 
-from .runtime import get_instrcount
-from .settings import MAX_SEQ_LEN, OBJ_WORSEN_WEIGHT, llvm_tools_path
 
-def compose_multi_objective(metrics, pass_sequence):
-    """
-    把多个目标标量化为一个 BO 可直接优化的 objective。
 
-    多目标组成：
-      1. mean_norm   : 平均归一化指令数，越小越好
-      2. worsen_rate : 相比 -Oz 变差的程序比例，越小越好
+def create_objective_backend(objective_kind: str | None = None, runtime_rows=None):
+    """根据配置创建一个目标后端实例。"""
+    resolved = (objective_kind or OBJECTIVE_KIND).strip().lower()
+    if resolved == 'instrcount':
+        return InstructionCountBackend()
+    if resolved == 'runtime':
+        if runtime_rows is None:
+            raise RuntimeError(
+                'runtime backend requires runtime_rows; '
+                'load runtime-evaluable rows before creating the backend.'
+            )
+        harnesses = [ProgramRuntimeHarness(**row['runtime_harness']) for row in runtime_rows]
+        return RuntimeObjectiveBackend(harnesses, cache_dir=str(RUNTIME_CACHE_DIR))
+    raise ValueError(f'Unsupported OBJECTIVE_KIND={resolved!r}')
 
-    直觉解释：
-      - mean_norm 管“整体平均效果”
-      - worsen_rate 管“鲁棒性/保守性”
 
-    返回值越小越好。
-    """
-    return (
-        metrics['mean_norm']
-        + OBJ_WORSEN_WEIGHT * metrics['worsen_rate']
-    )
 
-def evaluate_sequence_metrics(programs, oz_values, pass_sequence):
-    """
-    在一组程序上评估一条 pass 序列，并返回详细统计。
+def configure_objective_backend(backend) -> None:
+    """设置当前全局目标后端。"""
+    global _ACTIVE_BACKEND
+    _ACTIVE_BACKEND = backend
 
-    与旧版只返回一个平均值不同，这里同时返回多目标需要的多个指标：
-      - mean_norm    : 平均归一化指令数
-      - median_norm  : 中位数归一化指令数
-      - worsen_rate  : 退化比例
-      - improved/tied/worsened: 三类样本计数
-      - objective    : 上述指标经加权后的标量化目标
 
-    这样 BO 仍然优化一个标量 objective，
-    但我们在日志、验证集选择、最终报告里都能看到完整画像。
-    """
-    if not programs:
-        return {
-            'count': 0,
-            'mean_norm': float('inf'),
-            'median_norm': float('inf'),
-            'improved': 0,
-            'tied': 0,
-            'worsened': 0,
-            'improved_rate': 0.0,
-            'tie_rate': 0.0,
-            'worsen_rate': 1.0,
-            'len_ratio': len(pass_sequence) / max(MAX_SEQ_LEN, 1),
-            'objective': float('inf'),
-        }
 
-    def eval_one(args):
-        prog, oz = args
-        with open(prog, 'r') as f:
-            ll_code = f.read()
-        try:
-            count = get_instrcount(ll_code, pass_sequence, llvm_tools_path)
-            ratio = count / oz if oz > 0 else float(count)
-            return count, ratio
-        except Exception as e:
-            print(f"[Error] eval {prog}: {e}")
-            return None, float('inf')
+def reset_objective_backend() -> None:
+    """清空当前全局目标后端。"""
+    global _ACTIVE_BACKEND
+    _ACTIVE_BACKEND = None
 
-    with ThreadPoolExecutor() as executor:
-        results = list(executor.map(eval_one, zip(programs, oz_values)))
 
-    ratios = []
-    improved = 0
-    tied = 0
-    worsened = 0
 
-    for (count, ratio), oz in zip(results, oz_values):
-        if ratio == float('inf'):
-            # 出现异常时，把它视为“最坏情况”：既不让平均值乐观，也不让退化率乐观
-            worsened += 1
-            continue
+def get_objective_backend():
+    """获取当前目标后端；若未初始化则创建默认后端。"""
+    global _ACTIVE_BACKEND
+    if _ACTIVE_BACKEND is None:
+        _ACTIVE_BACKEND = create_objective_backend()
+    return _ACTIVE_BACKEND
 
-        ratios.append(ratio)
-        if oz > 0 and count < oz:
-            improved += 1
-        elif oz > 0 and count == oz:
-            tied += 1
-        else:
-            worsened += 1
 
-    if not ratios:
-        return {
-            'count': len(programs),
-            'mean_norm': float('inf'),
-            'median_norm': float('inf'),
-            'improved': improved,
-            'tied': tied,
-            'worsened': max(worsened, len(programs)),
-            'improved_rate': 0.0,
-            'tie_rate': 0.0,
-            'worsen_rate': 1.0,
-            'len_ratio': len(pass_sequence) / max(MAX_SEQ_LEN, 1),
-            'objective': float('inf'),
-        }
 
-    total = len(programs)
-    metrics = {
-        'count': total,
-        'mean_norm': float(np.mean(ratios)),
-        'median_norm': float(np.median(ratios)),
-        'improved': improved,
-        'tied': tied,
-        'worsened': worsened,
-        'improved_rate': improved / total,
-        'tie_rate': tied / total,
-        'worsen_rate': worsened / total,
-        'len_ratio': len(pass_sequence) / max(MAX_SEQ_LEN, 1),
-    }
-    metrics['objective'] = compose_multi_objective(metrics, pass_sequence)
-    return metrics
+def get_objective_kind() -> str:
+    return get_objective_backend().objective_kind
 
-def get_objective_score(programs, oz_values, pass_sequence):
-    """
-    兼容性包装函数：返回多目标标量化后的 objective。
 
-    之所以保留这个名字，是因为 GA / 消融 / Top-N 等旧逻辑很多地方都在调用它。
-    现在它不再只表示“平均值”，而是表示“多目标合成后的 BO 优化目标”。
-    """
-    return evaluate_sequence_metrics(programs, oz_values, pass_sequence)['objective']
 
-def get_ei(pred, eta):
-    """
-    计算 Expected Improvement。
+def prepare_objective_backend(programs) -> None:
+    get_objective_backend().prepare(programs)
 
-    这里用 `math.erf` 实现标准正态的 CDF，避免把 `scipy` 变成硬依赖。
-    对实验脚本来说，这样更轻，也更方便在不同环境里做消融和快速复现。
-    """
-    pred = np.array(pred).transpose(1, 0)
-    m = np.mean(pred, axis=1)
-    s = np.std(pred, axis=1)
 
-    def calculate_f(std_values):
-        z = (eta - m) / std_values
-        cdf = 0.5 * (1.0 + np.vectorize(math.erf)(z / math.sqrt(2.0)))
-        pdf = np.exp(-0.5 * np.square(z)) / math.sqrt(2.0 * math.pi)
-        return (eta - m) * cdf + std_values * pdf
 
-    if np.any(s == 0.0):
-        s_copy = np.copy(s)
-        s_safe = np.copy(s)
-        s_safe[s_copy == 0.0] = 1.0
-        f = calculate_f(s_safe)
-        f[s_copy == 0.0] = 0.0
-    else:
-        f = calculate_f(s)
+def compute_baseline_values(programs):
+    return get_objective_backend().compute_baseline_values(programs)
 
-    return f
+
+
+def evaluate_sequence_metrics(programs, baseline_values, pass_sequence):
+    return get_objective_backend().evaluate_sequence_metrics(programs, baseline_values, pass_sequence)
+
+
+
+def get_objective_score(programs, baseline_values, pass_sequence):
+    return evaluate_sequence_metrics(programs, baseline_values, pass_sequence)['objective']
+
+
+__all__ = [
+    'ProgramRuntimeHarness',
+    'RuntimeObjectiveBackend',
+    'InstructionCountBackend',
+    'compose_multi_objective',
+    'create_objective_backend',
+    'configure_objective_backend',
+    'reset_objective_backend',
+    'get_objective_backend',
+    'get_objective_kind',
+    'prepare_objective_backend',
+    'compute_baseline_values',
+    'evaluate_sequence_metrics',
+    'get_objective_score',
+    'get_ei',
+]

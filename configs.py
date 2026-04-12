@@ -1,19 +1,16 @@
 """
 RFunipassLab 的集中配置入口。
 
-这个文件故意做得很“朴素”：
+这个文件故意保持“实验级”而不是“平台级”：
 
 1. 路径定义放在这里，方便所有脚本统一引用；
 2. 默认实验参数放在这里，方便统一修改；
 3. 预设实验列表放在这里，方便做快速 sweep；
 4. 只做轻量级校验，不引入复杂 schema 系统。
 
-对当前阶段来说，这样的组织方式已经足够支撑：
-
-- 单实验复现
-- 小规模超参数对比
-- 论文实验记录
-- 日志与结果汇总
+本次新增 runtime 目标后，配置仍然遵循同一个原则：
+搜索方法、特征、GA/RF 参数继续复用；只通过 OBJECTIVE_KIND 和
+PROGRAM_POOL_KIND 切换“评估目标”和“程序池来源”。
 """
 
 from __future__ import annotations
@@ -22,25 +19,26 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
+from boca_exp.paths import (
+    default_result_json_path,
+    ensure_results_layout as ensure_objective_results_layout,
+    normalize_objective_kind,
+)
+
 
 # ---------------------------------------------------------------------------
 # 基础路径定义
 # ---------------------------------------------------------------------------
-#
-# 这里假设当前目录结构为：
-#
-# /root/exp/
-# ├── RFunipass/
-# └── RFunipassLab/
-#
-# 因此只需要取当前目录的上一级，就可以稳定地找到目标项目目录。
 LAB_ROOT = Path(__file__).resolve().parent
 WORKSPACE_ROOT = LAB_ROOT.parent
 TARGET_PROJECT_DIR = LAB_ROOT
 TARGET_SCRIPT = TARGET_PROJECT_DIR / "boca.py"
 REFERENCE_PROJECT_DIR = WORKSPACE_ROOT / "RFunipass"
 
-# 所有新产物都只写在 RFunipassLab 自己的目录里。
+# 这些仍然是 run_one/run_sweep 自己的外层记录目录。
+# 真正的结构化实验 result json 会按 objective 另写到：
+# - results/instrcount/summaries/
+# - results/runtime/summaries/
 RESULTS_DIR = LAB_ROOT / "results"
 LOGS_DIR = RESULTS_DIR / "logs"
 MANIFESTS_DIR = RESULTS_DIR / "manifests"
@@ -50,13 +48,6 @@ REPORTS_DIR = RESULTS_DIR / "reports"
 # ---------------------------------------------------------------------------
 # 默认环境变量
 # ---------------------------------------------------------------------------
-#
-# 这些参数直接映射到 RFunipassLab/boca.py 中已经保留的环境变量读取逻辑。
-# 这样做的好处是：
-#
-# 1. 不需要改 boca.py；
-# 2. 不需要新造一套配置协议；
-# 3. 当前实验脚本仍尽量保持与原项目参数语义兼容。
 BASE_ENV: Dict[str, str] = {
     "RUNS": "1",
     "TRAIN_TOPK": "20",
@@ -77,21 +68,41 @@ BASE_ENV: Dict[str, str] = {
     "SCALE": "10",
     "OFFSET": "20",
     "FEATURE_MODE": "full",
+    # 目标切换：默认仍保持旧的指令数目标，保证兼容性。
+    "OBJECTIVE_KIND": "instrcount",
+    "PROGRAM_POOL_KIND": "auto",
+    # runtime 目标编译可执行文件时的后端优化等级。
+    # 默认 -O0 是为了让测到的变化主要来自待评估 pass 序列，而不是额外后端优化。
+    "BACKEND_OPT_LEVEL": "-O0",
+    "RUNTIME_TIMEOUT_SEC": "2.0",
+    "RUNTIME_SAMPLES": "5",
+    "RUNTIME_TARGET_SAMPLE_MS": "30.0",
+    "RUNTIME_MAX_VARIANCE_PCT": "10.0",
+    "RUNTIME_EVAL_MAX_VARIANCE_PCT": "15.0",
+    "RUNTIME_MAX_INNER_REPEATS": "64",
+    # 0 表示由 runner 自动取 max(TRAIN_TOPK + TEST_TOPK, SEED_TOPK)。
+    "RUNTIME_REQUIRED_ROWS": "0",
 }
+
+
+def _orig_boca_overrides() -> Dict[str, str]:
+    """原始 boca 参数的统一片段，避免多个预设复制后不一致。"""
+    return {
+        "TRAIN_TOPK": "200",
+        "TEST_TOPK": "50",
+        "SEED_TOPK": "0",
+        "MIN_VAL_PROGRAMS": "5",
+        "ITERS": "200",
+        "VAL_RATIO": "0.5",
+        "GA_POP": "200",
+        "GA_GEN": "5",
+        "MAX_SEQ_LEN": "120",
+    }
 
 
 # ---------------------------------------------------------------------------
 # 预设实验列表
 # ---------------------------------------------------------------------------
-#
-# 这里故意只放少量“代表性实验”，避免把实验框架本身做得太重。
-# 后续如果你要扩展 sweep，只需要继续往这个列表中追加 dict 即可。
-#
-# 每个实验包含四个字段：
-# - name:        实验的唯一名字，会进入日志/manifest 文件名
-# - group:       实验分组，主要用于汇总报告中分类展示
-# - description: 人类可读说明，便于回忆这个实验想验证什么
-# - overrides:   只写和 BASE_ENV 不同的项
 EXPERIMENTS: List[Dict[str, Any]] = [
     {
         "name": "baseline",
@@ -103,16 +114,10 @@ EXPERIMENTS: List[Dict[str, Any]] = [
         "name": "feature_lite",
         "group": "feature_ablation",
         "description": "切换到 Lite 特征编码，保留其余搜索流程不变。",
-        "overrides": {"FEATURE_MODE": "lite",
-                    "TRAIN_TOPK": "200",
-                    "TEST_TOPK": "50",
-                    "SEED_TOPK": "0",
-                    "MIN_VAL_PROGRAMS": "5",
-                    "ITERS": "200",
-                    "VAL_RATIO": "0.5",
-                    "GA_POP": "200",
-                    "GA_GEN": "5",
-                    "MAX_SEQ_LEN": "120",},
+        "overrides": {
+            "FEATURE_MODE": "lite",
+            **_orig_boca_overrides(),
+        },
     },
     {
         "name": "valratio_020",
@@ -144,31 +149,49 @@ EXPERIMENTS: List[Dict[str, Any]] = [
         },
     },
     {
-    "name": "orig_boca",
-    "group": "reproduce",
-    "description": "复现原始 RFunipass/boca.py 默认实验参数。",
-    "overrides": {
-        "TRAIN_TOPK": "200",
-        "TEST_TOPK": "50",
-        "SEED_TOPK": "0",
-        "MIN_VAL_PROGRAMS": "5",
-        "ITERS": "200",
-        "VAL_RATIO": "0.5",
-        "GA_POP": "200",
-        "GA_GEN": "5",
-        "MAX_SEQ_LEN": "120",
+        "name": "orig_boca",
+        "group": "reproduce",
+        "description": "复现原始 RFunipass/boca.py 默认实验参数。",
+        "overrides": _orig_boca_overrides(),
     },
-},
-
+    {
+        "name": "instr_runtime_pool",
+        "group": "runtime_compare",
+        "description": "仍以指令数为目标，但只在 runtime-evaluable 子集上搜索，便于公平对照。",
+        "overrides": {
+            "PROGRAM_POOL_KIND": "runtime",
+            **_orig_boca_overrides(),
+        },
+    },
+    {
+        "name": "runtime_baseline",
+        "group": "runtime",
+        "description": "把优化目标切换为实际运行时间，搜索/选择流程与 orig_boca 尽量保持一致。",
+        "overrides": {
+            "OBJECTIVE_KIND": "runtime",
+            "PROGRAM_POOL_KIND": "runtime",
+            "BACKEND_OPT_LEVEL": "-O0",
+            **_orig_boca_overrides(),
+        },
+    },
+    {
+        "name": "runtime_feature_lite",
+        "group": "runtime_feature_ablation",
+        "description": "运行时间目标 + Lite 特征编码，用于分析轻量特征对时间目标的影响。",
+        "overrides": {
+            "OBJECTIVE_KIND": "runtime",
+            "PROGRAM_POOL_KIND": "runtime",
+            "FEATURE_MODE": "lite",
+            "BACKEND_OPT_LEVEL": "-O0",
+            **_orig_boca_overrides(),
+        },
+    },
 ]
 
 
 # ---------------------------------------------------------------------------
 # 简单数值校验规则
 # ---------------------------------------------------------------------------
-#
-# 我们不引入重量级 schema 工具，但依然希望在“运行前”拦住明显错误。
-# 这类轻量规则已经足以避免大多数实验配置写错的问题。
 NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
     "RUNS": {"type": int, "min": 1},
     "TRAIN_TOPK": {"type": int, "min": 1},
@@ -188,13 +211,20 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
     "DECAY": {"type": float, "min": 0.0},
     "SCALE": {"type": float, "min": 0.0},
     "OFFSET": {"type": float, "min": 0.0},
+    "RUNTIME_TIMEOUT_SEC": {"type": float, "min": 0.1},
+    "RUNTIME_SAMPLES": {"type": int, "min": 1},
+    "RUNTIME_TARGET_SAMPLE_MS": {"type": float, "min": 0.0},
+    "RUNTIME_MAX_VARIANCE_PCT": {"type": float, "min": 0.0},
+    "RUNTIME_EVAL_MAX_VARIANCE_PCT": {"type": float, "min": 0.0},
+    "RUNTIME_MAX_INNER_REPEATS": {"type": int, "min": 1},
+    "RUNTIME_REQUIRED_ROWS": {"type": int, "min": 0},
 }
 
 
-# 这类字符串开关不需要复杂 schema，
-# 但仍然值得在运行前做一次显式检查。
 CHOICE_RULES: Dict[str, set[str]] = {
     "FEATURE_MODE": {"full", "lite"},
+    "OBJECTIVE_KIND": {"instrcount", "runtime"},
+    "PROGRAM_POOL_KIND": {"auto", "tuning", "runtime"},
 }
 
 
@@ -202,33 +232,32 @@ def ensure_layout() -> None:
     """
     创建实验框架自己的输出目录。
 
-    这里不接触 RFunipass 目录内的任何文件或文件夹，
-    以满足“只新增、不修改原项目”的约束。
+    `results/logs` 与 `results/manifests` 仍用于 run_one 外层记录；
+    `boca_exp.paths.ensure_results_layout()` 会额外创建：
+      - results/instrcount/summaries
+      - results/runtime/summaries
+      - results/runtime/manifests/cache
     """
+    ensure_objective_results_layout()
     for path in (RESULTS_DIR, LOGS_DIR, MANIFESTS_DIR, REPORTS_DIR):
         path.mkdir(parents=True, exist_ok=True)
 
 
-def describe_overrides(overrides: Dict[str, str]) -> str:
-    """
-    把覆盖项转成简洁的文本描述，便于写入 manifest 和报告。
+def default_result_path_for_run(run_id: str, control_env: Dict[str, str]) -> Path:
+    """根据 objective kind 生成本次运行的结构化 result json 路径。"""
+    objective_kind = normalize_objective_kind(control_env.get("OBJECTIVE_KIND", "instrcount"))
+    return default_result_json_path(objective_kind, run_id)
 
-    例如：
-        {"VAL_RATIO": "0.2", "RNUM": "128"}
-    会变成：
-        "RNUM=128, VAL_RATIO=0.2"
-    """
+
+def describe_overrides(overrides: Dict[str, str]) -> str:
+    """把覆盖项转成简洁的文本描述，便于写入 manifest 和报告。"""
     if not overrides:
         return "baseline"
     return ", ".join(f"{key}={overrides[key]}" for key in sorted(overrides))
 
 
 def list_experiments() -> List[Dict[str, Any]]:
-    """
-    返回实验列表的浅拷贝，并补充 `changed` 字段。
-
-    这样上层脚本可以直接使用这个列表，而不必重复拼接说明文字。
-    """
+    """返回实验列表的浅拷贝，并补充 `changed` 字段。"""
     experiments: List[Dict[str, Any]] = []
     for item in EXPERIMENTS:
         copied = dict(item)
@@ -238,22 +267,18 @@ def list_experiments() -> List[Dict[str, Any]]:
     return experiments
 
 
-def get_experiment(name: str) -> Dict[str, Any]:
-    """
-    按名字获取单个实验配置。
+def available_experiment_names() -> List[str]:
+    """返回所有实验名字，主要给 CLI 的帮助信息使用。"""
+    return [item["name"] for item in EXPERIMENTS]
 
-    如果名字写错，直接抛出异常，让调用方尽早失败。
-    """
+
+def get_experiment(name: str) -> Dict[str, Any]:
+    """按名字获取单个实验配置。"""
     for experiment in list_experiments():
         if experiment["name"] == name:
             return experiment
     available = ", ".join(available_experiment_names())
     raise KeyError(f"Unknown experiment '{name}'. Available experiments: {available}")
-
-
-def available_experiment_names() -> List[str]:
-    """返回所有实验名字，主要给 CLI 的帮助信息使用。"""
-    return [item["name"] for item in EXPERIMENTS]
 
 
 def resolve_control_env(overrides: Optional[Dict[str, str]] = None) -> Dict[str, str]:
@@ -272,27 +297,14 @@ def resolve_control_env(overrides: Optional[Dict[str, str]] = None) -> Dict[str,
 
 
 def build_process_env(control_env: Dict[str, str]) -> Dict[str, str]:
-    """
-    生成传给 subprocess 的完整环境变量。
-
-    这里会保留当前 shell 中已有的 PATH / HOME / PYTHONPATH 等变量，
-    然后再叠加实验需要控制的参数。
-    """
+    """生成传给 subprocess 的完整环境变量。"""
     env = os.environ.copy()
     env.update(control_env)
     return env
 
 
 def validate_env(env: Dict[str, str]) -> None:
-    """
-    对实验参数做非常轻量的校验。
-
-    这个函数的设计目标不是“面面俱到”，而是把最常见、最浪费时间的错误挡在运行之前。
-    例如：
-    - 本来应为整数的参数写成了字符串文字
-    - 本来应在 [0, 1] 的比例参数被写成了 1.5
-    - 关键脚本路径不存在
-    """
+    """对实验参数做轻量校验，把常见手误挡在运行前。"""
     if not TARGET_PROJECT_DIR.exists():
         raise FileNotFoundError(f"Target project directory not found: {TARGET_PROJECT_DIR}")
     if not TARGET_SCRIPT.exists():
@@ -301,7 +313,6 @@ def validate_env(env: Dict[str, str]) -> None:
     for key, rule in NUMERIC_RULES.items():
         if key not in env:
             continue
-
         raw_value = env[key]
         value_type = rule["type"]
 
@@ -312,7 +323,6 @@ def validate_env(env: Dict[str, str]) -> None:
 
         min_value = rule.get("min")
         max_value = rule.get("max")
-
         if min_value is not None and value < min_value:
             raise ValueError(f"{key} must be >= {min_value}, got {value}")
         if max_value is not None and value > max_value:
@@ -321,15 +331,11 @@ def validate_env(env: Dict[str, str]) -> None:
     for key, choices in CHOICE_RULES.items():
         if key not in env:
             continue
-
         value = str(env[key]).strip().lower()
         if value not in choices:
             expected = ", ".join(sorted(choices))
             raise ValueError(f"{key} must be one of: {expected}, got {env[key]!r}")
 
-    # 下面补充几条跨字段或“更接近语义”的检查。
-    #
-    # 虽然它们也不复杂，但能显著降低因为配置手误导致的无效实验。
     val_ratio = float(env["VAL_RATIO"])
     if not 0.0 < val_ratio < 1.0:
         raise ValueError(f"VAL_RATIO should be inside (0, 1), got {val_ratio}")
@@ -338,14 +344,17 @@ def validate_env(env: Dict[str, str]) -> None:
     if elite_ratio >= 1.0:
         raise ValueError(f"GA_ELITE should be smaller than 1.0, got {elite_ratio}")
 
+    objective_kind = str(env.get("OBJECTIVE_KIND", "instrcount")).strip().lower()
+    pool_kind = str(env.get("PROGRAM_POOL_KIND", "auto")).strip().lower()
+    if objective_kind == "runtime" and pool_kind == "tuning":
+        raise ValueError(
+            "OBJECTIVE_KIND=runtime cannot use PROGRAM_POOL_KIND=tuning; "
+            "use auto or runtime so every program has a calibrated runtime harness."
+        )
+
 
 def format_env_block(env: Dict[str, str]) -> str:
-    """
-    把环境变量格式化成多行文本，便于：
-    - 终端输出
-    - 日志头部
-    - manifest 调试
-    """
+    """把环境变量格式化成多行文本，便于终端输出、日志头部和 manifest 调试。"""
     lines = []
     for key in sorted(env):
         lines.append(f"{key}={env[key]}")
@@ -358,8 +367,6 @@ def iter_selected_experiments(names: Optional[Iterable[str]] = None) -> List[Dic
 
     - names 为空时，返回全部预设实验；
     - names 非空时，按给定顺序返回对应实验。
-
-    这样可以让 run_sweep.py 很容易支持“全量跑”和“只跑其中几个”两种模式。
     """
     if not names:
         return list_experiments()

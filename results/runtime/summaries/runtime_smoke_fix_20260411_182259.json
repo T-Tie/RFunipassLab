@@ -1,0 +1,276 @@
+{
+  "run_id": "runtime_smoke_fix_20260411_182259",
+  "tuning_csv": "/root/exp/RFunipassLab/data/tuning_results.csv",
+  "synergy_csv": "/root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv",
+  "result_json_path": "/root/exp/RFunipassLab/results/runtime/summaries/runtime_smoke_fix_20260411_182259.json",
+  "objective_kind": "runtime",
+  "program_pool_kind": "runtime",
+  "runtime_manifest_path": "/root/exp/RFunipassLab/results/runtime/manifests/runtime_manifest.json",
+  "runtime_required_rows": 3,
+  "runtime_rows_count": 3,
+  "backend_opt_level": "-O0",
+  "train_topk": 2,
+  "test_topk": 1,
+  "seed_topk": 2,
+  "iters": 1,
+  "runs": 1,
+  "decay": 0.5,
+  "scale": 10.0,
+  "offset": 20.0,
+  "ga_pop_size": 4,
+  "ga_generations": 1,
+  "ga_mutate_rate": 0.5,
+  "ga_elite_ratio": 0.25,
+  "ga_tournament_k": 2,
+  "max_seq_len": 20,
+  "val_ratio": 0.5,
+  "min_val_programs": 1,
+  "obj_worsen_weight": 0.15,
+  "feature_mode": "full",
+  "programs": [
+    "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/53_1495.ll",
+    "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/51_225.ll"
+  ],
+  "test_programs": [
+    "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/7_1103.ll"
+  ],
+  "suboptimal_sequences": [
+    [
+      "module(scc-oz-module-inliner)",
+      "module(attributor)",
+      "module(scc-oz-module-inliner)",
+      "module(attributor)",
+      "cgscc(attributor-cgscc)",
+      "function(newgvn)"
+    ],
+    [
+      "module(scc-oz-module-inliner)",
+      "function(newgvn)",
+      "function(gvn-hoist)",
+      "function(memcpyopt)",
+      "module(attributor)",
+      "module(scc-oz-module-inliner)"
+    ]
+  ],
+  "run_results": [
+    {
+      "objective_kind": "runtime",
+      "objective_history": [
+        0.6661592846283612,
+        0.2740330576063789,
+        0.2740330576063789
+      ],
+      "timestamps": [
+        0.006189823150634766,
+        0.008743047714233398,
+        1.5299010276794434
+      ],
+      "search_best_objective": 0.2740330576063789,
+      "search_best_sequence": [
+        "module(scc-oz-module-inliner)",
+        "function(newgvn)",
+        "function(gvn-hoist)",
+        "function(memcpyopt)",
+        "module(attributor)",
+        "module(scc-oz-module-inliner)"
+      ],
+      "final_sequence": [
+        "module(scc-oz-module-inliner)",
+        "function(newgvn)",
+        "function(gvn-hoist)",
+        "function(memcpyopt)",
+        "module(attributor)",
+        "module(scc-oz-module-inliner)"
+      ],
+      "final_train_metrics": {
+        "count": 1,
+        "mean_norm": 0.2740330576063789,
+        "median_norm": 0.2740330576063789,
+        "improved": 1,
+        "tied": 0,
+        "worsened": 0,
+        "invalid": 0,
+        "improved_rate": 1.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 0.0,
+        "len_ratio": 0.3,
+        "per_program": {
+          "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/51_225.ll": {
+            "ratio": 0.2740330576063789,
+            "raw_value": 1183882.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.2740330576063789
+      },
+      "final_val_metrics": {
+        "count": 1,
+        "mean_norm": 0.2676646859018947,
+        "median_norm": 0.2676646859018947,
+        "improved": 1,
+        "tied": 0,
+        "worsened": 0,
+        "invalid": 0,
+        "improved_rate": 1.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 0.0,
+        "len_ratio": 0.3,
+        "per_program": {
+          "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/53_1495.ll": {
+            "ratio": 0.2676646859018947,
+            "raw_value": 1167135.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.2676646859018947
+      },
+      "final_test_metrics": {
+        "count": 1,
+        "mean_norm": 0.7791549388771722,
+        "median_norm": 0.7791549388771722,
+        "improved": 1,
+        "tied": 0,
+        "worsened": 0,
+        "invalid": 0,
+        "improved_rate": 1.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 0.0,
+        "len_ratio": 0.3,
+        "per_program": {
+          "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/7_1103.ll": {
+            "ratio": 0.7791549388771722,
+            "raw_value": 3398511.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.7791549388771722
+      },
+      "selection_split": "validation",
+      "selection_objective": 0.2676646859018947
+    }
+  ],
+  "best_run_index": 0,
+  "best_result": {
+    "objective_kind": "runtime",
+    "objective_history": [
+      0.6661592846283612,
+      0.2740330576063789,
+      0.2740330576063789
+    ],
+    "timestamps": [
+      0.006189823150634766,
+      0.008743047714233398,
+      1.5299010276794434
+    ],
+    "search_best_objective": 0.2740330576063789,
+    "search_best_sequence": [
+      "module(scc-oz-module-inliner)",
+      "function(newgvn)",
+      "function(gvn-hoist)",
+      "function(memcpyopt)",
+      "module(attributor)",
+      "module(scc-oz-module-inliner)"
+    ],
+    "final_sequence": [
+      "module(scc-oz-module-inliner)",
+      "function(newgvn)",
+      "function(gvn-hoist)",
+      "function(memcpyopt)",
+      "module(attributor)",
+      "module(scc-oz-module-inliner)"
+    ],
+    "final_train_metrics": {
+      "count": 1,
+      "mean_norm": 0.2740330576063789,
+      "median_norm": 0.2740330576063789,
+      "improved": 1,
+      "tied": 0,
+      "worsened": 0,
+      "invalid": 0,
+      "improved_rate": 1.0,
+      "tie_rate": 0.0,
+      "worsen_rate": 0.0,
+      "len_ratio": 0.3,
+      "per_program": {
+        "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/51_225.ll": {
+          "ratio": 0.2740330576063789,
+          "raw_value": 1183882.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 0.2740330576063789
+    },
+    "final_val_metrics": {
+      "count": 1,
+      "mean_norm": 0.2676646859018947,
+      "median_norm": 0.2676646859018947,
+      "improved": 1,
+      "tied": 0,
+      "worsened": 0,
+      "invalid": 0,
+      "improved_rate": 1.0,
+      "tie_rate": 0.0,
+      "worsen_rate": 0.0,
+      "len_ratio": 0.3,
+      "per_program": {
+        "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/53_1495.ll": {
+          "ratio": 0.2676646859018947,
+          "raw_value": 1167135.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 0.2676646859018947
+    },
+    "final_test_metrics": {
+      "count": 1,
+      "mean_norm": 0.7791549388771722,
+      "median_norm": 0.7791549388771722,
+      "improved": 1,
+      "tied": 0,
+      "worsened": 0,
+      "invalid": 0,
+      "improved_rate": 1.0,
+      "tie_rate": 0.0,
+      "worsen_rate": 0.0,
+      "len_ratio": 0.3,
+      "per_program": {
+        "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/7_1103.ll": {
+          "ratio": 0.7791549388771722,
+          "raw_value": 3398511.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 0.7791549388771722
+    },
+    "selection_split": "validation",
+    "selection_objective": 0.2676646859018947
+  },
+  "best_runtime_sequence_instruction_test_metrics": {
+    "count": 1,
+    "mean_norm": 0.9743589743589743,
+    "median_norm": 0.9743589743589743,
+    "improved": 1,
+    "tied": 0,
+    "worsened": 0,
+    "invalid": 0,
+    "improved_rate": 1.0,
+    "tie_rate": 0.0,
+    "worsen_rate": 0.0,
+    "len_ratio": 0.3,
+    "per_program": {
+      "/root/iscas/ruyituner/dataset21/poj104-v2-ll_4/train/7_1103.ll": {
+        "ratio": 0.9743589743589743,
+        "raw_value": 76.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      }
+    },
+    "objective": 0.9743589743589743
+  }
+}

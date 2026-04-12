@@ -1,0 +1,185 @@
+; ModuleID = '<stdin>'
+source_filename = "/tmp/tmpl_vybhzh.cpp"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-i128:128-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-unknown-linux-gnu"
+
+module asm ".globl _ZSt21ios_base_library_initv"
+
+@.str = private unnamed_addr constant [3 x i8] c"%d\00", align 1
+@.str.1 = private unnamed_addr constant [4 x i8] c"%d,\00", align 1
+
+; Function Attrs: mustprogress norecurse uwtable
+define dso_local noundef i32 @main() local_unnamed_addr #0 {
+entry:
+  %n = alloca i32, align 4
+  %jn = alloca i32, align 4
+  %i1 = alloca i32, align 4
+  %i2 = alloca i32, align 4
+  %i3 = alloca i32, align 4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %n) #4
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef align 4 %jn) #4
+  store i32 0, ptr %jn, align 4, !tbaa !5
+  %call = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef @.str, ptr noundef align 4 %n)
+  %0 = load i32, ptr %n, align 4, !tbaa !5
+  %1 = zext i32 %0 to i64
+  %2 = call ptr @llvm.stacksave.p0()
+  %vla = alloca i32, i64 %1, align 16
+  %3 = load i32, ptr %n, align 4, !tbaa !5
+  %4 = zext i32 %3 to i64
+  %vla1 = alloca i32, i64 %4, align 16
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef %i1) #5
+  store i32 0, ptr %i1, align 4, !tbaa !5
+  br label %for.cond
+
+for.cond:                                         ; preds = %for.inc31, %entry
+  %5 = load i32, ptr %i1, align 4, !tbaa !5
+  %6 = load i32, ptr %n, align 4, !tbaa !5
+  %cmp = icmp slt i32 %5, %6
+  br i1 %cmp, label %for.body, label %for.cond.cleanup
+
+for.cond.cleanup:                                 ; preds = %for.cond
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %i1) #5
+  br label %for.end32
+
+for.body:                                         ; preds = %for.cond
+  %idxprom = sext i32 %5 to i64
+  %arrayidx = getelementptr inbounds i32, ptr %vla, i64 %idxprom
+  %call2 = call i32 (ptr, ...) @__isoc23_scanf(ptr noundef @.str, ptr noundef %arrayidx)
+  %7 = load i32, ptr %arrayidx, align 4, !tbaa !5
+  %rem = srem i32 %7, 2
+  %cmp5 = icmp eq i32 %rem, 1
+  br i1 %cmp5, label %if.then, label %if.end30
+
+if.then:                                          ; preds = %for.body
+  %8 = load i32, ptr %jn, align 4, !tbaa !5
+  %add = add nsw i32 %8, 1
+  store i32 %add, ptr %jn, align 4, !tbaa !5
+  %idxprom8 = sext i32 %add to i64
+  %arrayidx9 = getelementptr inbounds i32, ptr %vla1, i64 %idxprom8
+  store i32 %7, ptr %arrayidx9, align 4, !tbaa !5
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef %i2) #5
+  store i32 %add, ptr %i2, align 4, !tbaa !5
+  br label %for.cond10
+
+for.cond10:                                       ; preds = %for.inc, %if.then
+  %9 = load i32, ptr %i2, align 4, !tbaa !5
+  %cmp11 = icmp sgt i32 %9, 1
+  br i1 %cmp11, label %for.body13, label %for.cond.cleanup12
+
+for.cond.cleanup12:                               ; preds = %for.cond10
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %i2) #5
+  br label %for.end
+
+for.body13:                                       ; preds = %for.cond10
+  %idxprom14 = sext i32 %9 to i64
+  %arrayidx15 = getelementptr inbounds i32, ptr %vla1, i64 %idxprom14
+  %10 = load i32, ptr %arrayidx15, align 4, !tbaa !5
+  %sub = sub nsw i32 %9, 1
+  %idxprom16 = sext i32 %sub to i64
+  %arrayidx17 = getelementptr inbounds i32, ptr %vla1, i64 %idxprom16
+  %11 = load i32, ptr %arrayidx17, align 4, !tbaa !5
+  %cmp18 = icmp slt i32 %10, %11
+  br i1 %cmp18, label %if.then19, label %if.end
+
+if.then19:                                        ; preds = %for.body13
+  store i32 %10, ptr %arrayidx17, align 4, !tbaa !5
+  store i32 %11, ptr %arrayidx15, align 4, !tbaa !5
+  br label %if.end
+
+if.end:                                           ; preds = %if.then19, %for.body13
+  br label %for.inc
+
+for.inc:                                          ; preds = %if.end
+  %dec = add nsw i32 %9, -1
+  store i32 %dec, ptr %i2, align 4, !tbaa !5
+  br label %for.cond10, !llvm.loop !9
+
+for.end:                                          ; preds = %for.cond.cleanup12
+  br label %if.end30
+
+if.end30:                                         ; preds = %for.end, %for.body
+  br label %for.inc31
+
+for.inc31:                                        ; preds = %if.end30
+  %inc = add nsw i32 %5, 1
+  store i32 %inc, ptr %i1, align 4, !tbaa !5
+  br label %for.cond, !llvm.loop !12
+
+for.end32:                                        ; preds = %for.cond.cleanup
+  call void @llvm.lifetime.start.p0(i64 noundef 4, ptr noundef %i3) #5
+  store i32 1, ptr %i3, align 4, !tbaa !5
+  br label %for.cond33
+
+for.cond33:                                       ; preds = %for.inc40, %for.end32
+  %12 = load i32, ptr %i3, align 4, !tbaa !5
+  %13 = load i32, ptr %jn, align 4, !tbaa !5
+  %cmp34 = icmp slt i32 %12, %13
+  br i1 %cmp34, label %for.body36, label %for.cond.cleanup35
+
+for.cond.cleanup35:                               ; preds = %for.cond33
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %i3) #5
+  br label %for.end42
+
+for.body36:                                       ; preds = %for.cond33
+  %idxprom37 = sext i32 %12 to i64
+  %arrayidx38 = getelementptr inbounds i32, ptr %vla1, i64 %idxprom37
+  %14 = load i32, ptr %arrayidx38, align 4, !tbaa !5
+  %call39 = call i32 (ptr, ...) @printf(ptr noundef @.str.1, i32 noundef %14)
+  br label %for.inc40
+
+for.inc40:                                        ; preds = %for.body36
+  %inc41 = add nsw i32 %12, 1
+  store i32 %inc41, ptr %i3, align 4, !tbaa !5
+  br label %for.cond33, !llvm.loop !13
+
+for.end42:                                        ; preds = %for.cond.cleanup35
+  %idxprom43 = sext i32 %13 to i64
+  %arrayidx44 = getelementptr inbounds i32, ptr %vla1, i64 %idxprom43
+  %15 = load i32, ptr %arrayidx44, align 4, !tbaa !5
+  %call45 = call i32 (ptr, ...) @printf(ptr noundef @.str, i32 noundef %15)
+  call void @llvm.stackrestore.p0(ptr %2)
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %jn) #5
+  call void @llvm.lifetime.end.p0(i64 noundef 4, ptr noundef %n) #5
+  ret i32 0
+}
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.start.p0(i64 immarg, ptr captures(none)) #1
+
+declare i32 @__isoc23_scanf(ptr noundef, ...) local_unnamed_addr #2
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn
+declare ptr @llvm.stacksave.p0() #3
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn memory(argmem: readwrite)
+declare void @llvm.lifetime.end.p0(i64 immarg, ptr captures(none)) #1
+
+declare i32 @printf(ptr noundef, ...) local_unnamed_addr #2
+
+; Function Attrs: nocallback nofree nosync nounwind willreturn
+declare void @llvm.stackrestore.p0(ptr) #3
+
+attributes #0 = { mustprogress norecurse uwtable "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #1 = { nocallback nofree nosync nounwind willreturn memory(argmem: readwrite) }
+attributes #2 = { "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cmov,+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #3 = { nocallback nofree nosync nounwind willreturn }
+attributes #4 = { nofree nounwind }
+attributes #5 = { nounwind }
+
+!llvm.module.flags = !{!0, !1, !2, !3}
+!llvm.ident = !{!4}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{i32 8, !"PIC Level", i32 2}
+!2 = !{i32 7, !"PIE Level", i32 2}
+!3 = !{i32 7, !"uwtable", i32 2}
+!4 = !{!"clang version 21.1.8 (https://github.com/llvm/llvm-project.git 2078da43e25a4623cab2d0d60decddf709aaea28)"}
+!5 = !{!6, !6, i64 0}
+!6 = !{!"int", !7, i64 0}
+!7 = !{!"omnipotent char", !8, i64 0}
+!8 = !{!"Simple C++ TBAA"}
+!9 = distinct !{!9, !10, !11}
+!10 = !{!"llvm.loop.mustprogress"}
+!11 = !{!"llvm.loop.unroll.disable"}
+!12 = distinct !{!12, !10, !11}
+!13 = distinct !{!13, !10, !11}
