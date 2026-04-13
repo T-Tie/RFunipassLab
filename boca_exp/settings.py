@@ -31,6 +31,7 @@ INITIAL_SEED_TOPK = int(os.environ.get('SEED_TOPK', 0))
 
 # 多目标权重
 OBJ_WORSEN_WEIGHT = float(os.environ.get('OBJ_WORSEN_W', 0.15))
+OBJ_HIGHVAR_WEIGHT = float(os.environ.get('OBJ_HIGHVAR_W', 0.0))
 
 # 特征编码模式
 FEATURE_MODE = os.environ.get('FEATURE_MODE', 'full').strip().lower()

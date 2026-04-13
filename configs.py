@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 from boca_exp.paths import (
     default_result_json_path,
@@ -57,6 +57,7 @@ BASE_ENV: Dict[str, str] = {
     "ITERS": "6",
     "VAL_RATIO": "0.3",
     "OBJ_WORSEN_W": "0.15",
+    "OBJ_HIGHVAR_W": "0.0",
     "GA_POP": "30",
     "GA_GEN": "3",
     "GA_MUT": "0.8",
@@ -201,6 +202,7 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
     "ITERS": {"type": int, "min": 1},
     "VAL_RATIO": {"type": float, "min": 0.0, "max": 1.0},
     "OBJ_WORSEN_W": {"type": float, "min": 0.0},
+    "OBJ_HIGHVAR_W": {"type": float, "min": 0.0},
     "GA_POP": {"type": int, "min": 1},
     "GA_GEN": {"type": int, "min": 1},
     "GA_MUT": {"type": float, "min": 0.0, "max": 1.0},
@@ -281,17 +283,34 @@ def get_experiment(name: str) -> Dict[str, Any]:
     raise KeyError(f"Unknown experiment '{name}'. Available experiments: {available}")
 
 
-def resolve_control_env(overrides: Optional[Dict[str, str]] = None) -> Dict[str, str]:
+def resolve_control_env(
+    overrides: Optional[Dict[str, str]] = None,
+    external_env: Optional[Mapping[str, str]] = None,
+) -> Dict[str, str]:
     """
     生成“实验真正关心”的环境变量集合。
 
     注意这里不把整个系统环境也混进来，是因为：
     - manifest 只需要记录受实验控制的参数；
     - 这样输出更干净，也更利于复现。
+
+    但为了实验时能方便地临时覆盖单个超参数，允许 shell 前缀环境变量
+    对“已知实验参数键”进行最终覆盖。例如：
+    `OBJ_HIGHVAR_W=0.05 python3 run_one.py --name runtime_baseline`
     """
     env = dict(BASE_ENV)
     if overrides:
         env.update(overrides)
+
+    resolved_external_env = external_env or {}
+    override_keys = set(BASE_ENV) | set(NUMERIC_RULES) | set(CHOICE_RULES)
+    if overrides:
+        override_keys.update(overrides)
+
+    for key in override_keys:
+        if key in resolved_external_env:
+            env[key] = str(resolved_external_env[key])
+
     validate_env(env)
     return env
 

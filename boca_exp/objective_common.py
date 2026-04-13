@@ -7,13 +7,22 @@ import statistics
 
 import numpy as np
 
-from .settings import MAX_SEQ_LEN, OBJ_WORSEN_WEIGHT
+from .settings import MAX_SEQ_LEN, OBJ_HIGHVAR_WEIGHT, OBJ_WORSEN_WEIGHT
 
 
-def compose_multi_objective(metrics, pass_sequence, worsen_weight: float = OBJ_WORSEN_WEIGHT):
-    """把平均收益与退化率合成为单个 BO 目标。"""
+def compose_multi_objective(
+    metrics,
+    pass_sequence,
+    worsen_weight: float = OBJ_WORSEN_WEIGHT,
+    highvar_weight: float = OBJ_HIGHVAR_WEIGHT,
+):
+    """把平均收益、退化率和高方差比例合成为单个 BO 目标。"""
     del pass_sequence
-    return metrics['mean_norm'] + worsen_weight * metrics['worsen_rate']
+    return (
+        metrics['mean_norm']
+        + worsen_weight * metrics['worsen_rate']
+        + highvar_weight * metrics.get('high_variance_rate', 0.0)
+    )
 
 
 
@@ -27,8 +36,10 @@ def compose_metrics(
     per_program,
     invalid,
     *,
+    high_variance: int = 0,
     max_seq_len: int = MAX_SEQ_LEN,
     worsen_weight: float = OBJ_WORSEN_WEIGHT,
+    highvar_weight: float = OBJ_HIGHVAR_WEIGHT,
 ):
     """把逐程序观测汇总成统一的 metrics 字典。"""
     total = len(programs)
@@ -41,9 +52,11 @@ def compose_metrics(
             'tied': 0,
             'worsened': 0,
             'invalid': 0,
+            'high_variance': 0,
             'improved_rate': 0.0,
             'tie_rate': 0.0,
             'worsen_rate': 1.0,
+            'high_variance_rate': 0.0,
             'len_ratio': 0.0,
             'objective': float('inf'),
             'per_program': {},
@@ -64,9 +77,11 @@ def compose_metrics(
         'tied': tied,
         'worsened': worsened,
         'invalid': invalid,
+        'high_variance': high_variance,
         'improved_rate': improved / total,
         'tie_rate': tied / total,
         'worsen_rate': worsened / total,
+        'high_variance_rate': high_variance / total,
         'len_ratio': len(pass_sequence) / max(max_seq_len, 1),
         'per_program': per_program,
     }
@@ -74,6 +89,7 @@ def compose_metrics(
         metrics,
         pass_sequence,
         worsen_weight=worsen_weight,
+        highvar_weight=highvar_weight,
     )
     return metrics
 

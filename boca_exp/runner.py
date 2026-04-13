@@ -52,6 +52,7 @@ from .settings import (
     INITIAL_SEED_TOPK,
     MAX_SEQ_LEN,
     MIN_VAL_PROGRAMS,
+    OBJ_HIGHVAR_WEIGHT,
     OBJECTIVE_KIND,
     OBJ_WORSEN_WEIGHT,
     PROGRAM_POOL_KIND,
@@ -171,11 +172,12 @@ def _load_program_pool(
 
 def _format_metrics(label: str, metrics: Dict[str, Any]) -> str:
     """统一的日志指标格式，避免多处重复拼接。"""
-    return (
-        f"{label}_obj={metrics['objective']:.4f}, "
-        f"{label}_mean={metrics['mean_norm']:.4f}, "
-        f"{label}_worsen={metrics['worsen_rate']:.2%}"
-    )
+    return ", ".join([
+        f"{label}_obj={metrics['objective']:.4f}",
+        f"{label}_mean={metrics['mean_norm']:.4f}",
+        f"{label}_worsen={metrics['worsen_rate']:.2%}",
+        f"{label}_highvar={metrics.get('high_variance_rate', 0.0):.2%}",
+    ])
 
 
 def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
@@ -207,7 +209,10 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     print(f"特征模式:      {get_feature_mode()}")
     print(f"RF 特征维度:   {get_feature_dim()}")
     print(f"词表: {all_passes}")
-    print(f"多目标权重:    mean=1.0, worsen={OBJ_WORSEN_WEIGHT}")
+    print(
+        f"多目标权重:    mean=1.0, "
+        f"worsen={OBJ_WORSEN_WEIGHT}, highvar={OBJ_HIGHVAR_WEIGHT}"
+    )
 
     # ---- Step 1.5: 从训练程序中切出验证集 ----
     search_programs, val_programs = split_train_validation_programs(
@@ -316,7 +321,8 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             f"EI={ei_val:.4f}  rnum={rnum:.1f}  "
             f"len={len(new_seq)}  syn_rate={syn_rate:.2f}  "
             f"mean={train_metrics['mean_norm']:.4f}  "
-            f"worsen={train_metrics['worsen_rate']:.2%}"
+            f"worsen={train_metrics['worsen_rate']:.2%}  "
+            f"highvar={train_metrics.get('high_variance_rate', 0.0):.2%}"
         )
 
     # ---- Step 5: 基于 validation / search_train 选择最终序列 ----
@@ -403,8 +409,10 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             f"{primary_split_name}_obj={primary_metrics['objective']:.4f}, "
             f"{primary_split_name}_mean={primary_metrics['mean_norm']:.4f}, "
             f"{primary_split_name}_worsen={primary_metrics['worsen_rate']:.2%}, "
+            f"{primary_split_name}_highvar={primary_metrics.get('high_variance_rate', 0.0):.2%}, "
             f"train_obj={train_metrics['objective']:.4f}, "
             f"train_mean={train_metrics['mean_norm']:.4f}, "
+            f"train_highvar={train_metrics.get('high_variance_rate', 0.0):.2%}, "
             f"len={len(seq)}, syn_rate={syn_rate:.2f}"
         )
         if test_programs and test_baseline_values:
@@ -412,7 +420,8 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             msg += (
                 f", test_obj={test_metrics['objective']:.4f}, "
                 f"test_mean={test_metrics['mean_norm']:.4f}, "
-                f"test_worsen={test_metrics['worsen_rate']:.2%}"
+                f"test_worsen={test_metrics['worsen_rate']:.2%}, "
+                f"test_highvar={test_metrics.get('high_variance_rate', 0.0):.2%}"
             )
         print(msg)
         print("     " + (" → ".join(seq) if seq else "(空序列)"))
@@ -572,26 +581,11 @@ def cli_main() -> int:
         )
         print(f"最优通用 pass 序列 ({len(best_seq_overall)} passes):")
         print(f"  {' → '.join(best_seq_overall)}")
-        print(
-            f"  search_train: "
-            f"obj={best_result['final_train_metrics']['objective']:.4f}, "
-            f"mean={best_result['final_train_metrics']['mean_norm']:.4f}, "
-            f"worsen={best_result['final_train_metrics']['worsen_rate']:.2%}"
-        )
+        print(f"  {_format_metrics('search_train', best_result['final_train_metrics'])}")
         if best_result['final_val_metrics'] is not None:
-            print(
-                f"  validation:   "
-                f"obj={best_result['final_val_metrics']['objective']:.4f}, "
-                f"mean={best_result['final_val_metrics']['mean_norm']:.4f}, "
-                f"worsen={best_result['final_val_metrics']['worsen_rate']:.2%}"
-            )
+            print(f"  {_format_metrics('validation', best_result['final_val_metrics'])}")
         if best_result['final_test_metrics'] is not None:
-            print(
-                f"  test:         "
-                f"obj={best_result['final_test_metrics']['objective']:.4f}, "
-                f"mean={best_result['final_test_metrics']['mean_norm']:.4f}, "
-                f"worsen={best_result['final_test_metrics']['worsen_rate']:.2%}"
-            )
+            print(f"  {_format_metrics('test', best_result['final_test_metrics'])}")
 
         cross_instrcount_metrics = _build_cross_instrcount_metrics(best_seq_overall, test_programs)
         summary_payload = {
@@ -622,6 +616,7 @@ def cli_main() -> int:
             'val_ratio': VAL_RATIO,
             'min_val_programs': MIN_VAL_PROGRAMS,
             'obj_worsen_weight': OBJ_WORSEN_WEIGHT,
+            'obj_highvar_weight': OBJ_HIGHVAR_WEIGHT,
             'feature_mode': get_feature_mode(),
             'programs': list(programs),
             'test_programs': list(test_programs),

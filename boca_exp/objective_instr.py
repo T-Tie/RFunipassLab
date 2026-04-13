@@ -48,6 +48,7 @@ class InstructionCountBackend:
         if not programs:
             return compose_metrics(
                 [], pass_sequence, [], 0, 0, 0, {}, 0,
+                high_variance=0,
                 max_seq_len=self.max_seq_len,
                 worsen_weight=self.worsen_weight,
             )
@@ -107,6 +108,7 @@ class InstructionCountBackend:
             worsened,
             per_program,
             invalid,
+            high_variance=0,
             max_seq_len=self.max_seq_len,
             worsen_weight=self.worsen_weight,
         )

@@ -101,7 +101,7 @@ def run_experiment(experiment_name: str, dry_run: bool = False, show_env: bool =
     ensure_layout()
 
     experiment = get_experiment(experiment_name)
-    control_env = resolve_control_env(experiment["overrides"])
+    control_env = resolve_control_env(experiment["overrides"], external_env=os.environ)
 
     run_id = build_run_id(experiment_name)
     default_result_json = default_result_path_for_run(run_id, control_env)

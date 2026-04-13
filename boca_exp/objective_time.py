@@ -18,6 +18,7 @@ from .runtime import detect_target_triple, transform_ir_strict
 from .settings import (
     BACKEND_OPT_LEVEL,
     MAX_SEQ_LEN,
+    OBJ_HIGHVAR_WEIGHT,
     OBJ_WORSEN_WEIGHT,
     RUNTIME_EVAL_MAX_VARIANCE_PCT,
     RUNTIME_MAX_INNER_REPEATS,
@@ -324,6 +325,7 @@ class RuntimeObjectiveBackend:
         max_variance_pct: float = RUNTIME_EVAL_MAX_VARIANCE_PCT,
         max_seq_len: int = MAX_SEQ_LEN,
         worsen_weight: float = OBJ_WORSEN_WEIGHT,
+        highvar_weight: float = OBJ_HIGHVAR_WEIGHT,
     ) -> None:
         self.harnesses = {item.filename: item for item in harnesses}
         self.timeout_sec = timeout_sec
@@ -331,6 +333,7 @@ class RuntimeObjectiveBackend:
         self.max_variance_pct = max_variance_pct
         self.max_seq_len = max_seq_len
         self.worsen_weight = worsen_weight
+        self.highvar_weight = highvar_weight
         self.compile_cache = CompileCache(cache_dir, llvm_tools_path_value=llvm_tools_path_value)
         self._eval_cache: Dict[tuple[str, tuple[str, ...]], ProgramEvalResult] = {}
 
@@ -348,8 +351,10 @@ class RuntimeObjectiveBackend:
         if not programs:
             return compose_metrics(
                 [], pass_sequence, [], 0, 0, 0, {}, 0,
+                high_variance=0,
                 max_seq_len=self.max_seq_len,
                 worsen_weight=self.worsen_weight,
+                highvar_weight=self.highvar_weight,
             )
 
         ratios = []
@@ -357,6 +362,7 @@ class RuntimeObjectiveBackend:
         tied = 0
         worsened = 0
         invalid = 0
+        high_variance = 0
         per_program = {}
 
         for program, baseline in zip(programs, baseline_values):
@@ -367,6 +373,8 @@ class RuntimeObjectiveBackend:
                 'status': result.status,
                 'variance_pct': result.variance_pct,
             }
+            if result.status == 'high_variance':
+                high_variance += 1
             if not math.isfinite(result.ratio):
                 worsened += 1
                 invalid += 1
@@ -389,8 +397,10 @@ class RuntimeObjectiveBackend:
             worsened,
             per_program,
             invalid,
+            high_variance=high_variance,
             max_seq_len=self.max_seq_len,
             worsen_weight=self.worsen_weight,
+            highvar_weight=self.highvar_weight,
         )
 
     def evaluate_program(self, program: str, pass_sequence: Sequence[str]) -> ProgramEvalResult:
