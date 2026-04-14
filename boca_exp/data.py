@@ -24,6 +24,9 @@ from .settings import (
 )
 from .state import all_passes, pass_to_idx, synergy_edges, synergy_graph, synergy_self
 
+RUNTIME_MANIFEST_VERSION = 2
+REQUIRED_FIXED_BASELINES = ('none', 'oz', 'o3')
+
 
 def _parse_pass_sequence(seq_raw: str) -> List[str]:
     """
@@ -220,15 +223,22 @@ def _load_runtime_rows_from_manifest(
         return []
 
     payload = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if int(payload.get('version', 1)) < RUNTIME_MANIFEST_VERSION:
+        return []
+
     rows: List[Dict[str, Any]] = []
     try:
         for idx, item in enumerate(payload.get('programs', [])):
+            runtime_harness = item['runtime_harness']
+            fixed_baselines = runtime_harness.get('fixed_baselines') or {}
+            if any(name not in fixed_baselines for name in REQUIRED_FIXED_BASELINES):
+                return []
             rows.append({
                 'row_id': item.get('row_id', idx),
                 'filename': item['filename'],
                 'best_sequence': list(item['best_sequence']),
                 'best_score': item.get('best_score', float('inf')),
-                'runtime_harness': item['runtime_harness'],
+                'runtime_harness': runtime_harness,
             })
     except (KeyError, TypeError):
         return []
@@ -255,6 +265,9 @@ def load_runtime_evaluable_rows_from_tuning_csv(
     返回的每一行在原始字段基础上额外附带 `runtime_harness`。
     该 manifest 会写在 RFunipassLab/results/runtime/manifests/ 下，
     与指令数实验结果天然分离。
+
+    自 v2 起，runtime harness 会一次性记录 `[] / -Oz / -O3` 三条固定参考基线，
+    供后续每轮迭代直接做相对对比，而不必在实验中重复测量它们。
     """
     manifest = Path(manifest_path) if manifest_path else default_runtime_manifest_path()
 
@@ -290,6 +303,7 @@ def load_runtime_evaluable_rows_from_tuning_csv(
         })
 
     payload = {
+        'version': RUNTIME_MANIFEST_VERSION,
         'generated_at': time.strftime('%Y-%m-%d %H:%M:%S'),
         'required_rows': required_rows,
         'programs': runtime_rows,

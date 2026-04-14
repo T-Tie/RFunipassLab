@@ -180,6 +180,48 @@ def _format_metrics(label: str, metrics: Dict[str, Any]) -> str:
     ])
 
 
+def _format_runtime_comparisons(metrics: Optional[Dict[str, Any]]) -> str:
+    """把相对 [] / -Oz / -O3 的运行时间对比格式化为单行文本。"""
+    if not metrics:
+        return ""
+
+    comparisons = metrics.get('comparisons') or {}
+    parts = []
+    for name in ('none', 'oz', 'o3'):
+        item = comparisons.get(name)
+        if not item:
+            continue
+        mean_norm = float(item.get('mean_norm', float('inf')))
+        if not math.isfinite(mean_norm):
+            parts.append(f"vs_{name}=inf")
+            continue
+        improvement_pct = item.get('improvement_pct')
+        if improvement_pct is None:
+            improvement_pct = (1.0 - mean_norm) * 100.0
+        parts.append(f"vs_{name}={mean_norm:.3f} ({float(improvement_pct):+.1f}%)")
+    return "  ".join(parts)
+
+
+def _format_fixed_baseline_panel(panel: Optional[Dict[str, Any]]) -> str:
+    """把固定基线摘要压成一行，便于在 Step 2 和 summary 中展示。"""
+    if not panel:
+        return ""
+
+    baselines = panel.get('baselines') or {}
+    parts = []
+    for name in ('none', 'oz', 'o3'):
+        item = baselines.get(name)
+        if not item:
+            continue
+        mean_norm = float(item.get('mean_norm', float('inf')))
+        if not math.isfinite(mean_norm):
+            parts.append(f"{item.get('label', name)}=inf")
+            continue
+        improvement_pct = float(item.get('improvement_pct', (1.0 - mean_norm) * 100.0))
+        parts.append(f"{item.get('label', name)}={mean_norm:.3f} ({improvement_pct:+.1f}%)")
+    return "  ".join(parts)
+
+
 def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
          test_programs: Optional[Sequence[str]] = None, topn: int = 5):
     """
@@ -239,12 +281,40 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
         print(f"[Step 2c] 计算测试集程序 {backend.baseline_display_name}...")
         test_baseline_values = compute_baseline_values(test_programs)
 
+    fixed_baseline_summaries: Dict[str, Dict[str, Any]] = {}
+    if backend.objective_kind == 'runtime' and hasattr(backend, 'summarize_fixed_baselines'):
+        print("\n[Step 2d] 固定参考基线（相对 []）...")
+        fixed_baseline_summaries['search_train'] = backend.summarize_fixed_baselines(
+            search_programs,
+            anchor='none',
+        )
+        print(
+            f"  search_train: {_format_fixed_baseline_panel(fixed_baseline_summaries['search_train'])}"
+        )
+        if val_programs:
+            fixed_baseline_summaries['validation'] = backend.summarize_fixed_baselines(
+                val_programs,
+                anchor='none',
+            )
+            print(
+                f"  validation:   {_format_fixed_baseline_panel(fixed_baseline_summaries['validation'])}"
+            )
+        if test_programs:
+            fixed_baseline_summaries['test'] = backend.summarize_fixed_baselines(
+                test_programs,
+                anchor='none',
+            )
+            print(
+                f"  test:         {_format_fixed_baseline_panel(fixed_baseline_summaries['test'])}"
+            )
+
     # ---- Step 3: 评估初始 seed 序列 ----
     evaluated_sequences = [list(sequence) for sequence in suboptimal_sequences]
     evaluated_scores = []
     evaluated_train_metrics = []
     evaluated_val_metrics = []
     timestamps = []
+    iteration_compare_history = []
     begin_time = time.time()
 
     print(f"\n[Step 3] 评估初始 seed 序列（共 {len(evaluated_sequences)} 条）...")
@@ -324,6 +394,20 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             f"worsen={train_metrics['worsen_rate']:.2%}  "
             f"highvar={train_metrics.get('high_variance_rate', 0.0):.2%}"
         )
+        train_compare_text = _format_runtime_comparisons(train_metrics)
+        if train_compare_text:
+            print(f"                 search_train: {train_compare_text}")
+        val_compare_text = _format_runtime_comparisons(val_metrics)
+        if val_compare_text:
+            print(f"                 validation:   {val_compare_text}")
+
+        iteration_compare_history.append({
+            'iter': steps,
+            'sequence': list(new_seq),
+            'search_objective': new_score,
+            'search_train': train_metrics.get('comparisons', {}),
+            'validation': val_metrics.get('comparisons', {}) if val_metrics else None,
+        })
 
     # ---- Step 5: 基于 validation / search_train 选择最终序列 ----
     print(f"\n[Step 5] 按 {primary_split_name} 选择最终通用序列...")
@@ -342,8 +426,14 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
 
     print("  选择结果:")
     print(f"    {_format_metrics('search_train', final_train_metrics)}")
+    final_train_compare_text = _format_runtime_comparisons(final_train_metrics)
+    if final_train_compare_text:
+        print(f"    search_train: {final_train_compare_text}")
     if final_val_metrics is not None:
         print(f"    {_format_metrics('validation', final_val_metrics)}")
+        final_val_compare_text = _format_runtime_comparisons(final_val_metrics)
+        if final_val_compare_text:
+            print(f"    validation:   {final_val_compare_text}")
 
     # ---- Step 6: 在最终选择集合上做消融，进一步去冗余 ----
     print(f"\n[Step 6] 在 {primary_split_name} 上执行消融后处理...")
@@ -384,10 +474,19 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     print(f"\n最终通用 pass 序列（{len(final_seq)} 个 pass, syn_rate={final_syn_rate:.2f}）:")
     print("  " + " → ".join(final_seq) if final_seq else "  (空序列)")
     print(f"  {_format_metrics('search_train', final_train_metrics)}")
+    final_train_compare_text = _format_runtime_comparisons(final_train_metrics)
+    if final_train_compare_text:
+        print(f"  search_train: {final_train_compare_text}")
     if final_val_metrics is not None:
         print(f"  {_format_metrics('validation', final_val_metrics)}")
+        final_val_compare_text = _format_runtime_comparisons(final_val_metrics)
+        if final_val_compare_text:
+            print(f"  validation:   {final_val_compare_text}")
     if final_test_metrics is not None:
         print(f"  {_format_metrics('test', final_test_metrics)}")
+        final_test_compare_text = _format_runtime_comparisons(final_test_metrics)
+        if final_test_compare_text:
+            print(f"  test:         {final_test_compare_text}")
 
     # ---- Step 7: 输出 Top-N 序列 ----
     ranked_top = rank_top_unique_sequences(
@@ -438,6 +537,8 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
         'final_test_metrics': final_test_metrics,
         'selection_split': primary_split_name,
         'selection_objective': final_primary_metrics['objective'],
+        'fixed_baseline_summaries': fixed_baseline_summaries,
+        'iteration_compare_history': iteration_compare_history,
     }
 
 
@@ -515,13 +616,14 @@ def cli_main() -> int:
     top_n = 5
     train_topk = int(os.environ.get('TRAIN_TOPK', 200))
     test_topk = int(os.environ.get('TEST_TOPK', 50))
-    seed_topk = INITIAL_SEED_TOPK if INITIAL_SEED_TOPK > 0 else train_topk
+    configured_seed_topk = INITIAL_SEED_TOPK
+    effective_seed_topk = configured_seed_topk if configured_seed_topk > 0 else train_topk
 
     programs, suboptimal_sequences, test_programs, runtime_rows, resolved_pool_kind, runtime_required_rows = _load_program_pool(
         tuning_csv=tuning_csv,
         train_topk=train_topk,
         test_topk=test_topk,
-        seed_topk=seed_topk,
+        seed_topk=effective_seed_topk,
         objective_kind=objective_kind,
         program_pool_kind=PROGRAM_POOL_KIND,
         runtime_manifest_path=runtime_manifest_path,
@@ -582,10 +684,27 @@ def cli_main() -> int:
         print(f"最优通用 pass 序列 ({len(best_seq_overall)} passes):")
         print(f"  {' → '.join(best_seq_overall)}")
         print(f"  {_format_metrics('search_train', best_result['final_train_metrics'])}")
+        best_train_compare_text = _format_runtime_comparisons(best_result['final_train_metrics'])
+        if best_train_compare_text:
+            print(f"  search_train: {best_train_compare_text}")
         if best_result['final_val_metrics'] is not None:
             print(f"  {_format_metrics('validation', best_result['final_val_metrics'])}")
+            best_val_compare_text = _format_runtime_comparisons(best_result['final_val_metrics'])
+            if best_val_compare_text:
+                print(f"  validation:   {best_val_compare_text}")
         if best_result['final_test_metrics'] is not None:
             print(f"  {_format_metrics('test', best_result['final_test_metrics'])}")
+            best_test_compare_text = _format_runtime_comparisons(best_result['final_test_metrics'])
+            if best_test_compare_text:
+                print(f"  test:         {best_test_compare_text}")
+
+        fixed_runtime_baselines = best_result.get('fixed_baseline_summaries')
+        if fixed_runtime_baselines:
+            print("固定参考基线（相对 []）:")
+            for split_name in ('search_train', 'validation', 'test'):
+                panel = fixed_runtime_baselines.get(split_name)
+                if panel:
+                    print(f"  {split_name}: {_format_fixed_baseline_panel(panel)}")
 
         cross_instrcount_metrics = _build_cross_instrcount_metrics(best_seq_overall, test_programs)
         summary_payload = {
@@ -601,7 +720,8 @@ def cli_main() -> int:
             'backend_opt_level': BACKEND_OPT_LEVEL,
             'train_topk': train_topk,
             'test_topk': test_topk,
-            'seed_topk': seed_topk,
+            'seed_topk': configured_seed_topk,
+            'effective_seed_topk': effective_seed_topk,
             'iters': iters,
             'runs': begin2end,
             'decay': decay,
@@ -624,6 +744,7 @@ def cli_main() -> int:
             'run_results': run_results,
             'best_run_index': best_run,
             'best_result': best_result,
+            'fixed_runtime_baselines': fixed_runtime_baselines,
             'best_runtime_sequence_instruction_test_metrics': cross_instrcount_metrics,
         }
         _write_summary_json(summary_payload, result_json_path)

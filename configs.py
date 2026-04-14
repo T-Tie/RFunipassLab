@@ -93,7 +93,7 @@ def _orig_boca_overrides() -> Dict[str, str]:
         "TEST_TOPK": "50",
         "SEED_TOPK": "0",
         "MIN_VAL_PROGRAMS": "5",
-        "ITERS": "200",
+        "ITERS": "100",
         "VAL_RATIO": "0.5",
         "GA_POP": "200",
         "GA_GEN": "5",

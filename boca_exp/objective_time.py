@@ -9,7 +9,7 @@ import os
 import statistics
 import subprocess
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Dict, Optional, Sequence
 
@@ -30,6 +30,17 @@ from .settings import (
 )
 
 DEFAULT_LM_FLAGS = ['-lm']
+FIXED_BASELINE_ORDER = ('none', 'oz', 'o3')
+FIXED_BASELINE_PIPELINES = {
+    'none': [],
+    'oz': '-Oz',
+    'o3': '-O3',
+}
+FIXED_BASELINE_LABELS = {
+    'none': '[]',
+    'oz': '-Oz',
+    'o3': '-O3',
+}
 INPUT_HINT_TOKENS = (
     'scanf',
     'fscanf',
@@ -85,6 +96,42 @@ class ProgramRuntimeHarness:
     baseline_output_sha1: str
     baseline_stdout_size: int
     calibration_sequence_ok: bool
+    fixed_baselines: Dict[str, Dict[str, object]] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        fixed_baselines = dict(self.fixed_baselines or {})
+        if 'oz' not in fixed_baselines and self.baseline_time_ns > 0:
+            fixed_baselines['oz'] = {
+                'label': FIXED_BASELINE_LABELS['oz'],
+                'pipeline': FIXED_BASELINE_PIPELINES['oz'],
+                'time_ns': float(self.baseline_time_ns),
+                'variance_pct': float(self.baseline_variance_pct),
+                'stdout_sha1': self.baseline_output_sha1,
+                'stdout_size': int(self.baseline_stdout_size),
+                'inner_repeats': int(self.inner_repeats),
+            }
+        self.fixed_baselines = fixed_baselines
+
+        oz_baseline = self.get_fixed_baseline('oz')
+        if oz_baseline:
+            self.baseline_time_ns = float(oz_baseline.get('time_ns', self.baseline_time_ns))
+            self.baseline_variance_pct = float(
+                oz_baseline.get('variance_pct', self.baseline_variance_pct)
+            )
+            self.baseline_output_sha1 = str(
+                oz_baseline.get('stdout_sha1', self.baseline_output_sha1)
+            )
+            self.baseline_stdout_size = int(
+                oz_baseline.get('stdout_size', self.baseline_stdout_size)
+            )
+            self.inner_repeats = int(oz_baseline.get('inner_repeats', self.inner_repeats))
+
+    def get_fixed_baseline(self, baseline_name: str) -> Optional[Dict[str, object]]:
+        baseline = self.fixed_baselines.get(baseline_name)
+        return baseline if isinstance(baseline, dict) else None
+
+    def available_fixed_baselines(self) -> list[str]:
+        return [name for name in FIXED_BASELINE_ORDER if self.get_fixed_baseline(name)]
 
     def to_json(self) -> Dict[str, object]:
         return asdict(self)
@@ -126,6 +173,18 @@ def _max_deviation_pct(values: Sequence[float], center: float) -> float:
 
 def _clang_bin(llvm_tools_path_value: str) -> str:
     return os.path.join(llvm_tools_path_value, 'clang++') if llvm_tools_path_value else 'clang++'
+
+
+def _fixed_baseline_record(name: str, stats: Dict[str, object]) -> Dict[str, object]:
+    return {
+        'label': FIXED_BASELINE_LABELS[name],
+        'pipeline': FIXED_BASELINE_PIPELINES[name],
+        'time_ns': float(stats['median_ns']),
+        'variance_pct': float(stats['variance_pct']),
+        'stdout_sha1': str(stats['stdout_sha1']),
+        'stdout_size': int(stats['stdout_size']),
+        'inner_repeats': int(stats['inner_repeats']),
+    }
 
 
 class CompileCache:
@@ -209,20 +268,22 @@ class RuntimeHarnessBuilder:
         if not has_input_hint:
             template_items = [('empty', '')] + template_items
 
-        baseline_exe = self.compile_cache.compile_binary(program_path, '-Oz')
+        fixed_baseline_execs = {
+            name: self.compile_cache.compile_binary(program_path, pipeline)
+            for name, pipeline in FIXED_BASELINE_PIPELINES.items()
+        }
         reference_exe = self.compile_cache.compile_binary(program_path, list(reference_sequence))
 
         best_choice: Optional[ProgramRuntimeHarness] = None
         for input_name, input_data in template_items:
             try:
-                baseline_stats = self._benchmark_binary(baseline_exe, input_data)
+                fixed_baselines = self._benchmark_fixed_baselines(fixed_baseline_execs, input_data)
                 reference_run = self._run_once(reference_exe, input_data)
             except ObjectiveError:
                 continue
 
-            if reference_run['stdout_sha1'] != baseline_stats['stdout_sha1']:
-                continue
-            if baseline_stats['variance_pct'] > self.max_variance_pct:
+            oz_baseline = fixed_baselines['oz']
+            if reference_run['stdout_sha1'] != oz_baseline['stdout_sha1']:
                 continue
 
             candidate = ProgramRuntimeHarness(
@@ -231,12 +292,13 @@ class RuntimeHarnessBuilder:
                 input_name=input_name,
                 input_data=input_data,
                 has_input_hint=has_input_hint,
-                inner_repeats=baseline_stats['inner_repeats'],
-                baseline_time_ns=baseline_stats['median_ns'],
-                baseline_variance_pct=baseline_stats['variance_pct'],
-                baseline_output_sha1=baseline_stats['stdout_sha1'],
-                baseline_stdout_size=baseline_stats['stdout_size'],
+                inner_repeats=int(oz_baseline['inner_repeats']),
+                baseline_time_ns=float(oz_baseline['time_ns']),
+                baseline_variance_pct=float(oz_baseline['variance_pct']),
+                baseline_output_sha1=str(oz_baseline['stdout_sha1']),
+                baseline_stdout_size=int(oz_baseline['stdout_size']),
                 calibration_sequence_ok=True,
+                fixed_baselines=fixed_baselines,
             )
             if best_choice is None or candidate.baseline_time_ns > best_choice.baseline_time_ns:
                 best_choice = candidate
@@ -244,6 +306,28 @@ class RuntimeHarnessBuilder:
         if best_choice is None:
             raise RunError(f'failed to calibrate runtime harness for {program_path}')
         return best_choice
+
+    def _benchmark_fixed_baselines(
+        self,
+        executables: Dict[str, str],
+        input_data: str,
+    ) -> Dict[str, Dict[str, object]]:
+        records: Dict[str, Dict[str, object]] = {}
+        expected_hash = None
+
+        for name in FIXED_BASELINE_ORDER:
+            bench = self._benchmark_binary(executables[name], input_data)
+            if bench['variance_pct'] > self.max_variance_pct:
+                raise RunError(
+                    f'{name} baseline variance too high: {bench["variance_pct"]:.2f}%'
+                )
+            if expected_hash is None:
+                expected_hash = bench['stdout_sha1']
+            elif bench['stdout_sha1'] != expected_hash:
+                raise RunError(f'{name} baseline stdout mismatch')
+            records[name] = _fixed_baseline_record(name, bench)
+
+        return records
 
     def _run_once(self, binary_path: str, input_data: str) -> Dict[str, object]:
         try:
@@ -342,20 +426,27 @@ class RuntimeObjectiveBackend:
         if missing:
             raise ObjectiveError(f'missing runtime harnesses for {len(missing)} programs')
         for program in programs:
-            self.compile_cache.compile_binary(program, '-Oz')
+            harness = self.harnesses[program]
+            for baseline_name in harness.available_fixed_baselines():
+                baseline = harness.get_fixed_baseline(baseline_name)
+                if baseline is None:
+                    continue
+                self.compile_cache.compile_binary(program, baseline.get('pipeline', '-Oz'))
 
     def compute_baseline_values(self, programs):
         return [float(self.harnesses[program].baseline_time_ns) for program in programs]
 
     def evaluate_sequence_metrics(self, programs, baseline_values, pass_sequence):
         if not programs:
-            return compose_metrics(
+            metrics = compose_metrics(
                 [], pass_sequence, [], 0, 0, 0, {}, 0,
                 high_variance=0,
                 max_seq_len=self.max_seq_len,
                 worsen_weight=self.worsen_weight,
                 highvar_weight=self.highvar_weight,
             )
+            metrics['comparisons'] = {}
+            return metrics
 
         ratios = []
         improved = 0
@@ -364,15 +455,18 @@ class RuntimeObjectiveBackend:
         invalid = 0
         high_variance = 0
         per_program = {}
+        comparison_buckets = self._init_comparison_buckets()
 
         for program, baseline in zip(programs, baseline_values):
             result = self.evaluate_program(program, pass_sequence)
+            harness = self.harnesses[program]
             per_program[program] = {
                 'ratio': result.ratio,
                 'raw_value': result.raw_value,
                 'status': result.status,
                 'variance_pct': result.variance_pct,
             }
+            self._update_comparison_buckets(comparison_buckets, harness, result)
             if result.status == 'high_variance':
                 high_variance += 1
             if not math.isfinite(result.ratio):
@@ -388,7 +482,7 @@ class RuntimeObjectiveBackend:
             else:
                 worsened += 1
 
-        return compose_metrics(
+        metrics = compose_metrics(
             programs,
             pass_sequence,
             ratios,
@@ -402,6 +496,127 @@ class RuntimeObjectiveBackend:
             worsen_weight=self.worsen_weight,
             highvar_weight=self.highvar_weight,
         )
+        metrics['comparisons'] = self._finalize_comparison_buckets(comparison_buckets)
+        return metrics
+
+    def summarize_fixed_baselines(self, programs, anchor: str = 'none') -> Dict[str, object]:
+        anchor_label = FIXED_BASELINE_LABELS.get(anchor, anchor)
+        baselines: Dict[str, Dict[str, object]] = {}
+
+        for name in FIXED_BASELINE_ORDER:
+            ratios: list[float] = []
+            for program in programs:
+                harness = self.harnesses.get(program)
+                if harness is None:
+                    continue
+                anchor_baseline = harness.get_fixed_baseline(anchor)
+                baseline = harness.get_fixed_baseline(name)
+                if anchor_baseline is None or baseline is None:
+                    continue
+
+                anchor_time = float(anchor_baseline.get('time_ns', float('inf')))
+                baseline_time = float(baseline.get('time_ns', float('inf')))
+                if not math.isfinite(anchor_time) or anchor_time <= 0:
+                    continue
+                if not math.isfinite(baseline_time):
+                    continue
+                ratios.append(baseline_time / anchor_time)
+
+            if not ratios:
+                continue
+
+            mean_norm = float(statistics.fmean(ratios))
+            baselines[name] = {
+                'label': FIXED_BASELINE_LABELS.get(name, name),
+                'count': len(ratios),
+                'mean_norm': mean_norm,
+                'median_norm': float(statistics.median(ratios)),
+                'improvement_pct': (1.0 - mean_norm) * 100.0,
+            }
+
+        return {
+            'anchor': anchor,
+            'anchor_label': anchor_label,
+            'baselines': baselines,
+        }
+
+    def _init_comparison_buckets(self) -> Dict[str, Dict[str, object]]:
+        return {
+            name: {
+                'ratios': [],
+                'count': 0,
+                'improved': 0,
+                'tied': 0,
+                'worsened': 0,
+                'invalid': 0,
+                'high_variance': 0,
+            }
+            for name in FIXED_BASELINE_ORDER
+        }
+
+    def _update_comparison_buckets(
+        self,
+        comparison_buckets: Dict[str, Dict[str, object]],
+        harness: ProgramRuntimeHarness,
+        result: ProgramEvalResult,
+    ) -> None:
+        for name in FIXED_BASELINE_ORDER:
+            baseline = harness.get_fixed_baseline(name)
+            if baseline is None:
+                continue
+
+            bucket = comparison_buckets[name]
+            bucket['count'] += 1
+            if result.status == 'high_variance':
+                bucket['high_variance'] += 1
+
+            baseline_time = float(baseline.get('time_ns', float('inf')))
+            if not math.isfinite(result.raw_value) or not math.isfinite(baseline_time) or baseline_time <= 0:
+                bucket['worsened'] += 1
+                bucket['invalid'] += 1
+                continue
+
+            ratio = result.raw_value / baseline_time
+            bucket['ratios'].append(float(ratio))
+            if result.raw_value < baseline_time * 0.999:
+                bucket['improved'] += 1
+            elif result.raw_value <= baseline_time * 1.001:
+                bucket['tied'] += 1
+            else:
+                bucket['worsened'] += 1
+
+    def _finalize_comparison_buckets(
+        self,
+        comparison_buckets: Dict[str, Dict[str, object]],
+    ) -> Dict[str, Dict[str, object]]:
+        comparisons: Dict[str, Dict[str, object]] = {}
+
+        for name, bucket in comparison_buckets.items():
+            total = int(bucket['count'])
+            if total <= 0:
+                continue
+
+            ratios = list(bucket['ratios'])
+            mean_norm = float(statistics.fmean(ratios)) if ratios else float('inf')
+            median_norm = float(statistics.median(ratios)) if ratios else float('inf')
+            comparisons[name] = {
+                'label': FIXED_BASELINE_LABELS.get(name, name),
+                'count': total,
+                'mean_norm': mean_norm,
+                'median_norm': median_norm,
+                'improved': int(bucket['improved']),
+                'tied': int(bucket['tied']),
+                'worsened': int(bucket['worsened']),
+                'invalid': int(bucket['invalid']),
+                'high_variance': int(bucket['high_variance']),
+                'improved_rate': bucket['improved'] / total,
+                'tie_rate': bucket['tied'] / total,
+                'worsen_rate': bucket['worsened'] / total,
+                'high_variance_rate': bucket['high_variance'] / total,
+                'improvement_pct': ((1.0 - mean_norm) * 100.0) if math.isfinite(mean_norm) else None,
+            }
+
+        return comparisons
 
     def evaluate_program(self, program: str, pass_sequence: Sequence[str]) -> ProgramEvalResult:
         key = (program, tuple(pass_sequence))
