@@ -237,6 +237,7 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
 
     print("=" * 60)
     print(f"目标类型:      {backend.objective_kind}")
+    print(f"目标基准:      {getattr(backend, 'baseline_pipeline', '(unknown)')}")
     print(f"基准指标:      {backend.baseline_display_name}")
     print(f"优化指标:      {backend.metric_display_name}")
     if backend.objective_kind == 'runtime':
@@ -713,6 +714,9 @@ def cli_main() -> int:
             'synergy_csv': synergy_csv,
             'result_json_path': str(result_json_path),
             'objective_kind': objective_kind,
+            'objective_baseline': getattr(backend, 'baseline_name', None),
+            'baseline_pipeline': getattr(backend, 'baseline_pipeline', None),
+            'baseline_display_name': getattr(backend, 'baseline_display_name', None),
             'program_pool_kind': resolved_pool_kind,
             'runtime_manifest_path': str(runtime_manifest_path) if runtime_rows is not None else None,
             'runtime_required_rows': runtime_required_rows,

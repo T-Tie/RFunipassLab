@@ -206,12 +206,15 @@ def collect_rows(latest_only: bool = True) -> List[Dict[str, Any]]:
             continue
 
         parsed = parse_log(log_path.read_text(encoding="utf-8", errors="replace"))
+        control_env = manifest.get("control_env") or {}
         row: Dict[str, Any] = {
             "run_id": manifest.get("run_id"),
             "name": manifest.get("name"),
             "group": manifest.get("group"),
             "description": manifest.get("description"),
             "changed": manifest.get("changed"),
+            "objective_kind": control_env.get("OBJECTIVE_KIND", "instrcount"),
+            "objective_baseline": control_env.get("OBJECTIVE_BASELINE", "oz"),
             "started_at": manifest.get("started_at"),
             "finished_at": manifest.get("finished_at"),
             "wall_runtime_s": manifest.get("wall_runtime_s") or parsed.get("reported_runtime_s"),
@@ -244,7 +247,7 @@ def collect_rows(latest_only: bool = True) -> List[Dict[str, Any]]:
 def write_csv(path: Path, rows: List[Dict[str, Any]], fieldnames: List[str]) -> None:
     """写出机器可读的汇总 CSV。"""
     with path.open("w", newline="", encoding="utf-8") as file_obj:
-        writer = csv.DictWriter(file_obj, fieldnames=fieldnames)
+        writer = csv.DictWriter(file_obj, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -277,6 +280,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append(
         f"- Best experiment: `{best_row['name']}` "
         f"(group=`{best_row['group']}`, "
+        f"objective=`{best_row.get('objective_kind')}/{best_row.get('objective_baseline')}`, "
         f"validation_obj=`{format_value(best_row.get('validation_obj'))}`, "
         f"test_obj=`{format_value(best_row.get('test_obj'))}`)"
     )
@@ -289,6 +293,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
                 str(index),
                 str(row.get("name")),
                 str(row.get("group")),
+                str(row.get("objective_baseline")),
                 format_value(row.get("validation_obj")),
                 format_value(row.get("test_obj")),
                 format_value(row.get("search_train_obj")),
@@ -302,7 +307,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append("")
     lines.append(
         markdown_table(
-            ["Rank", "Name", "Group", "Val Obj", "Test Obj", "Train Obj", "Len", "Runtime(s)", "Exit"],
+            ["Rank", "Name", "Group", "Baseline", "Val Obj", "Test Obj", "Train Obj", "Len", "Runtime(s)", "Exit"],
             top_rows,
         )
     )
@@ -314,6 +319,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
             [
                 str(row.get("name")),
                 str(row.get("group")),
+                str(row.get("objective_baseline")),
                 format_value(row.get("validation_obj")),
                 format_value(row.get("test_obj")),
                 format_value(row.get("search_train_obj")),
@@ -329,7 +335,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append("")
     lines.append(
         markdown_table(
-            ["Name", "Group", "Val Obj", "Test Obj", "Train Obj", "Val Worse(%)", "Test Worse(%)", "Len", "Runtime(s)", "Log"],
+            ["Name", "Group", "Baseline", "Val Obj", "Test Obj", "Train Obj", "Val Worse(%)", "Test Worse(%)", "Len", "Runtime(s)", "Log"],
             full_rows,
         )
     )
@@ -355,6 +361,8 @@ def write_summary(latest_only: bool = True) -> Dict[str, Path]:
         "group",
         "description",
         "changed",
+        "objective_kind",
+        "objective_baseline",
         "started_at",
         "finished_at",
         "wall_runtime_s",

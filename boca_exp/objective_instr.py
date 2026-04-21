@@ -9,7 +9,14 @@ from pathlib import Path
 
 from .objective_common import compose_metrics
 from .runtime import get_instrcount
-from .settings import MAX_SEQ_LEN, OBJ_WORSEN_WEIGHT, llvm_tools_path
+from .settings import (
+    MAX_SEQ_LEN,
+    OBJ_WORSEN_WEIGHT,
+    OBJECTIVE_BASELINE,
+    llvm_tools_path,
+    normalize_objective_baseline,
+    objective_baseline_pipeline,
+)
 
 
 class InstructionCountBackend:
@@ -25,22 +32,26 @@ class InstructionCountBackend:
         llvm_tools_path_value: str = llvm_tools_path,
         max_seq_len: int = MAX_SEQ_LEN,
         worsen_weight: float = OBJ_WORSEN_WEIGHT,
+        objective_baseline: str = OBJECTIVE_BASELINE,
     ) -> None:
         self.llvm_tools_path = llvm_tools_path_value
         self.max_seq_len = max_seq_len
         self.worsen_weight = worsen_weight
+        self.baseline_name = normalize_objective_baseline(objective_baseline)
+        self.baseline_pipeline = objective_baseline_pipeline(self.baseline_name)
+        self.baseline_display_name = f'{self.baseline_pipeline} 基准指令数'
         self._program_text_cache: dict[str, str] = {}
         self._baseline_cache: dict[str, int] = {}
         self._value_cache: dict[tuple[str, tuple[str, ...]], int] = {}
         self._cache_lock = threading.Lock()
 
     def prepare(self, programs) -> None:
-        """预热 `-Oz` 基线缓存。"""
+        """预热目标基准缓存。"""
         for program in programs:
             _ = self._baseline(program)
 
     def compute_baseline_values(self, programs):
-        """返回程序集合对应的 `-Oz` 指令数。"""
+        """返回程序集合对应的目标基准指令数。"""
         return [float(self._baseline(program)) for program in programs]
 
     def evaluate_sequence_metrics(self, programs, baseline_values, pass_sequence):
@@ -119,7 +130,7 @@ class InstructionCountBackend:
         if cached is not None:
             return cached
 
-        value = self._count_program(program, ['-Oz'])
+        value = self._count_program(program, [self.baseline_pipeline])
         with self._cache_lock:
             self._baseline_cache[program] = value
         return value

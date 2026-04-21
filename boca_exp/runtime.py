@@ -75,7 +75,7 @@ def normalize_pass_sequence(pass_sequence) -> list[str]:
         text = pass_sequence.strip()
         if not text:
             return []
-        if text in {'-Oz', '-O3', 'default<Oz>'}:
+        if text in {'-Oz', '-O3', 'default<Oz>', 'default<O3>'}:
             return [text]
         return [item.strip() for item in text.split(',') if item.strip()]
     return [str(item).strip() for item in pass_sequence if str(item).strip()]
@@ -142,7 +142,7 @@ def fix_loop_nesting(pipeline: str) -> str:
 def _build_opt_command(opt_path: str, pipeline: str, resolved_target_triple: str | None):
     if pipeline in {'default<Oz>', '-Oz'}:
         cmd_opt = [opt_path, '-Oz', '-S']
-    elif pipeline == '-O3':
+    elif pipeline in {'default<O3>', '-O3'}:
         cmd_opt = [opt_path, '-O3', '-S']
     else:
         cmd_opt = [opt_path, '-S', f'-passes={pipeline}']
@@ -177,7 +177,7 @@ def transform_ir_strict(ir_code: str, pass_sequence, llvm_tools_path: str, targe
     opt_path = os.path.join(llvm_tools_path, 'opt') if llvm_tools_path else 'opt'
     resolved_target_triple = target_triple or detect_target_triple(ir_code)
 
-    if pipeline not in {'default<Oz>', '-Oz', '-O3'}:
+    if pipeline not in {'default<Oz>', 'default<O3>', '-Oz', '-O3'}:
         pipeline = fix_loop_nesting(pipeline)
 
     cmd_opt = _build_opt_command(opt_path, pipeline, resolved_target_triple)

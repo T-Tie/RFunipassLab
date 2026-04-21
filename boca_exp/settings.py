@@ -37,7 +37,40 @@ OBJ_HIGHVAR_WEIGHT = float(os.environ.get('OBJ_HIGHVAR_W', 0.0))
 FEATURE_MODE = os.environ.get('FEATURE_MODE', 'full').strip().lower()
 
 # 目标与数据池模式
+def normalize_objective_baseline(value=None):
+    """把目标函数基准规范化为内部名字。"""
+    raw_value = 'oz' if value is None else str(value).strip().lower()
+    aliases = {
+        'oz': 'oz',
+        '-oz': 'oz',
+        'default<oz>': 'oz',
+        'o3': 'o3',
+        '-o3': 'o3',
+        'default<o3>': 'o3',
+    }
+    try:
+        return aliases[raw_value]
+    except KeyError as exc:
+        raise ValueError(
+            f"OBJECTIVE_BASELINE must be one of: oz, o3; got {value!r}"
+        ) from exc
+
+
+def objective_baseline_pipeline(value=None):
+    """返回目标函数基准对应的 opt pipeline 标志。"""
+    baseline = normalize_objective_baseline(value)
+    return {'oz': '-Oz', 'o3': '-O3'}[baseline]
+
+
+def objective_baseline_label(value=None):
+    """返回目标函数基准的人类可读标签。"""
+    return objective_baseline_pipeline(value)
+
+
 OBJECTIVE_KIND = os.environ.get('OBJECTIVE_KIND', 'instrcount').strip().lower()
+OBJECTIVE_BASELINE = normalize_objective_baseline(os.environ.get('OBJECTIVE_BASELINE', 'oz'))
+OBJECTIVE_BASELINE_PIPELINE = objective_baseline_pipeline(OBJECTIVE_BASELINE)
+OBJECTIVE_BASELINE_LABEL = objective_baseline_label(OBJECTIVE_BASELINE)
 PROGRAM_POOL_KIND = os.environ.get('PROGRAM_POOL_KIND', 'auto').strip().lower()
 
 # LLVM 工具路径

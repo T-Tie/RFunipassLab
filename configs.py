@@ -9,8 +9,8 @@ RFunipassLab 的集中配置入口。
 4. 只做轻量级校验，不引入复杂 schema 系统。
 
 本次新增 runtime 目标后，配置仍然遵循同一个原则：
-搜索方法、特征、GA/RF 参数继续复用；只通过 OBJECTIVE_KIND 和
-PROGRAM_POOL_KIND 切换“评估目标”和“程序池来源”。
+搜索方法、特征、GA/RF 参数继续复用；通过 OBJECTIVE_KIND、
+OBJECTIVE_BASELINE 和 PROGRAM_POOL_KIND 切换“评估目标”、“归一化基准”和“程序池来源”。
 """
 
 from __future__ import annotations
@@ -69,8 +69,9 @@ BASE_ENV: Dict[str, str] = {
     "SCALE": "10",
     "OFFSET": "20",
     "FEATURE_MODE": "full",
-    # 目标切换：默认仍保持旧的指令数目标，保证兼容性。
+    # 目标切换：默认仍保持旧的指令数目标和 -Oz 归一化基准，保证兼容性。
     "OBJECTIVE_KIND": "instrcount",
+    "OBJECTIVE_BASELINE": "oz",
     "PROGRAM_POOL_KIND": "auto",
     # runtime 目标编译可执行文件时的后端优化等级。
     # 默认 -O0 是为了让测到的变化主要来自待评估 pass 序列，而不是额外后端优化。
@@ -172,6 +173,7 @@ EXPERIMENTS: List[Dict[str, Any]] = [
             "OBJECTIVE_KIND": "runtime",
             "PROGRAM_POOL_KIND": "runtime",
             "BACKEND_OPT_LEVEL": "-O0",
+            "ITERS": "50", 
             **_orig_boca_overrides(),
         },
     },
@@ -226,6 +228,7 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
 CHOICE_RULES: Dict[str, set[str]] = {
     "FEATURE_MODE": {"full", "lite"},
     "OBJECTIVE_KIND": {"instrcount", "runtime"},
+    "OBJECTIVE_BASELINE": {"oz", "o3", "-oz", "-o3", "default<oz>", "default<o3>"},
     "PROGRAM_POOL_KIND": {"auto", "tuning", "runtime"},
 }
 

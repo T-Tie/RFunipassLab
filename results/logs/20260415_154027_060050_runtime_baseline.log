@@ -1,0 +1,115 @@
+# run_id: 20260415_154027_060050_runtime_baseline
+# name: runtime_baseline
+# group: runtime
+# description: 把优化目标切换为实际运行时间，搜索/选择流程与 orig_boca 尽量保持一致。
+# changed: BACKEND_OPT_LEVEL=-O0, GA_GEN=5, GA_POP=200, ITERS=100, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, OBJECTIVE_KIND=runtime, PROGRAM_POOL_KIND=runtime, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5
+# result_json: /root/exp/RFunipassLab/results/runtime/summaries/20260415_154027_060050_runtime_baseline.json
+# started_at: 2026-04-15T15:40:27
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   DECAY=0.5
+#   FEATURE_MODE=full
+#   GA_ELITE=0.1
+#   GA_GEN=5
+#   GA_MUT=0.8
+#   GA_POP=200
+#   GA_TOUR=3
+#   ITERS=100
+#   MAX_SEQ_LEN=120
+#   MIN_VAL_PROGRAMS=5
+#   OBJECTIVE_BASELINE=o3
+#   OBJECTIVE_KIND=runtime
+#   OBJ_HIGHVAR_W=0.1
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=runtime
+#   RNUM=256
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=0
+#   TEST_TOPK=50
+#   TRAIN_TOPK=200
+#   VAL_RATIO=0.5
+
+Loading runtime-evaluable rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Runtime manifest path: /root/exp/RFunipassLab/results/runtime/manifests/runtime_manifest.json
+Runtime required rows: 250
+Loaded runtime-evaluable rows: 250
+Loaded train programs:       200
+Loaded initial seed seqs:    69
+Loaded test programs:        50
+Objective kind:              runtime
+Program pool kind:           runtime
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'function(mem2reg)', 'function(newgvn)', 'function(dce)', 'function(memcpyopt)', 'cgscc(attributor-cgscc)', 'function(jump-threading)', 'function(gvn-sink)', 'module(globalopt)', 'module(scc-oz-module-inliner)', 'function(instsimplify)', 'function(reassociate)', 'module(iroutliner)', 'module(attributor)', 'function(dse)', 'function(gvn-hoist)', 'loop(loop-simplifycfg)', 'module(inferattrs)', 'function(lower-switch)']
+Synergy edges: 176
+Self-loop passes: {'module(attributor)', 'cgscc(attributor-cgscc)', 'function(newgvn)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+目标类型:      runtime
+目标基准:      -O3
+基准指标:      -O3 基准运行时间
+优化指标:      归一化运行时间
+后端编译级别:  -O0
+输入程序数:    200
+输入次优序列数: 69
+测试程序数:    50
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  120
+特征模式:      full
+RF 特征维度:   216
+词表: ['module(elim-avail-extern)', 'function(mem2reg)', 'function(newgvn)', 'function(dce)', 'function(memcpyopt)', 'cgscc(attributor-cgscc)', 'function(jump-threading)', 'function(gvn-sink)', 'module(globalopt)', 'module(scc-oz-module-inliner)', 'function(instsimplify)', 'function(reassociate)', 'module(iroutliner)', 'module(attributor)', 'function(dse)', 'function(gvn-hoist)', 'loop(loop-simplifycfg)', 'module(inferattrs)', 'function(lower-switch)']
+多目标权重:    mean=1.0, worsen=0.15, highvar=0.1
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 100
+  validation 程序数:   100
+
+[Step 2] 计算 search_train 程序 -O3 基准运行时间...
+[Step 2b] 计算 validation 程序 -O3 基准运行时间...
+[Step 2c] 计算测试集程序 -O3 基准运行时间...
+
+[Step 2d] 固定参考基线（相对 []）...
+  search_train: []=1.000 (+0.0%)  -Oz=0.900 (+10.0%)  -O3=0.813 (+18.7%)
+  validation:   []=1.000 (+0.0%)  -Oz=0.870 (+13.0%)  -O3=0.765 (+23.5%)
+  test:         []=1.000 (+0.0%)  -Oz=0.897 (+10.3%)  -O3=0.807 (+19.3%)
+
+[Step 3] 评估初始 seed 序列（共 69 条）...
+
+[Step 4] 开始贝叶斯优化（100 轮）...
+Traceback (most recent call last):
+  File "/root/exp/RFunipassLab/boca.py", line 25, in <module>
+    raise SystemExit(cli_main())
+                     ~~~~~~~~^^
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 659, in cli_main
+    run_result = main(
+        programs,
+    ...<2 lines>...
+        topn=top_n,
+    )
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 351, in main
+    new_seq, ei_val = get_nd_solutions(
+                      ~~~~~~~~~~~~~~~~^
+        evaluated_sequences,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        suboptimal_sequences,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/root/exp/RFunipassLab/boca_exp/search.py", line 168, in get_nd_solutions
+    from sklearn.ensemble import RandomForestRegressor
+ModuleNotFoundError: No module named 'sklearn'

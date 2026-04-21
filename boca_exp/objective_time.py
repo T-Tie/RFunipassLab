@@ -20,6 +20,7 @@ from .settings import (
     MAX_SEQ_LEN,
     OBJ_HIGHVAR_WEIGHT,
     OBJ_WORSEN_WEIGHT,
+    OBJECTIVE_BASELINE,
     RUNTIME_EVAL_MAX_VARIANCE_PCT,
     RUNTIME_MAX_INNER_REPEATS,
     RUNTIME_MAX_VARIANCE_PCT,
@@ -27,6 +28,8 @@ from .settings import (
     RUNTIME_TARGET_SAMPLE_MS,
     RUNTIME_TIMEOUT_SEC,
     llvm_tools_path,
+    normalize_objective_baseline,
+    objective_baseline_pipeline,
 )
 
 DEFAULT_LM_FLAGS = ['-lm']
@@ -410,6 +413,7 @@ class RuntimeObjectiveBackend:
         max_seq_len: int = MAX_SEQ_LEN,
         worsen_weight: float = OBJ_WORSEN_WEIGHT,
         highvar_weight: float = OBJ_HIGHVAR_WEIGHT,
+        objective_baseline: str = OBJECTIVE_BASELINE,
     ) -> None:
         self.harnesses = {item.filename: item for item in harnesses}
         self.timeout_sec = timeout_sec
@@ -418,8 +422,11 @@ class RuntimeObjectiveBackend:
         self.max_seq_len = max_seq_len
         self.worsen_weight = worsen_weight
         self.highvar_weight = highvar_weight
+        self.baseline_name = normalize_objective_baseline(objective_baseline)
+        self.baseline_pipeline = objective_baseline_pipeline(self.baseline_name)
+        self.baseline_display_name = f'{self.baseline_pipeline} 基准运行时间'
         self.compile_cache = CompileCache(cache_dir, llvm_tools_path_value=llvm_tools_path_value)
-        self._eval_cache: Dict[tuple[str, tuple[str, ...]], ProgramEvalResult] = {}
+        self._eval_cache: Dict[tuple[str, str, tuple[str, ...]], ProgramEvalResult] = {}
 
     def prepare(self, programs) -> None:
         missing = [program for program in programs if program not in self.harnesses]
@@ -427,6 +434,7 @@ class RuntimeObjectiveBackend:
             raise ObjectiveError(f'missing runtime harnesses for {len(missing)} programs')
         for program in programs:
             harness = self.harnesses[program]
+            self._selected_baseline_record(harness)
             for baseline_name in harness.available_fixed_baselines():
                 baseline = harness.get_fixed_baseline(baseline_name)
                 if baseline is None:
@@ -434,7 +442,24 @@ class RuntimeObjectiveBackend:
                 self.compile_cache.compile_binary(program, baseline.get('pipeline', '-Oz'))
 
     def compute_baseline_values(self, programs):
-        return [float(self.harnesses[program].baseline_time_ns) for program in programs]
+        return [self._selected_baseline_time_ns(self.harnesses[program]) for program in programs]
+
+    def _selected_baseline_record(self, harness: ProgramRuntimeHarness) -> Dict[str, object]:
+        baseline = harness.get_fixed_baseline(self.baseline_name)
+        if baseline is None:
+            raise ObjectiveError(
+                f'missing {self.baseline_pipeline} fixed runtime baseline for {harness.filename}'
+            )
+        return baseline
+
+    def _selected_baseline_time_ns(self, harness: ProgramRuntimeHarness) -> float:
+        baseline = self._selected_baseline_record(harness)
+        baseline_time_ns = float(baseline.get('time_ns', float('inf')))
+        if not math.isfinite(baseline_time_ns) or baseline_time_ns <= 0:
+            raise ObjectiveError(
+                f'invalid {self.baseline_pipeline} fixed runtime baseline for {harness.filename}'
+            )
+        return baseline_time_ns
 
     def evaluate_sequence_metrics(self, programs, baseline_values, pass_sequence):
         if not programs:
@@ -619,15 +644,24 @@ class RuntimeObjectiveBackend:
         return comparisons
 
     def evaluate_program(self, program: str, pass_sequence: Sequence[str]) -> ProgramEvalResult:
-        key = (program, tuple(pass_sequence))
+        key = (program, self.baseline_name, tuple(pass_sequence))
         cached = self._eval_cache.get(key)
         if cached is not None:
             return cached
 
         harness = self.harnesses[program]
         try:
+            baseline = self._selected_baseline_record(harness)
+            baseline_time_ns = self._selected_baseline_time_ns(harness)
+            expected_stdout_sha1 = str(baseline.get('stdout_sha1', harness.baseline_output_sha1))
+            inner_repeats = max(1, int(baseline.get('inner_repeats', harness.inner_repeats)))
             binary_path = self.compile_cache.compile_binary(program, pass_sequence)
-            bench = self._benchmark_binary(binary_path, harness)
+            bench = self._benchmark_binary(
+                binary_path,
+                harness,
+                expected_stdout_sha1=expected_stdout_sha1,
+                inner_repeats=inner_repeats,
+            )
         except ObjectiveError as exc:
             result = ProgramEvalResult(
                 ratio=float('inf'),
@@ -638,7 +672,7 @@ class RuntimeObjectiveBackend:
             return result
 
         result = ProgramEvalResult(
-            ratio=bench['median_ns'] / harness.baseline_time_ns,
+            ratio=bench['median_ns'] / baseline_time_ns,
             raw_value=bench['median_ns'],
             status='ok' if bench['variance_pct'] <= self.max_variance_pct else 'high_variance',
             variance_pct=bench['variance_pct'],
@@ -647,23 +681,30 @@ class RuntimeObjectiveBackend:
         self._eval_cache[key] = result
         return result
 
-    def _benchmark_binary(self, binary_path: str, harness: ProgramRuntimeHarness) -> Dict[str, object]:
+    def _benchmark_binary(
+        self,
+        binary_path: str,
+        harness: ProgramRuntimeHarness,
+        *,
+        expected_stdout_sha1: str,
+        inner_repeats: int,
+    ) -> Dict[str, object]:
         samples_ns: list[float] = []
         sample_hashes: list[str] = []
         for _ in range(self.samples):
             total_ns = 0.0
             sample_hash = None
-            for run_idx in range(harness.inner_repeats):
+            for run_idx in range(inner_repeats):
                 run_stats = self._run_once(binary_path, harness.input_data)
                 total_ns += run_stats['elapsed_ns']
-                if run_stats['stdout_sha1'] != harness.baseline_output_sha1:
-                    raise RunError('stdout mismatch against -Oz baseline')
+                if run_stats['stdout_sha1'] != expected_stdout_sha1:
+                    raise RunError(f'stdout mismatch against {self.baseline_pipeline} baseline')
                 if run_idx == 0:
                     sample_hash = str(run_stats['stdout_sha1'])
             if sample_hash is None:
                 raise RunError('empty runtime sample')
             sample_hashes.append(sample_hash)
-            samples_ns.append(total_ns / harness.inner_repeats)
+            samples_ns.append(total_ns / inner_repeats)
 
         if len(set(sample_hashes)) != 1:
             raise RunError('stdout mismatch across runtime samples')
