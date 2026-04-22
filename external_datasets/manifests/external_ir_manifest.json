@@ -1,0 +1,381 @@
+{
+  "generated_at": "2026-04-22 14:04:51",
+  "suites": [
+    "cbench",
+    "polybench",
+    "csmith"
+  ],
+  "frontend_mode": "canonical",
+  "records": {
+    "cbench": [
+      {
+        "suite": "cbench",
+        "name": "consumer_jpeg_c",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/cdjpeg.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/cjpeg.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcapimin.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcapistd.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jccoefct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jccolor.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcdctmgr.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jchuff.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcinit.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcmainct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcmarker.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcmaster.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcomapi.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcparam.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcphuff.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcprepct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jcsample.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jctrans.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdapimin.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdapistd.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdatadst.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdatasrc.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdcoefct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdcolor.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jddctmgr.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdhuff.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdinput.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdmainct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdmarker.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdmaster.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdmerge.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdphuff.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdpostct.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdsample.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jdtrans.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jerror.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jfdctflt.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jfdctfst.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jfdctint.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jidctflt.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jidctfst.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jidctint.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jidctred.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jmemansi.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jmemmgr.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jquant1.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jquant2.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/jutils.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdbmp.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdgif.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdppm.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdrle.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdswitch.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_jpeg_c/rdtarga.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "security_sha",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/security_sha/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/security_sha/sha.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/security_sha/sha_driver.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "automotive_bitcount",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitarray.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitcnt_1.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitcnt_2.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitcnt_3.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitcnt_4.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitcnts.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitfiles.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bitstrng.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/bstr_i.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_bitcount/loop-wrap.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "automotive_susan_e",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_e/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_e/susan.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "automotive_susan_c",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_c/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_c/susan.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "automotive_susan_s",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_s/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/automotive_susan_s/susan.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "bzip2e",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/blocksort.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/bzip2.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/bzlib.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/compress.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/crctable.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/decompress.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/huffman.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/bzip2e/randtable.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "consumer_tiff2rgba",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/loop-wrap.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_aux.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_close.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_codec.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_compress.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_dir.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_dirinfo.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_dirread.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_dirwrite.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_dumpmode.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_error.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_fax3.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_fax3sm.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_flush.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_getimage.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_jpeg.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_luv.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_lzw.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_next.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_open.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_packbits.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_pixarlog.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_predict.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_print.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_read.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_strip.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_swab.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_thunder.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_tile.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_unix.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_version.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_warning.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_write.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tif_zip.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/consumer_tiff2rgba/tiff2rgba.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "telecom_adpcm_c",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/telecom_adpcm_c/adpcm.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/telecom_adpcm_c/rawcaudio.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "cbench",
+        "name": "office_rsynth",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/ASCII.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/Revision.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/aufile.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/darray.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/def_pars.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/dict.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/elements.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/english.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/getarg.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/holmes.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/l2u.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/linuxplay.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/nsynth.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/phones.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/phtoelm.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/say.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/saynum.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/text.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/cbench/office_rsynth/trie.c"
+        ],
+        "frontend_mode": "canonical"
+      }
+    ],
+    "polybench": [
+      {
+        "suite": "polybench",
+        "name": "2mm",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/linear-algebra/kernels/2mm/2mm.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "3mm",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/linear-algebra/kernels/3mm/3mm.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "cholesky",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/linear-algebra/solvers/cholesky/cholesky.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "jacobi-2d",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/stencils/jacobi-2d/jacobi-2d.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "lu",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/linear-algebra/solvers/lu/lu.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "correlation",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/datamining/correlation/correlation.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "nussinov",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/medley/nussinov/nussinov.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "symm",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/linear-algebra/blas/symm/symm.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "heat-3d",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/stencils/heat-3d/heat-3d.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "polybench",
+        "name": "covariance",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/utilities/polybench.c",
+          "/root/exp/RFunipassLab/external_datasets/sources/polybench/datamining/covariance/covariance.c"
+        ],
+        "frontend_mode": "canonical"
+      }
+    ],
+    "csmith": [
+      {
+        "suite": "csmith",
+        "name": "trainprogram1",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/csmith/trainprogram1.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "csmith",
+        "name": "trainprogram2",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/csmith/trainprogram2.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "csmith",
+        "name": "trainprogram3",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/csmith/trainprogram3.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "csmith",
+        "name": "trainprogram4",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/csmith/trainprogram4.c"
+        ],
+        "frontend_mode": "canonical"
+      },
+      {
+        "suite": "csmith",
+        "name": "trainprogram5",
+        "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll",
+        "source_files": [
+          "/root/exp/RFunipassLab/external_datasets/sources/csmith/trainprogram5.c"
+        ],
+        "frontend_mode": "canonical"
+      }
+    ]
+  }
+}

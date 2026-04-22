@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-04-22 11:28:50",
+  "mode": "instrcount",
+  "sequence_source": "/root/exp/RFunipassLab/results/runtime/summaries/runtime_smoke_fix_20260411_182259.json",
+  "sequence_source_payload": {
+    "objective_kind": "runtime",
+    "tuning_csv": "/root/exp/RFunipassLab/data/tuning_results.csv",
+    "selection_split": "validation"
+  },
+  "sequence": [
+    "module(scc-oz-module-inliner)",
+    "function(newgvn)",
+    "function(gvn-hoist)",
+    "function(memcpyopt)",
+    "module(attributor)",
+    "module(scc-oz-module-inliner)"
+  ],
+  "suites": [
+    "polybench",
+    "csmith"
+  ],
+  "objective_baseline": "oz",
+  "ir_manifest_path": "/root/exp/RFunipassLab/external_datasets/manifests/external_ir_manifest.json",
+  "suite_results": {
+    "polybench": {
+      "count": 1,
+      "selected_names": [
+        "2mm"
+      ],
+      "primary_metrics": {
+        "count": 1,
+        "mean_norm": 1.0064516129032257,
+        "median_norm": 1.0064516129032257,
+        "improved": 0,
+        "tied": 0,
+        "worsened": 1,
+        "invalid": 0,
+        "high_variance": 0,
+        "improved_rate": 0.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 1.0,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.05,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+            "ratio": 1.0064516129032257,
+            "raw_value": 624.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 1.1564516129032256
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 1,
+          "mean_ratio": 1.0,
+          "median_ratio": 1.0,
+          "improved": 0,
+          "tied": 1,
+          "worsened": 0
+        },
+        "oz": {
+          "count": 1,
+          "mean_ratio": 1.0064516129032257,
+          "median_ratio": 1.0064516129032257,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 1
+        },
+        "o3": {
+          "count": 1,
+          "mean_ratio": 1.0064516129032257,
+          "median_ratio": 1.0064516129032257,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 1
+        }
+      },
+      "per_program": [
+        {
+          "suite": "polybench",
+          "name": "2mm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll",
+          "universal": 624,
+          "none": 624,
+          "oz": 620,
+          "o3": 620,
+          "ratio_vs_none": 1.0,
+          "ratio_vs_oz": 1.0064516129032257,
+          "ratio_vs_o3": 1.0064516129032257
+        }
+      ]
+    },
+    "csmith": {
+      "count": 1,
+      "selected_names": [
+        "trainprogram1"
+      ],
+      "primary_metrics": {
+        "count": 1,
+        "mean_norm": 1.071078319050456,
+        "median_norm": 1.071078319050456,
+        "improved": 0,
+        "tied": 0,
+        "worsened": 1,
+        "invalid": 0,
+        "high_variance": 0,
+        "improved_rate": 0.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 1.0,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.05,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+            "ratio": 1.071078319050456,
+            "raw_value": 23372.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 1.221078319050456
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 1,
+          "mean_ratio": 1.0,
+          "median_ratio": 1.0,
+          "improved": 0,
+          "tied": 1,
+          "worsened": 0
+        },
+        "oz": {
+          "count": 1,
+          "mean_ratio": 1.071078319050456,
+          "median_ratio": 1.071078319050456,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 1
+        },
+        "o3": {
+          "count": 1,
+          "mean_ratio": 1.074525309181187,
+          "median_ratio": 1.074525309181187,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 1
+        }
+      },
+      "per_program": [
+        {
+          "suite": "csmith",
+          "name": "trainprogram1",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll",
+          "universal": 23372,
+          "none": 23372,
+          "oz": 21821,
+          "o3": 21751,
+          "ratio_vs_none": 1.0,
+          "ratio_vs_oz": 1.071078319050456,
+          "ratio_vs_o3": 1.074525309181187
+        }
+      ]
+    }
+  },
+  "combined": {
+    "count": 2,
+    "primary_metrics": {
+      "count": 2,
+      "mean_norm": 1.0387649659768408,
+      "median_norm": 1.0387649659768408,
+      "improved": 0,
+      "tied": 0,
+      "worsened": 2,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.0,
+      "tie_rate": 0.0,
+      "worsen_rate": 1.0,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.05,
+      "per_program": {
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+          "ratio": 1.0064516129032257,
+          "raw_value": 624.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+          "ratio": 1.071078319050456,
+          "raw_value": 23372.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.1887649659768407
+    },
+    "fixed_baselines": {
+      "none": {
+        "count": 2,
+        "mean_ratio": 1.0,
+        "median_ratio": 1.0,
+        "improved": 0,
+        "tied": 2,
+        "worsened": 0
+      },
+      "oz": {
+        "count": 2,
+        "mean_ratio": 1.0387649659768408,
+        "median_ratio": 1.0387649659768408,
+        "improved": 0,
+        "tied": 0,
+        "worsened": 2
+      },
+      "o3": {
+        "count": 2,
+        "mean_ratio": 1.0404884610422065,
+        "median_ratio": 1.0404884610422065,
+        "improved": 0,
+        "tied": 0,
+        "worsened": 2
+      }
+    }
+  }
+}
