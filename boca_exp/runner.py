@@ -54,6 +54,7 @@ from .settings import (
     GA_POP_SIZE,
     GA_TOURNAMENT_K,
     INITIAL_SEED_TOPK,
+    LOOP_NESTING_POLICY,
     MAX_SEQ_LEN,
     MIN_VAL_PROGRAMS,
     OBJ_HIGHVAR_WEIGHT,
@@ -372,6 +373,7 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     print(f"协同边数:      {len(synergy_edges)}")
     print(f"自环 pass 数:  {len(synergy_self)}")
     print(f"序列长度上限:  {MAX_SEQ_LEN}")
+    print(f"Loop 合法化策略: {LOOP_NESTING_POLICY}")
     print(f"特征模式:      {get_feature_mode()}")
     print(f"RF 特征维度:   {get_feature_dim()}")
     print(f"词表: {all_passes}")
@@ -1081,6 +1083,7 @@ def cli_main() -> int:
             'runtime_required_rows': runtime_required_rows,
             'runtime_rows_count': len(runtime_rows) if runtime_rows is not None else None,
             'backend_opt_level': BACKEND_OPT_LEVEL,
+            'loop_nesting_policy': LOOP_NESTING_POLICY,
             'train_topk': train_topk,
             'test_topk': test_topk,
             'seed_topk': configured_seed_topk,

@@ -121,6 +121,23 @@ python RFunipassLab/summarize.py
 - 如果你的数据不放在这里，可以通过环境变量 `TUNING_CSV` 和 `SYNERGY_CSV` 显式指定
 - `boca.py` 的 autophase 动态库路径也可通过 `AUTOPHASE_LIB` 覆盖
 
+## Loop Pass 合法化策略
+
+LLVM New Pass Manager 不能在混合 module/function pipeline 中直接放置顶层
+`loop(...)` pass。`RFunipassLab` 会在执行前把 raw pass 序列转换成合法的
+effective pipeline，并通过 `LOOP_NESTING_POLICY` 控制转换方式：
+
+- `wrap`：默认推荐策略，把 `loop(x)` 原地转换为 `function(loop(x))`，尽量保持 raw 序列的前后顺序。
+- `legacy_previous_function`：复现实验策略，沿用旧版“挂到最近前一个 `function(...)` 末尾”的行为。
+- `attach_next_synergy`：研究型策略，若相邻 `loop(...) -> function(...)` 命中协同边，则把 loop 前置嵌入该 function。
+
+示例：
+
+```bash
+LOOP_NESTING_POLICY=legacy_previous_function python RFunipassLab/run_one.py --name feature_lite
+LOOP_NESTING_POLICY=attach_next_synergy python RFunipassLab/run_one.py --name feature_lite
+```
+
 ## 结果输出位置
 
 - 原始日志：`RFunipassLab/results/logs/`

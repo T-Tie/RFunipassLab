@@ -36,6 +36,35 @@ OBJ_HIGHVAR_WEIGHT = float(os.environ.get('OBJ_HIGHVAR_W', 0.0))
 # 特征编码模式
 FEATURE_MODE = os.environ.get('FEATURE_MODE', 'full').strip().lower()
 
+
+# LLVM New Pass Manager 作用域合法化策略
+def normalize_loop_nesting_policy(value=None):
+    """把 loop pass 合法化策略规范化为内部统一标识。"""
+    raw_value = 'wrap' if value is None else str(value).strip().lower()
+    aliases = {
+        'wrap': 'wrap',
+        'scope_preserving': 'wrap',
+        'scope-preserving': 'wrap',
+        'legacy': 'legacy_previous_function',
+        'legacy_previous': 'legacy_previous_function',
+        'legacy_previous_function': 'legacy_previous_function',
+        'previous': 'legacy_previous_function',
+        'previous_function': 'legacy_previous_function',
+        'attach_next_synergy': 'attach_next_synergy',
+        'next_synergy': 'attach_next_synergy',
+        'synergy': 'attach_next_synergy',
+        'synergy_aware': 'attach_next_synergy',
+    }
+    try:
+        return aliases[raw_value]
+    except KeyError as exc:
+        raise ValueError(
+            "LOOP_NESTING_POLICY must be one of: wrap, "
+            "legacy_previous_function, attach_next_synergy; "
+            f"got {value!r}"
+        ) from exc
+
+
 # 目标与数据池模式
 def normalize_objective_baseline(value=None):
     """把目标函数基准规范化为内部名字。"""
@@ -125,6 +154,7 @@ OBJECTIVE_KIND = os.environ.get('OBJECTIVE_KIND', 'instrcount').strip().lower()
 OBJECTIVE_BASELINE = normalize_objective_baseline(os.environ.get('OBJECTIVE_BASELINE', 'oz'))
 OBJECTIVE_BASELINE_PIPELINE = objective_baseline_pipeline(OBJECTIVE_BASELINE)
 OBJECTIVE_BASELINE_LABEL = objective_baseline_label(OBJECTIVE_BASELINE)
+LOOP_NESTING_POLICY = normalize_loop_nesting_policy(os.environ.get('LOOP_NESTING_POLICY', 'wrap'))
 BINARY_SIZE_METRIC = normalize_binary_size_metric(os.environ.get('BINARY_SIZE_METRIC', 'stripped_file_bytes'))
 BINARY_SIZE_REPORT_METRICS = normalize_binary_size_metric_list(
     os.environ.get('BINARY_SIZE_REPORT_METRICS'),

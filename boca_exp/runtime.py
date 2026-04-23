@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 
 from .paths import REFERENCE_PROJECT_DIR
+from .settings import LOOP_NESTING_POLICY, normalize_loop_nesting_policy
 
 AUTOPHASE_LIB_PATH = Path(
     os.environ.get(
@@ -77,7 +78,7 @@ def normalize_pass_sequence(pass_sequence) -> list[str]:
             return []
         if text in {'-Oz', '-O3', 'default<Oz>', 'default<O3>'}:
             return [text]
-        return [item.strip() for item in text.split(',') if item.strip()]
+        return split_pipeline_steps(text)
     return [str(item).strip() for item in pass_sequence if str(item).strip()]
 
 
@@ -124,60 +125,204 @@ def format_pipeline_for_display(pipeline: str | None) -> str:
 
 
 
-def fix_loop_nesting(pipeline: str) -> str:
-    """把 loop pass 嵌套进离它最近的前一个 function pass 中。"""
-    passes = split_pipeline_steps(pipeline)
+def _is_scope_pass(pass_item: str, scope: str) -> bool:
+    """判断 pass item 是否是指定 New PM 作用域包装。"""
+    return pass_item.startswith(f'{scope}(') and pass_item.endswith(')')
+
+
+def _function_body(function_pass: str) -> str:
+    """提取 `function(...)` 里的 body。调用前应确保输入是 function pass。"""
+    return function_pass[len('function('):-1]
+
+
+def _build_function_pass(body_steps: list[str]) -> str:
+    """用 body steps 构造 `function(...)` pass。"""
+    return f"function({','.join(body_steps)})"
+
+
+def _wrap_loop_passes(loop_passes: list[str]) -> list[str]:
+    """把每个顶层 loop pass 原地包装成独立 function-to-loop adaptor。"""
+    return [_build_function_pass([loop_pass]) for loop_pass in loop_passes]
+
+
+def _append_loops_to_function(function_pass: str, loop_passes: list[str]) -> str:
+    """legacy 策略：把 loop pass 追加到已有 function pass 的 body 末尾。"""
+    body_steps = split_pipeline_steps(_function_body(function_pass))
+    return _build_function_pass([*body_steps, *loop_passes])
+
+
+def _prepend_loops_to_function(function_pass: str, loop_passes: list[str]) -> str:
+    """synergy 策略：把 loop pass 前置到已有 function pass 的 body 开头。"""
+    body_steps = split_pipeline_steps(_function_body(function_pass))
+    return _build_function_pass([*loop_passes, *body_steps])
+
+
+def _function_synergy_targets(function_pass: str) -> set[str]:
+    """返回可与协同图中 `function(x)` 节点匹配的候选名字。"""
+    targets = {function_pass}
+    if not _is_scope_pass(function_pass, 'function'):
+        return targets
+
+    body_steps = split_pipeline_steps(_function_body(function_pass))
+    for body_step in body_steps:
+        if _is_scope_pass(body_step, 'loop'):
+            continue
+        targets.add(_build_function_pass([body_step]))
+    return targets
+
+
+def _has_loop_to_function_synergy(
+    loop_passes: list[str],
+    function_pass: str,
+    synergy_graph: dict[str, set[str]] | None,
+) -> bool:
+    """判断是否存在 `loop(L) -> function(F)` 协同边。"""
+    if not synergy_graph:
+        return False
+
+    function_targets = _function_synergy_targets(function_pass)
+    for loop_pass in loop_passes:
+        successors = synergy_graph.get(loop_pass, set())
+        if any(target in successors for target in function_targets):
+            return True
+    return False
+
+
+def _active_synergy_graph() -> dict[str, set[str]]:
+    """延迟读取全局协同图，避免 runtime 工具和状态初始化强耦合。"""
+    try:
+        from .state import synergy_graph
+    except Exception:
+        return {}
+    return synergy_graph
+
+
+def _fix_loop_nesting_wrap(passes: list[str]) -> str:
+    """默认策略：保持 raw 位置，把顶层 loop pass 原地包装成 function(loop(...))。"""
+    fixed_passes: list[str] = []
+    pending_loops: list[str] = []
+
+    def flush_pending_loops() -> None:
+        if pending_loops:
+            fixed_passes.extend(_wrap_loop_passes(pending_loops))
+            pending_loops.clear()
+
+    for pass_item in passes:
+        if _is_scope_pass(pass_item, 'loop'):
+            pending_loops.append(pass_item)
+            continue
+
+        flush_pending_loops()
+        fixed_passes.append(pass_item)
+
+    flush_pending_loops()
+    return ','.join(fixed_passes)
+
+
+def _fix_loop_nesting_legacy_previous_function(passes: list[str]) -> str:
+    """历史策略：把 loop pass 嵌套进离它最近的前一个 function pass 中。"""
 
     fixed_passes = []
     last_function_index = -1
     loop_passes_to_nest = []
 
-    has_function = any(p.startswith('function(') for p in passes)
+    has_function = any(_is_scope_pass(p, 'function') for p in passes)
     if not has_function:
-        passes = [p for p in passes if not p.startswith('loop(')]
+        passes = [p for p in passes if not _is_scope_pass(p, 'loop')]
         return ','.join(passes)
 
     for p in passes:
-        if p.startswith('function('):
+        if _is_scope_pass(p, 'function'):
             if last_function_index != -1 and loop_passes_to_nest:
-                inside = ','.join(loop_passes_to_nest)
-                original_func_body = fixed_passes[last_function_index][9:-1]
-                new_func_body = original_func_body
-                if original_func_body:
-                    new_func_body += ',' + inside
-                else:
-                    new_func_body = inside
-                fixed_passes[last_function_index] = f'function({new_func_body})'
+                fixed_passes[last_function_index] = _append_loops_to_function(
+                    fixed_passes[last_function_index],
+                    loop_passes_to_nest,
+                )
                 loop_passes_to_nest = []
 
             fixed_passes.append(p)
             last_function_index = len(fixed_passes) - 1
-        elif p.startswith('loop('):
+        elif _is_scope_pass(p, 'loop'):
             loop_passes_to_nest.append(p)
         else:
             if last_function_index != -1 and loop_passes_to_nest:
-                inside = ','.join(loop_passes_to_nest)
-                original_func_body = fixed_passes[last_function_index][9:-1]
-                new_func_body = original_func_body
-                if original_func_body:
-                    new_func_body += ',' + inside
-                else:
-                    new_func_body = inside
-                fixed_passes[last_function_index] = f'function({new_func_body})'
+                fixed_passes[last_function_index] = _append_loops_to_function(
+                    fixed_passes[last_function_index],
+                    loop_passes_to_nest,
+                )
                 loop_passes_to_nest = []
             fixed_passes.append(p)
 
     if last_function_index != -1 and loop_passes_to_nest:
-        inside = ','.join(loop_passes_to_nest)
-        original_func_body = fixed_passes[last_function_index][9:-1]
-        new_func_body = original_func_body
-        if original_func_body:
-            new_func_body += ',' + inside
-        else:
-            new_func_body = inside
-        fixed_passes[last_function_index] = f'function({new_func_body})'
+        fixed_passes[last_function_index] = _append_loops_to_function(
+            fixed_passes[last_function_index],
+            loop_passes_to_nest,
+        )
 
     return ','.join(fixed_passes)
+
+
+def _fix_loop_nesting_attach_next_synergy(
+    passes: list[str],
+    synergy_graph: dict[str, set[str]] | None,
+) -> str:
+    """
+    实验策略：若相邻的 `loop(...) -> function(...)` 存在协同边，则把 loop 前置到
+    该 function body 中；否则退化为 wrap 策略以保持 raw 顺序。
+    """
+    fixed_passes: list[str] = []
+    index = 0
+    while index < len(passes):
+        pass_item = passes[index]
+        if not _is_scope_pass(pass_item, 'loop'):
+            fixed_passes.append(pass_item)
+            index += 1
+            continue
+
+        loop_start = index
+        while index < len(passes) and _is_scope_pass(passes[index], 'loop'):
+            index += 1
+        loop_group = passes[loop_start:index]
+
+        if (
+            index < len(passes)
+            and _is_scope_pass(passes[index], 'function')
+            and _has_loop_to_function_synergy(loop_group, passes[index], synergy_graph)
+        ):
+            fixed_passes.append(_prepend_loops_to_function(passes[index], loop_group))
+            index += 1
+        else:
+            fixed_passes.extend(_wrap_loop_passes(loop_group))
+
+    return ','.join(fixed_passes)
+
+
+def fix_loop_nesting(
+    pipeline: str,
+    policy: str | None = None,
+    synergy_graph: dict[str, set[str]] | None = None,
+) -> str:
+    """
+    把 raw pipeline 中的顶层 loop pass 转换成 LLVM New PM 可执行的 effective pipeline。
+
+    策略：
+      - wrap: 默认策略，把 `loop(x)` 原地转换为 `function(loop(x))`，尽量保持 raw 顺序；
+      - legacy_previous_function: 复现实验用，沿用旧版“挂到前一个 function 末尾”；
+      - attach_next_synergy: 实验策略，若相邻 `loop -> function` 命中协同边，则前置嵌入。
+    """
+    passes = split_pipeline_steps(pipeline)
+    resolved_policy = normalize_loop_nesting_policy(policy or LOOP_NESTING_POLICY)
+
+    if resolved_policy == 'wrap':
+        return _fix_loop_nesting_wrap(passes)
+    if resolved_policy == 'legacy_previous_function':
+        return _fix_loop_nesting_legacy_previous_function(passes)
+    if resolved_policy == 'attach_next_synergy':
+        return _fix_loop_nesting_attach_next_synergy(
+            passes,
+            synergy_graph if synergy_graph is not None else _active_synergy_graph(),
+        )
+    raise ValueError(f"Unsupported LOOP_NESTING_POLICY={resolved_policy!r}")
 
 
 

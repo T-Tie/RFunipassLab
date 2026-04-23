@@ -69,6 +69,11 @@ BASE_ENV: Dict[str, str] = {
     "SCALE": "10",
     "OFFSET": "20",
     "FEATURE_MODE": "full",
+    # LLVM New PM loop pass 合法化策略：
+    # - wrap: 默认推荐，保持 raw 顺序，把 loop(x) 原地包装为 function(loop(x))；
+    # - legacy_previous_function: 复现实验用，沿用旧版挂到前一个 function 末尾；
+    # - attach_next_synergy: 研究型策略，命中相邻 loop->function 协同边时前置嵌入。
+    "LOOP_NESTING_POLICY": "wrap",
     # 目标切换：默认仍保持旧的指令数目标和 -Oz 归一化基准，保证兼容性。
     "OBJECTIVE_KIND": "instrcount",
     "OBJECTIVE_BASELINE": "oz",
@@ -231,6 +236,20 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
 
 CHOICE_RULES: Dict[str, set[str]] = {
     "FEATURE_MODE": {"full", "lite"},
+    "LOOP_NESTING_POLICY": {
+        "wrap",
+        "scope_preserving",
+        "scope-preserving",
+        "legacy",
+        "legacy_previous",
+        "legacy_previous_function",
+        "previous",
+        "previous_function",
+        "attach_next_synergy",
+        "next_synergy",
+        "synergy",
+        "synergy_aware",
+    },
     "OBJECTIVE_KIND": {"instrcount", "runtime"},
     "OBJECTIVE_BASELINE": {"oz", "o3", "-oz", "-o3", "default<oz>", "default<o3>"},
     "BINARY_SIZE_METRIC": {
