@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
@@ -53,6 +54,7 @@ from .settings import (
     GA_MUTATE_RATE,
     GA_POP_SIZE,
     GA_TOURNAMENT_K,
+    EXPERIMENT_SEED,
     INITIAL_SEED_TOPK,
     LOOP_NESTING_POLICY,
     MAX_SEQ_LEN,
@@ -63,6 +65,7 @@ from .settings import (
     PROGRAM_POOL_KIND,
     REBUILD_RUNTIME_MANIFEST,
     RUNTIME_REQUIRED_ROWS,
+    SPLIT_SEED,
     VAL_RATIO,
     begin2end,
     decay,
@@ -94,6 +97,32 @@ def _unique_ordered(items: Iterable[str]) -> List[str]:
         seen.add(item)
         result.append(item)
     return result
+
+
+def _stable_string_list_signature(items: Sequence[str]) -> str:
+    """为程序列表生成稳定签名，便于在 manifest/summary 中追踪具体 split。"""
+    payload = "\n".join(str(item) for item in items).encode('utf-8', errors='ignore')
+    return hashlib.sha1(payload).hexdigest()
+
+
+def _build_split_summary(
+    train_pool_programs: Sequence[str],
+    search_programs: Sequence[str],
+    validation_programs: Sequence[str],
+    test_programs: Sequence[str],
+) -> Dict[str, Any]:
+    """构建可复现的程序划分摘要。"""
+    return {
+        'split_seed': SPLIT_SEED,
+        'train_pool_count': len(train_pool_programs),
+        'search_train_count': len(search_programs),
+        'validation_count': len(validation_programs),
+        'test_count': len(test_programs),
+        'train_pool_signature': _stable_string_list_signature(train_pool_programs),
+        'search_train_signature': _stable_string_list_signature(search_programs),
+        'validation_signature': _stable_string_list_signature(validation_programs),
+        'test_signature': _stable_string_list_signature(test_programs),
+    }
 
 
 def _sequence_views(sequence: Sequence[str]) -> Dict[str, Any]:
@@ -374,6 +403,8 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     print(f"自环 pass 数:  {len(synergy_self)}")
     print(f"序列长度上限:  {MAX_SEQ_LEN}")
     print(f"Loop 合法化策略: {LOOP_NESTING_POLICY}")
+    print(f"实验种子:      {EXPERIMENT_SEED}")
+    print(f"划分种子:      {SPLIT_SEED}")
     print(f"特征模式:      {get_feature_mode()}")
     print(f"RF 特征维度:   {get_feature_dim()}")
     print(f"词表: {all_passes}")
@@ -389,9 +420,20 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
         MIN_VAL_PROGRAMS,
     )
     primary_split_name = 'validation' if val_programs else 'search_train'
+    split_summary = _build_split_summary(
+        programs,
+        search_programs,
+        val_programs,
+        test_programs,
+    )
     print("\n[Step 1.5] 训练程序切分...")
     print(f"  search_train 程序数: {len(search_programs)}")
     print(f"  validation 程序数:   {len(val_programs)}")
+    print(f"  split_signature(search_train): {split_summary['search_train_signature']}")
+    if val_programs:
+        print(f"  split_signature(validation):   {split_summary['validation_signature']}")
+    if test_programs:
+        print(f"  split_signature(test):         {split_summary['test_signature']}")
 
     # ---- Step 2: 计算目标后端对应的 -Oz baseline ----
     print(f"\n[Step 2] 计算 search_train 程序 {backend.baseline_display_name}...")
@@ -639,6 +681,11 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
 
     return {
         'objective_kind': backend.objective_kind,
+        'experiment_seed': EXPERIMENT_SEED,
+        'split_seed': SPLIT_SEED,
+        'search_programs': list(search_programs),
+        'validation_programs': list(val_programs),
+        'split_summary': split_summary,
         'objective_history': evaluated_scores,
         'timestamps': timestamps,
         'search_best_objective': search_best_objective,
@@ -1074,6 +1121,8 @@ def cli_main() -> int:
             'tuning_csv': tuning_csv,
             'synergy_csv': synergy_csv,
             'result_json_path': str(result_json_path),
+            'experiment_seed': EXPERIMENT_SEED,
+            'split_seed': SPLIT_SEED,
             'objective_kind': objective_kind,
             'objective_baseline': getattr(backend, 'baseline_name', None),
             'baseline_pipeline': getattr(backend, 'baseline_pipeline', None),
@@ -1105,7 +1154,10 @@ def cli_main() -> int:
             'obj_highvar_weight': OBJ_HIGHVAR_WEIGHT,
             'feature_mode': get_feature_mode(),
             'programs': list(programs),
+            'search_programs': list(best_result.get('search_programs') or []),
+            'validation_programs': list(best_result.get('validation_programs') or []),
             'test_programs': list(test_programs),
+            'split_summary': best_result.get('split_summary'),
             'suboptimal_sequences': [list(seq) for seq in suboptimal_sequences],
             'run_results': run_results,
             'best_run_index': best_run,

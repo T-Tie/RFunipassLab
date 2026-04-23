@@ -114,6 +114,29 @@ python RFunipassLab/run_sweep.py --names baseline valratio_020 rnum_128
 python RFunipassLab/summarize.py
 ```
 
+### 7. 多随机种子运行
+
+```bash
+python RFunipassLab/run_multi_seed.py --name feature_lite --seeds 456 457 458 459 460
+python RFunipassLab/run_multi_seed.py --name feature_lite --seed-start 456 --seed-count 10
+```
+
+`run_multi_seed.py` 会为每个 seed 启动独立进程，并写出：
+
+- 每个 seed 的普通日志和 manifest
+- 一个 batch manifest
+- 一个 batch 专属 `csv/md` 汇总
+- 一份全局 `summary.csv/summary.md`
+
+复现实验时重点关注这些字段：
+
+- `EXPERIMENT_SEED`：控制 BO/GA 搜索随机性
+- `SPLIT_SEED`：控制 train/search-train/validation/test 划分
+- `OBJECTIVE_KIND` / `OBJECTIVE_BASELINE`
+- `LOOP_NESTING_POLICY`
+- `BACKEND_OPT_LEVEL`
+- split counts 与 split signature
+
 ## 数据输入位置
 
 - 默认读取 `RFunipassLab/data/tuning_results.csv`

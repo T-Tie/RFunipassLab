@@ -31,7 +31,7 @@ import math
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, Iterable, List, Optional, Set
 
 from configs import MANIFESTS_DIR, REPORTS_DIR, ensure_layout
 
@@ -189,7 +189,50 @@ def markdown_table(headers: List[str], rows: List[List[str]]) -> str:
     return "\n".join(lines)
 
 
-def collect_rows(latest_only: bool = True) -> List[Dict[str, Any]]:
+def _manifest_result_summary(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    result_summary = manifest.get("result_summary")
+    return result_summary if isinstance(result_summary, dict) else {}
+
+
+def _manifest_reproducibility(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    reproducibility = manifest.get("reproducibility")
+    return reproducibility if isinstance(reproducibility, dict) else {}
+
+
+def _manifest_runner_context(manifest: Dict[str, Any]) -> Dict[str, Any]:
+    runner_context = manifest.get("runner_context")
+    return runner_context if isinstance(runner_context, dict) else {}
+
+
+def _copy_missing_fields(row: Dict[str, Any], fallback: Dict[str, Any]) -> None:
+    for key, value in fallback.items():
+        if key not in row or row[key] is None:
+            row[key] = value
+
+
+def _copy_preferred_fields(row: Dict[str, Any], preferred: Dict[str, Any]) -> None:
+    for key, value in preferred.items():
+        if value is not None:
+            row[key] = value
+
+
+def _normalize_log_compat_fields(row: Dict[str, Any]) -> None:
+    """把旧日志解析字段补齐到新的 summary 字段名上。"""
+    for split in ("search_train", "validation", "test"):
+        pct_key = f"{split}_worsen_pct"
+        rate_key = f"{split}_worsen_rate"
+        if row.get(rate_key) is None and row.get(pct_key) is not None:
+            row[rate_key] = float(row[pct_key]) / 100.0
+    if row.get("final_length_effective") is None and row.get("final_length") is not None:
+        row["final_length_effective"] = row.get("final_length")
+    if row.get("final_length_raw") is None and row.get("final_length") is not None:
+        row["final_length_raw"] = row.get("final_length")
+
+
+def collect_rows(
+    latest_only: bool = True,
+    include_run_ids: Optional[Iterable[str]] = None,
+) -> List[Dict[str, Any]]:
     """
     扫描所有 manifest，并和对应日志拼成汇总行。
 
@@ -197,38 +240,65 @@ def collect_rows(latest_only: bool = True) -> List[Dict[str, Any]]:
     如果需要保留所有历史运行，可通过 CLI 关闭该行为。
     """
     rows: List[Dict[str, Any]] = []
+    include_run_id_set: Optional[Set[str]] = (
+        {str(item) for item in include_run_ids} if include_run_ids is not None else None
+    )
 
     for manifest_path in sorted(MANIFESTS_DIR.glob("*.json")):
         manifest = load_manifest(manifest_path)
-        log_path = Path(manifest["log_path"])
-
-        if not log_path.exists():
+        if "run_id" not in manifest or "control_env" not in manifest:
+            continue
+        run_id = str(manifest.get("run_id"))
+        if include_run_id_set is not None and run_id not in include_run_id_set:
             continue
 
-        parsed = parse_log(log_path.read_text(encoding="utf-8", errors="replace"))
+        log_path_value = manifest.get("log_path")
+        log_path = Path(log_path_value) if log_path_value else None
+        parsed = {}
+        if log_path and log_path.is_file():
+            parsed = parse_log(log_path.read_text(encoding="utf-8", errors="replace"))
+
         control_env = manifest.get("control_env") or {}
+        reproducibility = _manifest_reproducibility(manifest)
+        result_summary = _manifest_result_summary(manifest)
+        runner_context = _manifest_runner_context(manifest)
+        wall_runtime_s = manifest.get("wall_runtime_s")
+        if wall_runtime_s is None:
+            wall_runtime_s = parsed.get("reported_runtime_s")
         row: Dict[str, Any] = {
-            "run_id": manifest.get("run_id"),
+            "run_id": run_id,
             "name": manifest.get("name"),
             "group": manifest.get("group"),
             "description": manifest.get("description"),
-            "changed": manifest.get("changed"),
+            "changed": manifest.get("effective_overrides") or manifest.get("changed"),
             "objective_kind": control_env.get("OBJECTIVE_KIND", "instrcount"),
             "objective_baseline": control_env.get("OBJECTIVE_BASELINE", "oz"),
+            "backend_opt_level": control_env.get("BACKEND_OPT_LEVEL"),
+            "loop_nesting_policy": control_env.get("LOOP_NESTING_POLICY"),
+            "feature_mode": control_env.get("FEATURE_MODE"),
+            "experiment_seed": control_env.get("EXPERIMENT_SEED"),
+            "split_seed": control_env.get("SPLIT_SEED"),
+            "runner_kind": runner_context.get("runner_kind", "single"),
+            "batch_id": runner_context.get("batch_id"),
+            "batch_index": runner_context.get("batch_index"),
+            "batch_size": runner_context.get("batch_size"),
             "started_at": manifest.get("started_at"),
             "finished_at": manifest.get("finished_at"),
-            "wall_runtime_s": manifest.get("wall_runtime_s") or parsed.get("reported_runtime_s"),
+            "wall_runtime_s": wall_runtime_s,
             "exit_code": manifest.get("exit_code"),
-            "log_path": str(log_path),
+            "log_path": str(log_path) if log_path else None,
             "manifest_path": str(manifest_path),
         }
         row.update(parsed)
+        _copy_missing_fields(row, reproducibility)
+        _copy_preferred_fields(row, result_summary)
+        _normalize_log_compat_fields(row)
         rows.append(row)
 
     if latest_only:
         latest_rows: Dict[str, Dict[str, Any]] = {}
         for row in rows:
-            name = row["name"]
+            name = f"{row.get('name')}::{row.get('runner_kind')}::{row.get('experiment_seed')}::{row.get('split_seed')}"
             current = latest_rows.get(name)
             if current is None or str(row.get("started_at", "")) > str(current.get("started_at", "")):
                 latest_rows[name] = row
@@ -266,7 +336,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append("# RFunipassLab Summary")
     lines.append("")
     lines.append(f"- Generated at: `{datetime.now().isoformat(timespec='seconds')}`")
-    lines.append(f"- Row policy: `{'latest-per-experiment' if latest_only else 'all-runs'}`")
+    lines.append(f"- Row policy: `{'latest-per-experiment-seed' if latest_only else 'all-runs'}`")
     lines.append(f"- Total rows: `{len(rows)}`")
     lines.append("")
 
@@ -281,6 +351,9 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
         f"- Best experiment: `{best_row['name']}` "
         f"(group=`{best_row['group']}`, "
         f"objective=`{best_row.get('objective_kind')}/{best_row.get('objective_baseline')}`, "
+        f"seed=`{format_value(best_row.get('experiment_seed'), digits=0)}`, "
+        f"split_seed=`{format_value(best_row.get('split_seed'), digits=0)}`, "
+        f"loop=`{best_row.get('loop_nesting_policy')}`, "
         f"validation_obj=`{format_value(best_row.get('validation_obj'))}`, "
         f"test_obj=`{format_value(best_row.get('test_obj'))}`)"
     )
@@ -293,11 +366,14 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
                 str(index),
                 str(row.get("name")),
                 str(row.get("group")),
+                format_value(row.get("experiment_seed"), digits=0),
+                format_value(row.get("split_seed"), digits=0),
                 str(row.get("objective_baseline")),
+                str(row.get("loop_nesting_policy")),
                 format_value(row.get("validation_obj")),
                 format_value(row.get("test_obj")),
                 format_value(row.get("search_train_obj")),
-                format_value(row.get("final_length"), digits=0),
+                format_value(row.get("final_length_effective"), digits=0),
                 format_value(row.get("wall_runtime_s"), digits=2),
                 str(row.get("exit_code")),
             ]
@@ -307,7 +383,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append("")
     lines.append(
         markdown_table(
-            ["Rank", "Name", "Group", "Baseline", "Val Obj", "Test Obj", "Train Obj", "Len", "Runtime(s)", "Exit"],
+            ["Rank", "Name", "Group", "Seed", "Split", "Baseline", "Loop", "Val Obj", "Test Obj", "Train Obj", "Len", "Runtime(s)", "Exit"],
             top_rows,
         )
     )
@@ -319,13 +395,21 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
             [
                 str(row.get("name")),
                 str(row.get("group")),
+                format_value(row.get("experiment_seed"), digits=0),
+                format_value(row.get("split_seed"), digits=0),
+                str(row.get("selection_split")),
+                format_value(row.get("search_train_count"), digits=0),
+                format_value(row.get("validation_count"), digits=0),
+                format_value(row.get("test_count"), digits=0),
+                str(row.get("loop_nesting_policy")),
+                str(row.get("backend_opt_level")),
                 str(row.get("objective_baseline")),
                 format_value(row.get("validation_obj")),
                 format_value(row.get("test_obj")),
                 format_value(row.get("search_train_obj")),
-                format_value(row.get("validation_worsen_pct"), digits=2),
-                format_value(row.get("test_worsen_pct"), digits=2),
-                format_value(row.get("final_length"), digits=0),
+                format_value(row.get("validation_worsen_rate"), digits=4),
+                format_value(row.get("test_worsen_rate"), digits=4),
+                format_value(row.get("final_length_effective"), digits=0),
                 format_value(row.get("wall_runtime_s"), digits=2),
                 str(row.get("log_path")),
             ]
@@ -335,7 +419,7 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     lines.append("")
     lines.append(
         markdown_table(
-            ["Name", "Group", "Baseline", "Val Obj", "Test Obj", "Train Obj", "Val Worse(%)", "Test Worse(%)", "Len", "Runtime(s)", "Log"],
+            ["Name", "Group", "Seed", "Split", "SelSplit", "SearchN", "ValN", "TestN", "Loop", "Backend", "Baseline", "Val Obj", "Test Obj", "Train Obj", "Val Worse", "Test Worse", "Len", "Runtime(s)", "Log"],
             full_rows,
         )
     )
@@ -343,7 +427,12 @@ def build_markdown_report(rows: List[Dict[str, Any]], latest_only: bool) -> str:
     return "\n".join(lines)
 
 
-def write_summary(latest_only: bool = True) -> Dict[str, Path]:
+def write_summary(
+    latest_only: bool = True,
+    *,
+    include_run_ids: Optional[Iterable[str]] = None,
+    output_prefix: str = "summary",
+) -> Dict[str, Path]:
     """
     生成并写出汇总文件。
 
@@ -351,9 +440,9 @@ def write_summary(latest_only: bool = True) -> Dict[str, Path]:
     """
     ensure_layout()
 
-    rows = collect_rows(latest_only=latest_only)
-    csv_path = REPORTS_DIR / "summary.csv"
-    md_path = REPORTS_DIR / "summary.md"
+    rows = collect_rows(latest_only=latest_only, include_run_ids=include_run_ids)
+    csv_path = REPORTS_DIR / f"{output_prefix}.csv"
+    md_path = REPORTS_DIR / f"{output_prefix}.md"
 
     fieldnames = [
         "run_id",
@@ -361,29 +450,44 @@ def write_summary(latest_only: bool = True) -> Dict[str, Path]:
         "group",
         "description",
         "changed",
+        "runner_kind",
+        "batch_id",
+        "batch_index",
+        "batch_size",
+        "experiment_seed",
+        "split_seed",
         "objective_kind",
         "objective_baseline",
+        "backend_opt_level",
+        "loop_nesting_policy",
+        "feature_mode",
         "started_at",
         "finished_at",
         "wall_runtime_s",
         "exit_code",
         "selection_split",
         "selection_objective",
+        "search_train_count",
+        "validation_count",
+        "test_count",
+        "search_train_signature",
+        "validation_signature",
+        "test_signature",
         "search_train_obj",
         "search_train_mean",
-        "search_train_worsen_pct",
+        "search_train_worsen_rate",
         "validation_obj",
         "validation_mean",
-        "validation_worsen_pct",
+        "validation_worsen_rate",
         "test_obj",
         "test_mean",
-        "test_worsen_pct",
-        "final_length",
-        "final_syn_rate",
+        "test_worsen_rate",
+        "final_length_effective",
+        "final_length_raw",
         "iter_count",
         "log_path",
         "manifest_path",
-        "final_sequence",
+        "final_pipeline_effective",
     ]
 
     write_csv(csv_path, rows, fieldnames)
@@ -399,6 +503,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Include all historical runs instead of keeping only the latest run for each experiment name.",
     )
+    parser.add_argument(
+        "--prefix",
+        default="summary",
+        help="Output filename prefix under results/reports/.",
+    )
     return parser
 
 
@@ -407,7 +516,7 @@ def main() -> int:
     parser = build_arg_parser()
     args = parser.parse_args()
 
-    outputs = write_summary(latest_only=not args.all_runs)
+    outputs = write_summary(latest_only=not args.all_runs, output_prefix=args.prefix)
     print(f"[summary] csv={outputs['csv']}")
     print(f"[summary] md={outputs['md']}")
     return 0

@@ -16,6 +16,7 @@ from .objective import compute_baseline_values
 from .objective_time import ObjectiveError, RuntimeHarnessBuilder
 from .paths import RUNTIME_CACHE_DIR, default_runtime_manifest_path
 from .settings import (
+    SPLIT_SEED,
     RUNTIME_MAX_VARIANCE_PCT,
     RUNTIME_SAMPLES,
     RUNTIME_TARGET_SAMPLE_MS,
@@ -166,7 +167,7 @@ def load_train_test_from_rows(
     if not all_rows:
         return [], [], []
 
-    rng = random.Random(456)
+    rng = random.Random(SPLIT_SEED)
     program_rows = _random_unique_rows(all_rows, key_fn=lambda row: row['filename'], rng=rng)
     train_rows = random_sample_rows(program_rows, train_topk, rng)
     train_filenames = {row['filename'] for row in train_rows}
@@ -404,7 +405,7 @@ def split_train_validation_programs(
     if len(program_list) <= 1 or val_ratio <= 0.0:
         return program_list, []
 
-    rng = random.Random(456)
+    rng = random.Random(SPLIT_SEED)
     shuffled = list(program_list)
     rng.shuffle(shuffled)
 

@@ -49,6 +49,8 @@ REPORTS_DIR = RESULTS_DIR / "reports"
 # 默认环境变量
 # ---------------------------------------------------------------------------
 BASE_ENV: Dict[str, str] = {
+    "EXPERIMENT_SEED": "456",
+    "SPLIT_SEED": "456",
     "RUNS": "1",
     "TRAIN_TOPK": "20",
     "TEST_TOPK": "40",
@@ -205,6 +207,8 @@ EXPERIMENTS: List[Dict[str, Any]] = [
 # 简单数值校验规则
 # ---------------------------------------------------------------------------
 NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
+    "EXPERIMENT_SEED": {"type": int},
+    "SPLIT_SEED": {"type": int},
     "RUNS": {"type": int, "min": 1},
     "TRAIN_TOPK": {"type": int, "min": 1},
     "TEST_TOPK": {"type": int, "min": 1},

@@ -5,9 +5,12 @@ import random
 
 import numpy as np
 
-# 保持与原实验脚本一致的随机种子，避免这次重构意外改变结果分布。
-random.seed(456)
-np.random.seed(456)
+EXPERIMENT_SEED = int(os.environ.get('EXPERIMENT_SEED', 456))
+SPLIT_SEED = int(os.environ.get('SPLIT_SEED', EXPERIMENT_SEED))
+
+# 保持默认值与旧实验一致；显式传入 EXPERIMENT_SEED 时再切换到新的随机轨迹。
+random.seed(EXPERIMENT_SEED)
+np.random.seed(EXPERIMENT_SEED)
 
 # BO / 调度超参数
 iters = int(os.environ.get('ITERS', 200))
