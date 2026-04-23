@@ -50,6 +50,20 @@
 - 单个 benchmark 上如果 `opt` 超过 `--instrcount-timeout`，会被记录为 `timeout`
 - 其余 benchmark 继续执行，最终仍会生成完整 JSON / Markdown 报告
 
+外部 `binarysize` 验证现已支持：
+
+- 直接复用 `build-ir` 生成的 linked `.ll`
+- 对 `universal / none / -Oz / -O3` 四条 pipeline 分别生成最终可执行文件
+- 记录：
+  - `file_bytes`
+  - `stripped_file_bytes`
+  - `text_bytes`
+  - `data_bytes`
+  - `bss_bytes`
+  - `dec_bytes`
+- 主比较指标可通过 `--binarysize-metric` 指定，默认是 `stripped_file_bytes`
+- `opt` 与 `clang++` 都受 `--binarysize-timeout` 保护，失败样本会单独记录
+
 数据来源优先级：
 
 1. 本地镜像
@@ -75,6 +89,13 @@ python run_external_validation.py evaluate \
   --suite polybench \
   --suite csmith \
   --instrcount-timeout 60
+
+python run_external_validation.py evaluate \
+  --mode binarysize \
+  --result-json results/instrcount/summaries/<run_id>.json \
+  --suite polybench \
+  --binarysize-metric stripped_file_bytes \
+  --binarysize-timeout 60
 ```
 
-当前阶段建议优先使用 `instrcount` 模式做外部泛化验证；`runtime` 入口仍保留，但不是当前扩展重点。
+当前阶段建议优先使用 `instrcount + binarysize` 做外部泛化验证；`runtime` 入口仍保留，但不是当前扩展重点。

@@ -11,10 +11,12 @@ DEFAULT_DATA_DIR = LAB_ROOT / 'data'
 RESULTS_DIR = LAB_ROOT / 'results'
 INSTRCOUNT_RESULTS_DIR = RESULTS_DIR / 'instrcount'
 RUNTIME_RESULTS_DIR = RESULTS_DIR / 'runtime'
+BINARY_SIZE_RESULTS_DIR = RESULTS_DIR / 'binary_size'
 INSTRCOUNT_SUMMARIES_DIR = INSTRCOUNT_RESULTS_DIR / 'summaries'
 RUNTIME_SUMMARIES_DIR = RUNTIME_RESULTS_DIR / 'summaries'
 RUNTIME_MANIFESTS_DIR = RUNTIME_RESULTS_DIR / 'manifests'
 RUNTIME_CACHE_DIR = RUNTIME_RESULTS_DIR / 'cache'
+BINARY_SIZE_CACHE_DIR = BINARY_SIZE_RESULTS_DIR / 'cache'
 
 
 def normalize_objective_kind(objective_kind: str) -> str:
@@ -52,9 +54,11 @@ def ensure_results_layout() -> None:
         RESULTS_DIR,
         INSTRCOUNT_RESULTS_DIR,
         RUNTIME_RESULTS_DIR,
+        BINARY_SIZE_RESULTS_DIR,
         INSTRCOUNT_SUMMARIES_DIR,
         RUNTIME_SUMMARIES_DIR,
         RUNTIME_MANIFESTS_DIR,
         RUNTIME_CACHE_DIR,
+        BINARY_SIZE_CACHE_DIR,
     ):
         path.mkdir(parents=True, exist_ok=True)

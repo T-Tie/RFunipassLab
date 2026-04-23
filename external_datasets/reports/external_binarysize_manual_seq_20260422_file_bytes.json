@@ -1,0 +1,2207 @@
+{
+  "generated_at": "2026-04-22 21:49:46",
+  "mode": "binarysize",
+  "sequence_source": "inline",
+  "sequence_source_payload": {
+    "sequence_text": "module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)"
+  },
+  "sequence": [
+    "module(elim-avail-extern)",
+    "module(iroutliner)",
+    "function(gvn-hoist)",
+    "module(attributor)",
+    "module(iroutliner)",
+    "function(jump-threading)",
+    "module(attributor)",
+    "function(gvn-sink)",
+    "module(globalopt)",
+    "module(iroutliner)",
+    "module(iroutliner)",
+    "function(newgvn)",
+    "function(gvn-sink)",
+    "module(attributor)",
+    "module(attributor)",
+    "function(newgvn)",
+    "function(gvn-hoist)",
+    "module(attributor)",
+    "cgscc(attributor-cgscc)",
+    "module(scc-oz-module-inliner)",
+    "module(attributor)"
+  ],
+  "suites": [
+    "cbench",
+    "polybench",
+    "csmith"
+  ],
+  "objective_baseline": "oz",
+  "size_metric": "file_bytes",
+  "size_metric_display_name": "可执行文件大小",
+  "frontend_mode": "canonical",
+  "binarysize_timeout": 60.0,
+  "binarysize_workers": 4,
+  "ir_manifest_path": "/root/exp/RFunipassLab/external_datasets/manifests/external_ir_manifest.json",
+  "suite_results": {
+    "cbench": {
+      "count": 10,
+      "selected_names": [
+        "consumer_jpeg_c",
+        "security_sha",
+        "automotive_bitcount",
+        "automotive_susan_e",
+        "automotive_susan_c",
+        "automotive_susan_s",
+        "bzip2e",
+        "consumer_tiff2rgba",
+        "telecom_adpcm_c",
+        "office_rsynth"
+      ],
+      "metric_name": "file_bytes",
+      "metric_display_name": "可执行文件大小",
+      "primary_metrics": {
+        "count": 10,
+        "mean_norm": 0.9881811745870762,
+        "median_norm": 0.9988089566460219,
+        "improved": 2,
+        "tied": 1,
+        "worsened": 7,
+        "invalid": 6,
+        "high_variance": 0,
+        "improved_rate": 0.2,
+        "tie_rate": 0.1,
+        "worsen_rate": 0.7,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.175,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt failed for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, returncode=-6, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\nopt: /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12853: virtual void {anonymous}::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&): Assertion `F && \"no associated function for return from call\"' failed.\nPLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.\nStack dump:\n0.\tProgram arguments: /root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\n1.\tRunning pass \"attributor\" on module \"<stdin>\"\n #0 0x000061d8b1f7fdd0 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:834:22\n #1 0x000061d8b1f80259 PrintStackTraceSignalHandler(void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:918:1\n #2 0x000061d8b1f7d3c9 llvm::sys::RunSignalHandlers() /root/llvm/llvm-project-21/llvm/lib/Support/Signals.cpp:104:20\n #3 0x000061d8b1f7f60d SignalHandler(int, siginfo_t*, void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:426:14\n #4 0x00007652cbb1c330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x45330)\n #5 0x00007652cbb75b2c __pthread_kill_implementation ./nptl/pthread_kill.c:44:76\n #6 0x00007652cbb75b2c __pthread_kill_internal ./nptl/pthread_kill.c:78:10\n #7 0x00007652cbb75b2c pthread_kill ./nptl/pthread_kill.c:89:10\n #8 0x00007652cbb1c27e raise ./signal/../sysdeps/posix/raise.c:27:6\n #9 0x00007652cbaff8ff abort ./stdlib/abort.c:81:7\n#10 0x00007652cbaff81b _nl_load_domain ./intl/loadmsgcat.c:1177:9\n#11 0x00007652cbb12517 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3b517)\n#12 0x000061d8ae52eca7 (anonymous namespace)::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&) /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12855:26\n#13 0x000061d8ae4bedfe llvm::AAInvariantLoadPointer const* llvm::Attributor::getOrCreateAAFor<llvm::AAInvariantLoadPointer>(llvm::IRPosition, llvm::AbstractAttribute const*, llvm::DepClassTy, bool, bool) /root/llvm/llvm-project-21/llvm/include/llvm/Transforms/IPO/Attributor.h:1633:9\n#14 0x000061d8ae52e7b1 (anonymous namespace)::AAInvariantLoadPointerImpl::updateLocalInvariance(llvm::Attributor&)::'lambda'(llvm::Value const&)::operator()(llvm::Value const&) const /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12795:53",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll": {
+            "ratio": 0.9976179132920439,
+            "raw_value": 16752.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll": {
+            "ratio": 1.0013736263736264,
+            "raw_value": 17496.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll": {
+            "ratio": 1.0,
+            "raw_value": 16608.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll": {
+            "ratio": 0.9537331586826348,
+            "raw_value": 163096.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          }
+        },
+        "objective": 1.0931811745870763,
+        "metric_name": "file_bytes",
+        "metric_display_name": "可执行文件大小"
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 3,
+          "tied": 0,
+          "worsened": 7
+        },
+        "oz": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 2,
+          "tied": 1,
+          "worsened": 7
+        },
+        "o3": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 3,
+          "tied": 1,
+          "worsened": 6
+        }
+      },
+      "per_program": [
+        {
+          "suite": "cbench",
+          "name": "consumer_jpeg_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll",
+          "universal": Infinity,
+          "none": 248000.0,
+          "oz": 261808.0,
+          "o3": 350712.0,
+          "universal_status": "opt failed for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, returncode=-6, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\nopt: /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12853: virtual void {anonymous}::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&): Assertion `F && \"no associated function for return from call\"' failed.\nPLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.\nStack dump:\n0.\tProgram arguments: /root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\n1.\tRunning pass \"attributor\" on module \"<stdin>\"\n #0 0x000061d8b1f7fdd0 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:834:22\n #1 0x000061d8b1f80259 PrintStackTraceSignalHandler(void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:918:1\n #2 0x000061d8b1f7d3c9 llvm::sys::RunSignalHandlers() /root/llvm/llvm-project-21/llvm/lib/Support/Signals.cpp:104:20\n #3 0x000061d8b1f7f60d SignalHandler(int, siginfo_t*, void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:426:14\n #4 0x00007652cbb1c330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x45330)\n #5 0x00007652cbb75b2c __pthread_kill_implementation ./nptl/pthread_kill.c:44:76\n #6 0x00007652cbb75b2c __pthread_kill_internal ./nptl/pthread_kill.c:78:10\n #7 0x00007652cbb75b2c pthread_kill ./nptl/pthread_kill.c:89:10\n #8 0x00007652cbb1c27e raise ./signal/../sysdeps/posix/raise.c:27:6\n #9 0x00007652cbaff8ff abort ./stdlib/abort.c:81:7\n#10 0x00007652cbaff81b _nl_load_domain ./intl/loadmsgcat.c:1177:9\n#11 0x00007652cbb12517 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3b517)\n#12 0x000061d8ae52eca7 (anonymous namespace)::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&) /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12855:26\n#13 0x000061d8ae4bedfe llvm::AAInvariantLoadPointer const* llvm::Attributor::getOrCreateAAFor<llvm::AAInvariantLoadPointer>(llvm::IRPosition, llvm::AbstractAttribute const*, llvm::DepClassTy, bool, bool) /root/llvm/llvm-project-21/llvm/include/llvm/Transforms/IPO/Attributor.h:1633:9\n#14 0x000061d8ae52e7b1 (anonymous namespace)::AAInvariantLoadPointerImpl::updateLocalInvariance(llvm::Attributor&)::'lambda'(llvm::Value const&)::operator()(llvm::Value const&) const /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12795:53",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt failed for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, returncode=-6, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\nopt: /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12853: virtual void {anonymous}::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&): Assertion `F && \"no associated function for return from call\"' failed.\nPLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.\nStack dump:\n0.\tProgram arguments: /root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\n1.\tRunning pass \"attributor\" on module \"<stdin>\"\n #0 0x000061d8b1f7fdd0 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:834:22\n #1 0x000061d8b1f80259 PrintStackTraceSignalHandler(void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:918:1\n #2 0x000061d8b1f7d3c9 llvm::sys::RunSignalHandlers() /root/llvm/llvm-project-21/llvm/lib/Support/Signals.cpp:104:20\n #3 0x000061d8b1f7f60d SignalHandler(int, siginfo_t*, void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:426:14\n #4 0x00007652cbb1c330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x45330)\n #5 0x00007652cbb75b2c __pthread_kill_implementation ./nptl/pthread_kill.c:44:76\n #6 0x00007652cbb75b2c __pthread_kill_internal ./nptl/pthread_kill.c:78:10\n #7 0x00007652cbb75b2c pthread_kill ./nptl/pthread_kill.c:89:10\n #8 0x00007652cbb1c27e raise ./signal/../sysdeps/posix/raise.c:27:6\n #9 0x00007652cbaff8ff abort ./stdlib/abort.c:81:7\n#10 0x00007652cbaff81b _nl_load_domain ./intl/loadmsgcat.c:1177:9\n#11 0x00007652cbb12517 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3b517)\n#12 0x000061d8ae52eca7 (anonymous namespace)::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&) /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12855:26\n#13 0x000061d8ae4bedfe llvm::AAInvariantLoadPointer const* llvm::Attributor::getOrCreateAAFor<llvm::AAInvariantLoadPointer>(llvm::IRPosition, llvm::AbstractAttribute const*, llvm::DepClassTy, bool, bool) /root/llvm/llvm-project-21/llvm/include/llvm/Transforms/IPO/Attributor.h:1633:9\n#14 0x000061d8ae52e7b1 (anonymous namespace)::AAInvariantLoadPointerImpl::updateLocalInvariance(llvm::Attributor&)::'lambda'(llvm::Value const&)::operator()(llvm::Value const&) const /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12795:53",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 248000.0,
+            "file_bytes": 248000,
+            "stripped_file_bytes": 227528,
+            "text_bytes": 215586,
+            "data_bytes": 2152,
+            "bss_bytes": 32,
+            "dec_bytes": 217770,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/consumer_jpeg_c/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 261808.0,
+            "file_bytes": 261808,
+            "stripped_file_bytes": 243904,
+            "text_bytes": 231027,
+            "data_bytes": 2168,
+            "bss_bytes": 32,
+            "dec_bytes": 233227,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/consumer_jpeg_c/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 350712.0,
+            "file_bytes": 350712,
+            "stripped_file_bytes": 334016,
+            "text_bytes": 323455,
+            "data_bytes": 2168,
+            "bss_bytes": 32,
+            "dec_bytes": 325655,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/consumer_jpeg_c/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "security_sha",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll",
+          "universal": 16752.0,
+          "none": 16744.0,
+          "oz": 16792.0,
+          "o3": 20848.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 1.0004777830864788,
+          "ratio_vs_oz": 0.9976179132920439,
+          "ratio_vs_o3": 0.8035303146584805,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 16752.0,
+            "file_bytes": 16752,
+            "stripped_file_bytes": 14352,
+            "text_bytes": 3277,
+            "data_bytes": 720,
+            "bss_bytes": 8,
+            "dec_bytes": 4005,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/cbench/security_sha/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 16744.0,
+            "file_bytes": 16744,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5371,
+            "data_bytes": 712,
+            "bss_bytes": 8,
+            "dec_bytes": 6091,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/security_sha/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 16792.0,
+            "file_bytes": 16792,
+            "stripped_file_bytes": 14352,
+            "text_bytes": 5461,
+            "data_bytes": 720,
+            "bss_bytes": 8,
+            "dec_bytes": 6189,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/security_sha/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 20848.0,
+            "file_bytes": 20848,
+            "stripped_file_bytes": 18448,
+            "text_bytes": 7969,
+            "data_bytes": 720,
+            "bss_bytes": 8,
+            "dec_bytes": 8697,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/security_sha/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_bitcount",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll",
+          "universal": 17496.0,
+          "none": 18088.0,
+          "oz": 17472.0,
+          "o3": 17520.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9672711189739054,
+          "ratio_vs_oz": 1.0013736263736264,
+          "ratio_vs_o3": 0.9986301369863013,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17496.0,
+            "file_bytes": 17496,
+            "stripped_file_bytes": 14456,
+            "text_bytes": 6599,
+            "data_bytes": 856,
+            "bss_bytes": 8,
+            "dec_bytes": 7463,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/cbench/automotive_bitcount/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 18088.0,
+            "file_bytes": 18088,
+            "stripped_file_bytes": 15016,
+            "text_bytes": 6422,
+            "data_bytes": 1376,
+            "bss_bytes": 8,
+            "dec_bytes": 7806,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/automotive_bitcount/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17472.0,
+            "file_bytes": 17472,
+            "stripped_file_bytes": 14456,
+            "text_bytes": 6406,
+            "data_bytes": 856,
+            "bss_bytes": 8,
+            "dec_bytes": 7270,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/automotive_bitcount/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17520.0,
+            "file_bytes": 17520,
+            "stripped_file_bytes": 14464,
+            "text_bytes": 6897,
+            "data_bytes": 864,
+            "bss_bytes": 8,
+            "dec_bytes": 7769,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/automotive_bitcount/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_e",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll",
+          "universal": Infinity,
+          "none": 58608.0,
+          "oz": 54512.0,
+          "o3": 66800.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 58608.0,
+            "file_bytes": 58608,
+            "stripped_file_bytes": 55384,
+            "text_bytes": 49223,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 50015,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/automotive_susan_e/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 54512.0,
+            "file_bytes": 54512,
+            "stripped_file_bytes": 51288,
+            "text_bytes": 45167,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 45959,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/automotive_susan_e/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 66800.0,
+            "file_bytes": 66800,
+            "stripped_file_bytes": 63576,
+            "text_bytes": 54540,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 55332,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/automotive_susan_e/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll",
+          "universal": Infinity,
+          "none": 58608.0,
+          "oz": 54512.0,
+          "o3": 66800.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 58608.0,
+            "file_bytes": 58608,
+            "stripped_file_bytes": 55384,
+            "text_bytes": 49223,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 50015,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/automotive_susan_c/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 54512.0,
+            "file_bytes": 54512,
+            "stripped_file_bytes": 51288,
+            "text_bytes": 45167,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 45959,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/automotive_susan_c/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 66800.0,
+            "file_bytes": 66800,
+            "stripped_file_bytes": 63576,
+            "text_bytes": 54540,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 55332,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/automotive_susan_c/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_s",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll",
+          "universal": Infinity,
+          "none": 58608.0,
+          "oz": 54512.0,
+          "o3": 66800.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 58608.0,
+            "file_bytes": 58608,
+            "stripped_file_bytes": 55384,
+            "text_bytes": 49223,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 50015,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/automotive_susan_s/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 54512.0,
+            "file_bytes": 54512,
+            "stripped_file_bytes": 51288,
+            "text_bytes": 45167,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 45959,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/automotive_susan_s/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 66800.0,
+            "file_bytes": 66800,
+            "stripped_file_bytes": 63576,
+            "text_bytes": 54540,
+            "data_bytes": 784,
+            "bss_bytes": 8,
+            "dec_bytes": 55332,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/automotive_susan_s/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "bzip2e",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll",
+          "universal": Infinity,
+          "none": 141232.0,
+          "oz": 238288.0,
+          "o3": 282704.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 141232.0,
+            "file_bytes": 141232,
+            "stripped_file_bytes": 132608,
+            "text_bytes": 117505,
+            "data_bytes": 4288,
+            "bss_bytes": 4400,
+            "dec_bytes": 126193,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/bzip2e/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 238288.0,
+            "file_bytes": 238288,
+            "stripped_file_bytes": 230800,
+            "text_bytes": 216808,
+            "data_bytes": 4224,
+            "bss_bytes": 4400,
+            "dec_bytes": 225432,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/bzip2e/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 282704.0,
+            "file_bytes": 282704,
+            "stripped_file_bytes": 275872,
+            "text_bytes": 258635,
+            "data_bytes": 4240,
+            "bss_bytes": 4400,
+            "dec_bytes": 267275,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/bzip2e/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "consumer_tiff2rgba",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll",
+          "universal": Infinity,
+          "none": 394104.0,
+          "oz": 432032.0,
+          "o3": 512848.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 394104.0,
+            "file_bytes": 394104,
+            "stripped_file_bytes": 372992,
+            "text_bytes": 360658,
+            "data_bytes": 5496,
+            "bss_bytes": 432,
+            "dec_bytes": 366586,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/consumer_tiff2rgba/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 432032.0,
+            "file_bytes": 432032,
+            "stripped_file_bytes": 412424,
+            "text_bytes": 398415,
+            "data_bytes": 4344,
+            "bss_bytes": 432,
+            "dec_bytes": 403191,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/consumer_tiff2rgba/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 512848.0,
+            "file_bytes": 512848,
+            "stripped_file_bytes": 494344,
+            "text_bytes": 482785,
+            "data_bytes": 4344,
+            "bss_bytes": 432,
+            "dec_bytes": 487561,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/consumer_tiff2rgba/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "telecom_adpcm_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll",
+          "universal": 16608.0,
+          "none": 17064.0,
+          "oz": 16608.0,
+          "o3": 16608.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9732770745428974,
+          "ratio_vs_oz": 1.0,
+          "ratio_vs_o3": 1.0,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 16608.0,
+            "file_bytes": 16608,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4092,
+            "data_bytes": 696,
+            "bss_bytes": 2536,
+            "dec_bytes": 7324,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/cbench/telecom_adpcm_c/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17064.0,
+            "file_bytes": 17064,
+            "stripped_file_bytes": 14768,
+            "text_bytes": 3553,
+            "data_bytes": 1128,
+            "bss_bytes": 2536,
+            "dec_bytes": 7217,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/telecom_adpcm_c/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 16608.0,
+            "file_bytes": 16608,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4092,
+            "data_bytes": 696,
+            "bss_bytes": 2536,
+            "dec_bytes": 7324,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/telecom_adpcm_c/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 16608.0,
+            "file_bytes": 16608,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 5280,
+            "data_bytes": 696,
+            "bss_bytes": 2536,
+            "dec_bytes": 8512,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/telecom_adpcm_c/a.out"
+          }
+        },
+        {
+          "suite": "cbench",
+          "name": "office_rsynth",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll",
+          "universal": 163096.0,
+          "none": 168120.0,
+          "oz": 171008.0,
+          "o3": 192944.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9701165833928147,
+          "ratio_vs_oz": 0.9537331586826348,
+          "ratio_vs_o3": 0.8453022638693092,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 163096.0,
+            "file_bytes": 163096,
+            "stripped_file_bytes": 153696,
+            "text_bytes": 97452,
+            "data_bytes": 46224,
+            "bss_bytes": 296,
+            "dec_bytes": 143972,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/cbench/office_rsynth/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 168120.0,
+            "file_bytes": 168120,
+            "stripped_file_bytes": 158176,
+            "text_bytes": 100966,
+            "data_bytes": 46232,
+            "bss_bytes": 296,
+            "dec_bytes": 147494,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/cbench/office_rsynth/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 171008.0,
+            "file_bytes": 171008,
+            "stripped_file_bytes": 161904,
+            "text_bytes": 105432,
+            "data_bytes": 46232,
+            "bss_bytes": 304,
+            "dec_bytes": 151968,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/cbench/office_rsynth/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 192944.0,
+            "file_bytes": 192944,
+            "stripped_file_bytes": 181776,
+            "text_bytes": 126104,
+            "data_bytes": 45624,
+            "bss_bytes": 760,
+            "dec_bytes": 172488,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/cbench/office_rsynth/a.out"
+          }
+        }
+      ],
+      "failures": [
+        {
+          "suite": "cbench",
+          "name": "consumer_jpeg_c",
+          "pipeline": "universal",
+          "error": "opt failed for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, returncode=-6, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\nopt: /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12853: virtual void {anonymous}::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&): Assertion `F && \"no associated function for return from call\"' failed.\nPLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.\nStack dump:\n0.\tProgram arguments: /root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\n1.\tRunning pass \"attributor\" on module \"<stdin>\"\n #0 0x000061d8b1f7fdd0 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:834:22\n #1 0x000061d8b1f80259 PrintStackTraceSignalHandler(void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:918:1\n #2 0x000061d8b1f7d3c9 llvm::sys::RunSignalHandlers() /root/llvm/llvm-project-21/llvm/lib/Support/Signals.cpp:104:20\n #3 0x000061d8b1f7f60d SignalHandler(int, siginfo_t*, void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:426:14\n #4 0x00007652cbb1c330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x45330)\n #5 0x00007652cbb75b2c __pthread_kill_implementation ./nptl/pthread_kill.c:44:76\n #6 0x00007652cbb75b2c __pthread_kill_internal ./nptl/pthread_kill.c:78:10\n #7 0x00007652cbb75b2c pthread_kill ./nptl/pthread_kill.c:89:10\n #8 0x00007652cbb1c27e raise ./signal/../sysdeps/posix/raise.c:27:6\n #9 0x00007652cbaff8ff abort ./stdlib/abort.c:81:7\n#10 0x00007652cbaff81b _nl_load_domain ./intl/loadmsgcat.c:1177:9\n#11 0x00007652cbb12517 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3b517)\n#12 0x000061d8ae52eca7 (anonymous namespace)::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&) /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12855:26\n#13 0x000061d8ae4bedfe llvm::AAInvariantLoadPointer const* llvm::Attributor::getOrCreateAAFor<llvm::AAInvariantLoadPointer>(llvm::IRPosition, llvm::AbstractAttribute const*, llvm::DepClassTy, bool, bool) /root/llvm/llvm-project-21/llvm/include/llvm/Transforms/IPO/Attributor.h:1633:9\n#14 0x000061d8ae52e7b1 (anonymous namespace)::AAInvariantLoadPointerImpl::updateLocalInvariance(llvm::Attributor&)::'lambda'(llvm::Value const&)::operator()(llvm::Value const&) const /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12795:53"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_e",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_c",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_s",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "bzip2e",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "consumer_tiff2rgba",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        }
+      ]
+    },
+    "polybench": {
+      "count": 10,
+      "selected_names": [
+        "2mm",
+        "3mm",
+        "cholesky",
+        "jacobi-2d",
+        "lu",
+        "correlation",
+        "nussinov",
+        "symm",
+        "heat-3d",
+        "covariance"
+      ],
+      "metric_name": "file_bytes",
+      "metric_display_name": "可执行文件大小",
+      "primary_metrics": {
+        "count": 10,
+        "mean_norm": 0.9996732285202266,
+        "median_norm": 0.998592210229939,
+        "improved": 6,
+        "tied": 1,
+        "worsened": 3,
+        "invalid": 0,
+        "high_variance": 0,
+        "improved_rate": 0.6,
+        "tie_rate": 0.1,
+        "worsen_rate": 0.3,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.175,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+            "ratio": 0.997653683716565,
+            "raw_value": 17008.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll": {
+            "ratio": 0.997653683716565,
+            "raw_value": 17008.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll": {
+            "ratio": 0.9939167056621432,
+            "raw_value": 16992.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll": {
+            "ratio": 0.998592210229939,
+            "raw_value": 17024.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll": {
+            "ratio": 0.996715157203191,
+            "raw_value": 16992.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll": {
+            "ratio": 1.0,
+            "raw_value": 17096.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll": {
+            "ratio": 1.002815579540122,
+            "raw_value": 17096.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll": {
+            "ratio": 1.004223369310183,
+            "raw_value": 17120.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll": {
+            "ratio": 0.998592210229939,
+            "raw_value": 17024.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll": {
+            "ratio": 1.006569685593618,
+            "raw_value": 17160.0,
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          }
+        },
+        "objective": 1.0446732285202265,
+        "metric_name": "file_bytes",
+        "metric_display_name": "可执行文件大小"
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 10,
+          "mean_ratio": 0.9868984469913402,
+          "median_ratio": 0.9856415006947661,
+          "improved": 10,
+          "tied": 0,
+          "worsened": 0
+        },
+        "oz": {
+          "count": 10,
+          "mean_ratio": 0.9996732285202266,
+          "median_ratio": 0.998592210229939,
+          "improved": 6,
+          "tied": 1,
+          "worsened": 3
+        },
+        "o3": {
+          "count": 10,
+          "mean_ratio": 0.9423404622015822,
+          "median_ratio": 0.9976552224860593,
+          "improved": 6,
+          "tied": 0,
+          "worsened": 4
+        }
+      },
+      "per_program": [
+        {
+          "suite": "polybench",
+          "name": "2mm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll",
+          "universal": 17008.0,
+          "none": 17264.0,
+          "oz": 17048.0,
+          "o3": 17016.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9851714550509731,
+          "ratio_vs_oz": 0.997653683716565,
+          "ratio_vs_o3": 0.999529854254819,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17008.0,
+            "file_bytes": 17008,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 3502,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 4246,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/2mm/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17264.0,
+            "file_bytes": 17264,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5156,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5924,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/2mm/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4840,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5592,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/2mm/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17016.0,
+            "file_bytes": 17016,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 6040,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 6792,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/2mm/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "3mm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll",
+          "universal": 17008.0,
+          "none": 17264.0,
+          "oz": 17048.0,
+          "o3": 21112.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9851714550509731,
+          "ratio_vs_oz": 0.997653683716565,
+          "ratio_vs_o3": 0.8056081849185297,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17008.0,
+            "file_bytes": 17008,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 3484,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 4228,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/3mm/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17264.0,
+            "file_bytes": 17264,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5476,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 6244,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/3mm/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 5288,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 6040,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/3mm/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 21112.0,
+            "file_bytes": 21112,
+            "stripped_file_bytes": 18432,
+            "text_bytes": 6568,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 7320,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/3mm/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "cholesky",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll",
+          "universal": 16992.0,
+          "none": 17320.0,
+          "oz": 17096.0,
+          "o3": 17120.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9810623556581987,
+          "ratio_vs_oz": 0.9939167056621432,
+          "ratio_vs_o3": 0.9925233644859813,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 16992.0,
+            "file_bytes": 16992,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 2543,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 3287,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/cholesky/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17320.0,
+            "file_bytes": 17320,
+            "stripped_file_bytes": 14352,
+            "text_bytes": 5123,
+            "data_bytes": 712,
+            "bss_bytes": 64,
+            "dec_bytes": 5899,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/cholesky/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17096.0,
+            "file_bytes": 17096,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4917,
+            "data_bytes": 704,
+            "bss_bytes": 56,
+            "dec_bytes": 5677,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/cholesky/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17120.0,
+            "file_bytes": 17120,
+            "stripped_file_bytes": 14352,
+            "text_bytes": 6143,
+            "data_bytes": 712,
+            "bss_bytes": 56,
+            "dec_bytes": 6911,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/cholesky/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "jacobi-2d",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll",
+          "universal": 17024.0,
+          "none": 17272.0,
+          "oz": 17048.0,
+          "o3": 17016.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9856415006947661,
+          "ratio_vs_oz": 0.998592210229939,
+          "ratio_vs_o3": 1.000470145745181,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17024.0,
+            "file_bytes": 17024,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 2808,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 3552,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/jacobi-2d/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17272.0,
+            "file_bytes": 17272,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4684,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5452,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/jacobi-2d/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4168,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 4920,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/jacobi-2d/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17016.0,
+            "file_bytes": 17016,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 5368,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 6120,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/jacobi-2d/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "lu",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll",
+          "universal": 16992.0,
+          "none": 17264.0,
+          "oz": 17048.0,
+          "o3": 17064.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9842446709916589,
+          "ratio_vs_oz": 0.996715157203191,
+          "ratio_vs_o3": 0.9957805907172996,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 16992.0,
+            "file_bytes": 16992,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 2543,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 3287,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/lu/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17264.0,
+            "file_bytes": 17264,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4980,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5748,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/lu/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4856,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5608,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/lu/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17064.0,
+            "file_bytes": 17064,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 6001,
+            "data_bytes": 704,
+            "bss_bytes": 56,
+            "dec_bytes": 6761,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/lu/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "correlation",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll",
+          "universal": 17096.0,
+          "none": 17320.0,
+          "oz": 17096.0,
+          "o3": 17064.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9870669745958429,
+          "ratio_vs_oz": 1.0,
+          "ratio_vs_o3": 1.0018752930145336,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17096.0,
+            "file_bytes": 17096,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4829,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5581,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/correlation/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17320.0,
+            "file_bytes": 17320,
+            "stripped_file_bytes": 14352,
+            "text_bytes": 5354,
+            "data_bytes": 712,
+            "bss_bytes": 64,
+            "dec_bytes": 6130,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/correlation/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17096.0,
+            "file_bytes": 17096,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4906,
+            "data_bytes": 704,
+            "bss_bytes": 56,
+            "dec_bytes": 5666,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/correlation/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17064.0,
+            "file_bytes": 17064,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5682,
+            "data_bytes": 704,
+            "bss_bytes": 56,
+            "dec_bytes": 6442,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/correlation/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "nussinov",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll",
+          "universal": 17096.0,
+          "none": 17272.0,
+          "oz": 17048.0,
+          "o3": 17064.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9898100972672533,
+          "ratio_vs_oz": 1.002815579540122,
+          "ratio_vs_o3": 1.0018752930145336,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17096.0,
+            "file_bytes": 17096,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4529,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5281,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/nussinov/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17272.0,
+            "file_bytes": 17272,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5154,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5922,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/nussinov/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4009,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 4761,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/nussinov/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17064.0,
+            "file_bytes": 17064,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5209,
+            "data_bytes": 704,
+            "bss_bytes": 56,
+            "dec_bytes": 5969,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/nussinov/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "symm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll",
+          "universal": 17120.0,
+          "none": 17264.0,
+          "oz": 17048.0,
+          "o3": 21112.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9916589434661723,
+          "ratio_vs_oz": 1.004223369310183,
+          "ratio_vs_o3": 0.8109132247063282,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17120.0,
+            "file_bytes": 17120,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 3278,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 4030,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/symm/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17264.0,
+            "file_bytes": 17264,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4836,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5604,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/symm/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4376,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5128,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/symm/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 21112.0,
+            "file_bytes": 21112,
+            "stripped_file_bytes": 18432,
+            "text_bytes": 6312,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 7064,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/symm/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "heat-3d",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll",
+          "universal": 17024.0,
+          "none": 17272.0,
+          "oz": 17048.0,
+          "o3": 21112.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9856415006947661,
+          "ratio_vs_oz": 0.998592210229939,
+          "ratio_vs_o3": 0.8063660477453581,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17024.0,
+            "file_bytes": 17024,
+            "stripped_file_bytes": 14328,
+            "text_bytes": 2752,
+            "data_bytes": 688,
+            "bss_bytes": 56,
+            "dec_bytes": 3496,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/heat-3d/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17272.0,
+            "file_bytes": 17272,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 5616,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 6384,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/heat-3d/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4973,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5725,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/heat-3d/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 21112.0,
+            "file_bytes": 21112,
+            "stripped_file_bytes": 18432,
+            "text_bytes": 6919,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 7671,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/heat-3d/a.out"
+          }
+        },
+        {
+          "suite": "polybench",
+          "name": "covariance",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll",
+          "universal": 17160.0,
+          "none": 17272.0,
+          "oz": 17048.0,
+          "o3": 17016.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.9935155164427976,
+          "ratio_vs_oz": 1.006569685593618,
+          "ratio_vs_o3": 1.008462623413258,
+          "universal_sizes": {
+            "status": "ok",
+            "value": 17160.0,
+            "file_bytes": 17160,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 3423,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 4175,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/universal/polybench/covariance/a.out"
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 17272.0,
+            "file_bytes": 17272,
+            "stripped_file_bytes": 14344,
+            "text_bytes": 4646,
+            "data_bytes": 704,
+            "bss_bytes": 64,
+            "dec_bytes": 5414,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/polybench/covariance/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 17048.0,
+            "file_bytes": 17048,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4194,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 4946,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/polybench/covariance/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 17016.0,
+            "file_bytes": 17016,
+            "stripped_file_bytes": 14336,
+            "text_bytes": 4842,
+            "data_bytes": 696,
+            "bss_bytes": 56,
+            "dec_bytes": 5594,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/polybench/covariance/a.out"
+          }
+        }
+      ],
+      "failures": []
+    },
+    "csmith": {
+      "count": 5,
+      "selected_names": [
+        "trainprogram1",
+        "trainprogram2",
+        "trainprogram3",
+        "trainprogram4",
+        "trainprogram5"
+      ],
+      "metric_name": "file_bytes",
+      "metric_display_name": "可执行文件大小",
+      "primary_metrics": {
+        "count": 5,
+        "mean_norm": Infinity,
+        "median_norm": Infinity,
+        "improved": 0,
+        "tied": 0,
+        "worsened": 5,
+        "invalid": 5,
+        "high_variance": 0,
+        "improved_rate": 0.0,
+        "tie_rate": 0.0,
+        "worsen_rate": 1.0,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.175,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0,
+            "metric_name": "file_bytes"
+          }
+        },
+        "objective": Infinity,
+        "metric_name": "file_bytes",
+        "metric_display_name": "可执行文件大小"
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 5
+        },
+        "oz": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 5
+        },
+        "o3": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 5
+        }
+      },
+      "per_program": [
+        {
+          "suite": "csmith",
+          "name": "trainprogram1",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll",
+          "universal": Infinity,
+          "none": 281672.0,
+          "oz": 43968.0,
+          "o3": 60104.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 281672.0,
+            "file_bytes": 281672,
+            "stripped_file_bytes": 268240,
+            "text_bytes": 224060,
+            "data_bytes": 35358,
+            "bss_bytes": 1272,
+            "dec_bytes": 260690,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/csmith/trainprogram1/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 43968.0,
+            "file_bytes": 43968,
+            "stripped_file_bytes": 39280,
+            "text_bytes": 28871,
+            "data_bytes": 5154,
+            "bss_bytes": 1136,
+            "dec_bytes": 35161,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/csmith/trainprogram1/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 60104.0,
+            "file_bytes": 60104,
+            "stripped_file_bytes": 55552,
+            "text_bytes": 44377,
+            "data_bytes": 5042,
+            "bss_bytes": 1136,
+            "dec_bytes": 50555,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/csmith/trainprogram1/a.out"
+          }
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram2",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll",
+          "universal": Infinity,
+          "none": 212904.0,
+          "oz": 96368.0,
+          "o3": 174192.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 212904.0,
+            "file_bytes": 212904,
+            "stripped_file_bytes": 189352,
+            "text_bytes": 134654,
+            "data_bytes": 45776,
+            "bss_bytes": 1720,
+            "dec_bytes": 182150,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/csmith/trainprogram2/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 96368.0,
+            "file_bytes": 96368,
+            "stripped_file_bytes": 85976,
+            "text_bytes": 58835,
+            "data_bytes": 19072,
+            "bss_bytes": 1408,
+            "dec_bytes": 79315,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/csmith/trainprogram2/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 174192.0,
+            "file_bytes": 174192,
+            "stripped_file_bytes": 163800,
+            "text_bytes": 136467,
+            "data_bytes": 19072,
+            "bss_bytes": 1408,
+            "dec_bytes": 156947,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/csmith/trainprogram2/a.out"
+          }
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram3",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll",
+          "universal": Infinity,
+          "none": 51872.0,
+          "oz": 33576.0,
+          "o3": 103208.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 51872.0,
+            "file_bytes": 51872,
+            "stripped_file_bytes": 40872,
+            "text_bytes": 24082,
+            "data_bytes": 7600,
+            "bss_bytes": 1240,
+            "dec_bytes": 32922,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/csmith/trainprogram3/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 33576.0,
+            "file_bytes": 33576,
+            "stripped_file_bytes": 30736,
+            "text_bytes": 21043,
+            "data_bytes": 704,
+            "bss_bytes": 1040,
+            "dec_bytes": 22787,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/csmith/trainprogram3/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 103208.0,
+            "file_bytes": 103208,
+            "stripped_file_bytes": 100368,
+            "text_bytes": 89187,
+            "data_bytes": 704,
+            "bss_bytes": 1040,
+            "dec_bytes": 90931,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/csmith/trainprogram3/a.out"
+          }
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram4",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll",
+          "universal": Infinity,
+          "none": 321864.0,
+          "oz": 312296.0,
+          "o3": 459752.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 321864.0,
+            "file_bytes": 321864,
+            "stripped_file_bytes": 304928,
+            "text_bytes": 178202,
+            "data_bytes": 115498,
+            "bss_bytes": 1136,
+            "dec_bytes": 294836,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/csmith/trainprogram4/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 312296.0,
+            "file_bytes": 312296,
+            "stripped_file_bytes": 298488,
+            "text_bytes": 175059,
+            "data_bytes": 112795,
+            "bss_bytes": 1056,
+            "dec_bytes": 288910,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/csmith/trainprogram4/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 459752.0,
+            "file_bytes": 459752,
+            "stripped_file_bytes": 445944,
+            "text_bytes": 321747,
+            "data_bytes": 112795,
+            "bss_bytes": 1056,
+            "dec_bytes": 435598,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/csmith/trainprogram4/a.out"
+          }
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram5",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll",
+          "universal": Infinity,
+          "none": 275680.0,
+          "oz": 168376.0,
+          "o3": 273344.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity,
+          "universal_sizes": {
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+            "value": Infinity,
+            "file_bytes": Infinity,
+            "stripped_file_bytes": Infinity,
+            "text_bytes": Infinity,
+            "data_bytes": Infinity,
+            "bss_bytes": Infinity,
+            "dec_bytes": Infinity,
+            "binary_path": null
+          },
+          "none_sizes": {
+            "status": "ok",
+            "value": 275680.0,
+            "file_bytes": 275680,
+            "stripped_file_bytes": 251376,
+            "text_bytes": 176679,
+            "data_bytes": 69824,
+            "bss_bytes": 1440,
+            "dec_bytes": 247943,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/none/csmith/trainprogram5/a.out"
+          },
+          "oz_sizes": {
+            "status": "ok",
+            "value": 168376.0,
+            "file_bytes": 168376,
+            "stripped_file_bytes": 158448,
+            "text_bytes": 110839,
+            "data_bytes": 42328,
+            "bss_bytes": 1184,
+            "dec_bytes": 154351,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/oz/csmith/trainprogram5/a.out"
+          },
+          "o3_sizes": {
+            "status": "ok",
+            "value": 273344.0,
+            "file_bytes": 273344,
+            "stripped_file_bytes": 263504,
+            "text_bytes": 213135,
+            "data_bytes": 40888,
+            "bss_bytes": 1184,
+            "dec_bytes": 255207,
+            "binary_path": "/root/exp/RFunipassLab/external_datasets/build/binarysize/o3/csmith/trainprogram5/a.out"
+          }
+        }
+      ],
+      "failures": [
+        {
+          "suite": "csmith",
+          "name": "trainprogram1",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram2",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram3",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram4",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram5",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu"
+        }
+      ]
+    }
+  },
+  "combined": {
+    "count": 25,
+    "metric_name": "file_bytes",
+    "metric_display_name": "可执行文件大小",
+    "primary_metrics": {
+      "count": 25,
+      "mean_norm": 0.9963897845393265,
+      "median_norm": 0.998592210229939,
+      "improved": 8,
+      "tied": 2,
+      "worsened": 15,
+      "invalid": 11,
+      "high_variance": 0,
+      "improved_rate": 0.32,
+      "tie_rate": 0.08,
+      "worsen_rate": 0.6,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.175,
+      "per_program": {
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt failed for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, returncode=-6, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\nopt: /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12853: virtual void {anonymous}::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&): Assertion `F && \"no associated function for return from call\"' failed.\nPLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.\nStack dump:\n0.\tProgram arguments: /root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu\n1.\tRunning pass \"attributor\" on module \"<stdin>\"\n #0 0x000061d8b1f7fdd0 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:834:22\n #1 0x000061d8b1f80259 PrintStackTraceSignalHandler(void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:918:1\n #2 0x000061d8b1f7d3c9 llvm::sys::RunSignalHandlers() /root/llvm/llvm-project-21/llvm/lib/Support/Signals.cpp:104:20\n #3 0x000061d8b1f7f60d SignalHandler(int, siginfo_t*, void*) /root/llvm/llvm-project-21/llvm/lib/Support/Unix/Signals.inc:426:14\n #4 0x00007652cbb1c330 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x45330)\n #5 0x00007652cbb75b2c __pthread_kill_implementation ./nptl/pthread_kill.c:44:76\n #6 0x00007652cbb75b2c __pthread_kill_internal ./nptl/pthread_kill.c:78:10\n #7 0x00007652cbb75b2c pthread_kill ./nptl/pthread_kill.c:89:10\n #8 0x00007652cbb1c27e raise ./signal/../sysdeps/posix/raise.c:27:6\n #9 0x00007652cbaff8ff abort ./stdlib/abort.c:81:7\n#10 0x00007652cbaff81b _nl_load_domain ./intl/loadmsgcat.c:1177:9\n#11 0x00007652cbb12517 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3b517)\n#12 0x000061d8ae52eca7 (anonymous namespace)::AAInvariantLoadPointerCallSiteReturned::initialize(llvm::Attributor&) /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12855:26\n#13 0x000061d8ae4bedfe llvm::AAInvariantLoadPointer const* llvm::Attributor::getOrCreateAAFor<llvm::AAInvariantLoadPointer>(llvm::IRPosition, llvm::AbstractAttribute const*, llvm::DepClassTy, bool, bool) /root/llvm/llvm-project-21/llvm/include/llvm/Transforms/IPO/Attributor.h:1633:9\n#14 0x000061d8ae52e7b1 (anonymous namespace)::AAInvariantLoadPointerImpl::updateLocalInvariance(llvm::Attributor&)::'lambda'(llvm::Value const&)::operator()(llvm::Value const&) const /root/llvm/llvm-project-21/llvm/lib/Transforms/IPO/AttributorAttributes.cpp:12795:53",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll": {
+          "ratio": 0.9976179132920439,
+          "raw_value": 16752.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll": {
+          "ratio": 1.0013736263736264,
+          "raw_value": 17496.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll": {
+          "ratio": 1.0,
+          "raw_value": 16608.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll": {
+          "ratio": 0.9537331586826348,
+          "raw_value": 163096.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+          "ratio": 0.997653683716565,
+          "raw_value": 17008.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll": {
+          "ratio": 0.997653683716565,
+          "raw_value": 17008.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll": {
+          "ratio": 0.9939167056621432,
+          "raw_value": 16992.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll": {
+          "ratio": 0.998592210229939,
+          "raw_value": 17024.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll": {
+          "ratio": 0.996715157203191,
+          "raw_value": 16992.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll": {
+          "ratio": 1.0,
+          "raw_value": 17096.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll": {
+          "ratio": 1.002815579540122,
+          "raw_value": 17096.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll": {
+          "ratio": 1.004223369310183,
+          "raw_value": 17120.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll": {
+          "ratio": 0.998592210229939,
+          "raw_value": 17024.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll": {
+          "ratio": 1.006569685593618,
+          "raw_value": 17160.0,
+          "status": "ok",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(iroutliner),function(gvn-hoist),module(attributor),module(iroutliner),function(jump-threading),module(attributor),function(gvn-sink),module(globalopt),module(iroutliner),module(iroutliner),function(newgvn),function(gvn-sink),module(attributor),module(attributor),function(newgvn),function(gvn-hoist),module(attributor),cgscc(attributor-cgscc),module(scc-oz-module-inliner),module(attributor) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0,
+          "metric_name": "file_bytes"
+        }
+      },
+      "objective": 1.0863897845393264,
+      "metric_name": "file_bytes",
+      "metric_display_name": "可执行文件大小"
+    },
+    "fixed_baselines": {
+      "none": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 0.9935155164427976,
+        "improved": 13,
+        "tied": 0,
+        "worsened": 12
+      },
+      "oz": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 1.004223369310183,
+        "improved": 8,
+        "tied": 2,
+        "worsened": 15
+      },
+      "o3": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 1.0018752930145336,
+        "improved": 9,
+        "tied": 1,
+        "worsened": 15
+      }
+    }
+  }
+}

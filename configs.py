@@ -72,6 +72,10 @@ BASE_ENV: Dict[str, str] = {
     # 目标切换：默认仍保持旧的指令数目标和 -Oz 归一化基准，保证兼容性。
     "OBJECTIVE_KIND": "instrcount",
     "OBJECTIVE_BASELINE": "oz",
+    # 旁路 binary-size 分析的主度量；不参与 BO 搜索目标。
+    "BINARY_SIZE_METRIC": "stripped_file_bytes",
+    # 旁路 binary-size 分析额外记录的指标面板；主度量仍由 BINARY_SIZE_METRIC 决定。
+    "BINARY_SIZE_REPORT_METRICS": "text_bytes,data_bytes,bss_bytes,dec_bytes",
     "PROGRAM_POOL_KIND": "auto",
     # runtime 目标编译可执行文件时的后端优化等级。
     # 默认 -O0 是为了让测到的变化主要来自待评估 pass 序列，而不是额外后端优化。
@@ -229,6 +233,26 @@ CHOICE_RULES: Dict[str, set[str]] = {
     "FEATURE_MODE": {"full", "lite"},
     "OBJECTIVE_KIND": {"instrcount", "runtime"},
     "OBJECTIVE_BASELINE": {"oz", "o3", "-oz", "-o3", "default<oz>", "default<o3>"},
+    "BINARY_SIZE_METRIC": {
+        "file",
+        "file_bytes",
+        "binary",
+        "binary_bytes",
+        "stripped",
+        "stripped_file_bytes",
+        "strip",
+        "text",
+        "text_bytes",
+        "code",
+        "code_bytes",
+        "data",
+        "data_bytes",
+        "bss",
+        "bss_bytes",
+        "dec",
+        "dec_bytes",
+        "llvm_size_dec",
+    },
     "PROGRAM_POOL_KIND": {"auto", "tuning", "runtime"},
 }
 

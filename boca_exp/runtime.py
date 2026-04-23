@@ -81,10 +81,52 @@ def normalize_pass_sequence(pass_sequence) -> list[str]:
     return [str(item).strip() for item in pass_sequence if str(item).strip()]
 
 
+def split_pipeline_steps(pipeline: str | None) -> list[str]:
+    """按顶层逗号拆分 LLVM pass pipeline，保留嵌套 pass 结构。"""
+    if not pipeline:
+        return []
+
+    steps: list[str] = []
+    depth = 0
+    start = 0
+    for index, char in enumerate(pipeline):
+        if char == '(':
+            depth += 1
+        elif char == ')':
+            depth = max(0, depth - 1)
+        elif char == ',' and depth == 0:
+            item = pipeline[start:index].strip()
+            if item:
+                steps.append(item)
+            start = index + 1
+
+    tail = pipeline[start:].strip()
+    if tail:
+        steps.append(tail)
+    return steps
+
+
+def sequence_to_pipeline(pass_sequence) -> str:
+    """把 raw pass 序列转换为实际送给 opt 的 effective pipeline。"""
+    sequence_list = normalize_pass_sequence(pass_sequence)
+    if not sequence_list:
+        return ""
+
+    if len(sequence_list) == 1 and sequence_list[0] in {'-Oz', '-O3', 'default<Oz>', 'default<O3>'}:
+        return sequence_list[0]
+    return fix_loop_nesting(','.join(sequence_list))
+
+
+def format_pipeline_for_display(pipeline: str | None) -> str:
+    """把 effective pipeline 格式化成日志中使用的箭头分隔形式。"""
+    steps = split_pipeline_steps(pipeline)
+    return " → ".join(steps) if steps else "(空序列)"
+
+
 
 def fix_loop_nesting(pipeline: str) -> str:
     """把 loop pass 嵌套进离它最近的前一个 function pass 中。"""
-    passes = [p.strip() for p in pipeline.split(',') if p.strip()]
+    passes = split_pipeline_steps(pipeline)
 
     fixed_passes = []
     last_function_index = -1
@@ -169,16 +211,12 @@ def _format_opt_failure(cmd_opt, pipeline: str, resolved_target_triple: str | No
 
 def transform_ir_strict(ir_code: str, pass_sequence, llvm_tools_path: str, target_triple: str | None = None) -> str:
     """对一段 IR 应用给定 pipeline，失败时直接抛错。"""
-    sequence_list = normalize_pass_sequence(pass_sequence)
-    if not sequence_list:
+    pipeline = sequence_to_pipeline(pass_sequence)
+    if not pipeline:
         return ir_code
 
-    pipeline = ','.join(sequence_list)
     opt_path = os.path.join(llvm_tools_path, 'opt') if llvm_tools_path else 'opt'
     resolved_target_triple = target_triple or detect_target_triple(ir_code)
-
-    if pipeline not in {'default<Oz>', 'default<O3>', '-Oz', '-O3'}:
-        pipeline = fix_loop_nesting(pipeline)
 
     cmd_opt = _build_opt_command(opt_path, pipeline, resolved_target_triple)
     result = subprocess.run(

@@ -19,6 +19,7 @@
     - 数据同步
     - LLVM IR 构建
     - 外部 `instrcount` 验证
+    - 外部 `binarysize` 验证
     - 外部 `runtime` 验证
     - JSON / Markdown 报告输出
 - `external_datasets/`
@@ -82,7 +83,28 @@
   - per-program 明细
   - failure / timeout 样本记录
 
-### 2. `runtime`
+### 2. `binarysize`
+
+- 把外部源程序构建成统一的 linked `.ll`
+- 对 linked `.ll` 应用通用 pass 序列
+- 再通过 `clang++ -x ir` 生成最终 binary
+- 使用 `llvm-strip` 和 `llvm-size` 记录 binary-size 指标
+- 输出：
+  - primary metrics
+  - 相对 `[] / -Oz / -O3` 的 fixed-baseline 对比
+  - `file_bytes / stripped_file_bytes / text_bytes / data_bytes / bss_bytes / dec_bytes`
+  - per-program 明细
+  - failure / timeout 样本记录
+
+默认主指标是 `stripped_file_bytes`，可通过：
+
+```bash
+--binarysize-metric stripped_file_bytes
+```
+
+切换到 `file_bytes`、`text_bytes`、`data_bytes`、`bss_bytes` 或 `dec_bytes`。
+
+### 3. `runtime`
 
 - 不复用当前 POJ 专用 runtime harness
 - 单独对外部 suite 做 source-aware 编译与运行
@@ -94,7 +116,7 @@
 
 这样避免了把需要参数/数据集文件的 `cbench` 错误地塞进当前通用输入模板。
 
-当前阶段不再继续扩展 `runtime` 侧数据准备，后续工作重点放在 `IR + instcount` 的外部泛化验证。
+当前阶段不再继续扩展 `runtime` 侧数据准备，后续工作重点放在 `IR + instrcount + binarysize` 的外部泛化验证。
 
 ## Upstream Sources
 
@@ -114,4 +136,5 @@
 python run_external_validation.py sync
 python run_external_validation.py build-ir --suite cbench --suite polybench --suite csmith --frontend-mode canonical
 python run_external_validation.py evaluate --mode instrcount --result-json <path> --instrcount-timeout 60
+python run_external_validation.py evaluate --mode binarysize --result-json <path> --binarysize-metric stripped_file_bytes --binarysize-timeout 60
 ```

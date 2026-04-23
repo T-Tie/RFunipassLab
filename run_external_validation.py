@@ -88,11 +88,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Source-to-IR generation strategy. 'canonical' uses -O1 with LLVM passes disabled; 'raw' uses -O0 without optnone.",
     )
 
-    eval_parser = subparsers.add_parser("evaluate", help="Run instrcount or runtime validation on external suites.")
+    eval_parser = subparsers.add_parser("evaluate", help="Run instrcount, binarysize, or runtime validation on external suites.")
     _add_common_suite_args(eval_parser)
     eval_parser.add_argument(
         "--mode",
-        choices=("instrcount", "runtime"),
+        choices=("instrcount", "binarysize", "runtime"),
         required=True,
         help="Validation mode.",
     )
@@ -108,7 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--objective-baseline",
         choices=("oz", "o3"),
         default="oz",
-        help="Primary baseline for instrcount aggregation.",
+        help="Primary baseline for instrcount / binarysize aggregation.",
     )
     eval_parser.add_argument(
         "--repeat",
@@ -125,7 +125,7 @@ def build_parser() -> argparse.ArgumentParser:
     eval_parser.add_argument(
         "--force-ir",
         action="store_true",
-        help="Force rebuilding linked LLVM IR files before instrcount validation.",
+        help="Force rebuilding linked LLVM IR files before instrcount/binarysize validation.",
     )
     eval_parser.add_argument(
         "--tag",
@@ -135,7 +135,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--frontend-mode",
         choices=("canonical", "raw"),
         default="canonical",
-        help="IR generation strategy used when building external linked .ll files for instrcount validation.",
+        help="IR generation strategy used when building external linked .ll files for instrcount/binarysize validation.",
     )
     eval_parser.add_argument(
         "--instrcount-timeout",
@@ -148,6 +148,24 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         default=4,
         help="Maximum parallel workers for external instrcount validation.",
+    )
+    eval_parser.add_argument(
+        "--binarysize-timeout",
+        type=float,
+        default=60.0,
+        help="Per-program timeout in seconds for external binary-size validation.",
+    )
+    eval_parser.add_argument(
+        "--binarysize-workers",
+        type=int,
+        default=4,
+        help="Maximum parallel workers for external binary-size validation.",
+    )
+    eval_parser.add_argument(
+        "--binarysize-metric",
+        choices=("file_bytes", "stripped_file_bytes", "text_bytes", "data_bytes", "bss_bytes", "dec_bytes"),
+        default="stripped_file_bytes",
+        help="Primary size metric used for binary-size validation.",
     )
     return parser
 
@@ -191,6 +209,9 @@ def main() -> int:
             frontend_mode=args.frontend_mode,
             instrcount_timeout=args.instrcount_timeout,
             instrcount_workers=args.instrcount_workers,
+            binarysize_timeout=args.binarysize_timeout,
+            binarysize_workers=args.binarysize_workers,
+            binarysize_metric=args.binarysize_metric,
         )
 
     print(json.dumps(payload, indent=2, ensure_ascii=False))

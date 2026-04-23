@@ -1,0 +1,79 @@
+# run_id: 20260422_191944_815660_feature_lite
+# name: feature_lite
+# group: feature_ablation
+# description: 切换到 Lite 特征编码，保留其余搜索流程不变。
+# changed: FEATURE_MODE=lite, GA_GEN=5, GA_POP=200, ITERS=100, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5
+# result_json: /root/exp/RFunipassLab/results/instrcount/summaries/20260422_191944_815660_feature_lite.json
+# started_at: 2026-04-22T19:19:44
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   BINARY_SIZE_METRIC=stripped_file_bytes
+#   DECAY=0.5
+#   FEATURE_MODE=lite
+#   GA_ELITE=0.1
+#   GA_GEN=5
+#   GA_MUT=0.8
+#   GA_POP=200
+#   GA_TOUR=3
+#   ITERS=100
+#   MAX_SEQ_LEN=120
+#   MIN_VAL_PROGRAMS=5
+#   OBJECTIVE_BASELINE=oz
+#   OBJECTIVE_KIND=instrcount
+#   OBJ_HIGHVAR_W=0.0
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=auto
+#   RNUM=256
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=0
+#   TEST_TOPK=50
+#   TRAIN_TOPK=200
+#   VAL_RATIO=0.5
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       200
+Loaded initial seed seqs:    86
+Loaded test programs:        50
+Objective kind:              instrcount
+Program pool kind:           tuning
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'module(globalopt)', 'cgscc(attributor-cgscc)', 'module(scc-oz-module-inliner)', 'function(mem2reg)', 'function(instsimplify)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(gvn-hoist)', 'function(dce)', 'function(jump-threading)', 'module(attributor)', 'function(dse)', 'function(newgvn)', 'function(gvn-sink)', 'module(inferattrs)', 'loop(loop-simplifycfg)', 'function(lower-switch)']
+Synergy edges: 176
+Self-loop passes: {'cgscc(attributor-cgscc)', 'module(attributor)', 'function(newgvn)'}
+Traceback (most recent call last):
+  File "/root/exp/RFunipassLab/boca.py", line 25, in <module>
+    raise SystemExit(cli_main())
+                     ~~~~~~~~^^
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 711, in cli_main
+    prepare_objective_backend(_unique_ordered(list(programs) + list(test_programs)))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/objective.py", line 61, in prepare_objective_backend
+    get_objective_backend().prepare(programs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 51, in prepare
+    _ = self._baseline(program)
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 133, in _baseline
+    value = self._count_program(program, [self.baseline_pipeline])
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 146, in _count_program
+    value = int(get_instrcount(ir_text, list(pass_sequence), self.llvm_tools_path))
+                ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 260, in get_instrcount
+    return get_inst_count(optimized_ir)
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 43, in get_inst_count
+    autophase_lib = _load_autophase_lib()
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 36, in _load_autophase_lib
+    _AUTOPHASE_LIB = ctypes.CDLL(str(AUTOPHASE_LIB_PATH))
+  File "/root/miniconda3/lib/python3.13/ctypes/__init__.py", line 390, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ~~~~~~~^^^^^^^^^^^^^^^^^^
+OSError: /root/miniconda3/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.30' not found (required by /root/exp/RFunipass/lib/libAutophase_21_1_8.so)

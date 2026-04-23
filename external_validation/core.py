@@ -15,8 +15,17 @@ from typing import Any, Dict, Iterable, List, Sequence
 
 from boca_exp.objective_common import compose_metrics
 from boca_exp.objective_instr import InstructionCountBackend
-from boca_exp.runtime import detect_target_triple, fix_loop_nesting, get_inst_count, normalize_pass_sequence
-from boca_exp.settings import llvm_tools_path
+from boca_exp.runtime import detect_target_triple, fix_loop_nesting, get_inst_count, normalize_pass_sequence, split_pipeline_steps
+from boca_exp.settings import (
+    BACKEND_OPT_LEVEL,
+    BINARY_SIZE_METRIC,
+    MAX_SEQ_LEN,
+    OBJ_WORSEN_WEIGHT,
+    llvm_tools_path,
+    normalize_binary_size_metric,
+    normalize_objective_baseline,
+    objective_baseline_pipeline,
+)
 
 from .paths import BUILD_DIR, IR_DIR, MANIFESTS_DIR, REPORTS_DIR, SOURCES_DIR, UPSTREAM_CACHE_DIR, ensure_layout
 from .registry import (
@@ -35,6 +44,17 @@ LOCAL_CSMITH_RUNTIME = Path("/root/projects/datasets/csmith/runtime")
 DEFAULT_IR_FRONTEND_MODE = "canonical"
 DEFAULT_INSTRCOUNT_TIMEOUT = 60.0
 DEFAULT_INSTRCOUNT_MAX_WORKERS = 4
+DEFAULT_BINARYSIZE_TIMEOUT = 60.0
+DEFAULT_BINARYSIZE_MAX_WORKERS = 4
+DEFAULT_BINARYSIZE_METRIC = normalize_binary_size_metric(BINARY_SIZE_METRIC)
+SIZE_METRIC_LABELS = {
+    "file_bytes": "可执行文件大小",
+    "stripped_file_bytes": "strip 后可执行文件大小",
+    "text_bytes": ".text 段大小",
+    "data_bytes": ".data 段大小",
+    "bss_bytes": ".bss 段大小",
+    "dec_bytes": "llvm-size dec 总大小",
+}
 
 
 @dataclass
@@ -92,6 +112,62 @@ def _run_checked(command: Sequence[str], cwd: Path | None = None) -> None:
             f"stdout:\n{completed.stdout}\n"
             f"stderr:\n{completed.stderr}"
         )
+
+
+def _parse_llvm_size_output(stdout_text: str) -> dict[str, int]:
+    lines = [line.strip() for line in stdout_text.splitlines() if line.strip()]
+    if len(lines) < 2:
+        raise RuntimeError(f"unexpected llvm-size output: {stdout_text!r}")
+
+    fields = lines[-1].split()
+    if len(fields) < 5:
+        raise RuntimeError(f"failed to parse llvm-size fields from: {lines[-1]!r}")
+
+    return {
+        "text_bytes": int(fields[0]),
+        "data_bytes": int(fields[1]),
+        "bss_bytes": int(fields[2]),
+        "dec_bytes": int(fields[3]),
+    }
+
+
+def _measure_binary_size_artifact(binary_path: Path) -> dict[str, Any]:
+    llvm_size_bin = _tool_bin("llvm-size")
+    llvm_strip_bin = _tool_bin("llvm-strip")
+
+    file_bytes = int(binary_path.stat().st_size)
+
+    stripped_path = binary_path.with_name(f"{binary_path.name}.stripped")
+    shutil.copy2(binary_path, stripped_path)
+    try:
+        strip_result = subprocess.run(
+            [llvm_strip_bin, str(stripped_path)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+        )
+        if strip_result.returncode != 0:
+            raise RuntimeError(strip_result.stderr.strip() or "llvm-strip failed")
+        stripped_file_bytes = int(stripped_path.stat().st_size)
+    finally:
+        stripped_path.unlink(missing_ok=True)
+
+    size_result = subprocess.run(
+        [llvm_size_bin, "-d", str(binary_path)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    if size_result.returncode != 0:
+        raise RuntimeError(size_result.stderr.strip() or "llvm-size failed")
+
+    return {
+        "file_bytes": file_bytes,
+        "stripped_file_bytes": stripped_file_bytes,
+        **_parse_llvm_size_output(size_result.stdout),
+    }
 
 
 def _run_and_measure(
@@ -426,7 +502,7 @@ def load_sequence_from_result(
     sequence_text: str | None = None,
 ) -> dict[str, Any]:
     if sequence_text:
-        sequence = normalize_pass_sequence(sequence_text)
+        sequence = _normalize_pipeline_or_sequence(sequence_text)
         return {
             "sequence": sequence,
             "sequence_source": "inline",
@@ -438,15 +514,23 @@ def load_sequence_from_result(
 
     payload = json.loads(Path(result_json_path).read_text(encoding="utf-8"))
     sequence = None
+    effective_pipeline = None
     if isinstance(payload.get("best_result"), dict):
+        effective_pipeline = payload["best_result"].get("final_pipeline_effective")
         sequence = payload["best_result"].get("final_sequence")
+    if effective_pipeline is None:
+        effective_pipeline = payload.get("final_pipeline_effective")
     if sequence is None:
         sequence = payload.get("final_sequence")
-    if sequence is None:
-        raise KeyError(f"cannot find final_sequence in {result_json_path}")
+    if effective_pipeline:
+        sequence = _normalize_pipeline_or_sequence(effective_pipeline)
+    elif sequence is not None:
+        sequence = _normalize_pipeline_or_sequence(sequence)
+    else:
+        raise KeyError(f"cannot find final_sequence/final_pipeline_effective in {result_json_path}")
 
     return {
-        "sequence": normalize_pass_sequence(sequence),
+        "sequence": sequence,
         "sequence_source": str(Path(result_json_path).resolve()),
         "source_payload": {
             "objective_kind": payload.get("objective_kind"),
@@ -457,8 +541,19 @@ def load_sequence_from_result(
     }
 
 
+def _normalize_pipeline_or_sequence(sequence: Sequence[str] | str | None) -> list[str]:
+    if isinstance(sequence, str):
+        text = sequence.strip()
+        if not text:
+            return []
+        if text in {"-Oz", "-O3", "default<Oz>", "default<O3>"}:
+            return [text]
+        return split_pipeline_steps(text)
+    return normalize_pass_sequence(sequence)
+
+
 def sequence_to_pipeline(sequence: Sequence[str] | str | None) -> str:
-    sequence_list = normalize_pass_sequence(sequence)
+    sequence_list = _normalize_pipeline_or_sequence(sequence)
     if not sequence_list:
         return ""
     if len(sequence_list) == 1 and sequence_list[0] in {"-Oz", "-O3", "default<Oz>", "default<O3>"}:
@@ -531,14 +626,11 @@ def _transform_ir_for_instrcount(
     *,
     opt_timeout: float,
 ) -> str:
-    sequence_list = normalize_pass_sequence(pass_sequence)
-    if not sequence_list:
+    pipeline = sequence_to_pipeline(pass_sequence)
+    if not pipeline:
         return ir_code
 
-    pipeline = ",".join(sequence_list)
     resolved_target_triple = detect_target_triple(ir_code)
-    if pipeline not in {"default<Oz>", "default<O3>", "-Oz", "-O3"}:
-        pipeline = fix_loop_nesting(pipeline)
 
     opt_bin = _tool_bin("opt")
     if pipeline in {"default<Oz>", "-Oz"}:
@@ -580,6 +672,91 @@ def _transform_ir_for_instrcount(
     return result.stdout
 
 
+def _select_binary_size_metric(size_record: dict[str, Any], metric_name: str) -> float:
+    value = size_record.get(metric_name, float("inf"))
+    return float(value) if value is not None else float("inf")
+
+
+def _compile_ir_to_binary_for_size(
+    ll_path: Path,
+    output_dir: Path,
+    *,
+    compile_timeout: float,
+) -> Path:
+    clangxx_bin = _tool_bin("clang++")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    binary_path = output_dir / "a.out"
+    command = [clangxx_bin]
+    if BACKEND_OPT_LEVEL:
+        command.append(BACKEND_OPT_LEVEL)
+    command.extend(["-x", "ir", str(ll_path), "-lm", "-o", str(binary_path)])
+
+    try:
+        result = subprocess.run(
+            command,
+            cwd=str(output_dir),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False,
+            timeout=compile_timeout,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise TimeoutError(
+            f"clang++ timed out after {compile_timeout:.1f}s for ll={ll_path}, cmd={' '.join(command)}"
+        ) from exc
+
+    if result.returncode != 0:
+        detail = (result.stderr or "").strip() or (result.stdout or "").strip() or "<no stdout/stderr captured>"
+        detail_lines = "\n".join(detail.splitlines()[:20])
+        raise RuntimeError(
+            "clang++ failed for binary-size build\n"
+            f"ll_path: {ll_path}\n"
+            f"returncode: {result.returncode}\n"
+            f"cmd: {' '.join(command)}\n"
+            f"{detail_lines}"
+        )
+    return binary_path
+
+
+def _measure_binary_size_program(
+    ll_path: str,
+    pass_sequence: Sequence[str],
+    *,
+    metric_name: str,
+    opt_timeout: float,
+    build_root: Path,
+) -> dict[str, Any]:
+    ll_path_obj = Path(ll_path).resolve()
+    ir_text = ll_path_obj.read_text(encoding="utf-8", errors="ignore")
+
+    if pass_sequence:
+        optimized_ir = _transform_ir_for_instrcount(
+            ir_text,
+            pass_sequence,
+            opt_timeout=opt_timeout,
+        )
+    else:
+        optimized_ir = ir_text
+
+    build_root.mkdir(parents=True, exist_ok=True)
+    optimized_ll_path = build_root / "optimized.ll"
+    optimized_ll_path.write_text(optimized_ir, encoding="utf-8")
+
+    binary_path = _compile_ir_to_binary_for_size(
+        optimized_ll_path,
+        build_root,
+        compile_timeout=opt_timeout,
+    )
+    size_record = _measure_binary_size_artifact(binary_path)
+    return {
+        "value": _select_binary_size_metric(size_record, metric_name),
+        "status": "ok",
+        **size_record,
+        "binary_path": str(binary_path),
+    }
+
+
 def _safe_count_program(
     backend: InstructionCountBackend,
     program: str,
@@ -589,7 +766,7 @@ def _safe_count_program(
     value_cache: dict[tuple[str, tuple[str, ...]], dict[str, Any]],
     cache_lock: threading.Lock,
 ) -> dict[str, Any]:
-    key = (program, tuple(normalize_pass_sequence(pass_sequence)))
+    key = (program, tuple(_normalize_pipeline_or_sequence(pass_sequence)))
     with cache_lock:
         cached = value_cache.get(key)
     if cached is not None:
@@ -719,6 +896,191 @@ def _compose_instrcount_metrics(
         max_seq_len=max_seq_len,
         worsen_weight=worsen_weight,
     )
+
+
+def _safe_binarysize_program(
+    program: str,
+    pass_sequence: Sequence[str],
+    *,
+    metric_name: str,
+    opt_timeout: float,
+    build_parent: Path,
+    value_cache: dict[tuple[str, tuple[str, ...], str], dict[str, Any]],
+    cache_lock: threading.Lock,
+) -> dict[str, Any]:
+    sequence_key = tuple(_normalize_pipeline_or_sequence(pass_sequence))
+    key = (program, sequence_key, metric_name)
+    with cache_lock:
+        cached = value_cache.get(key)
+    if cached is not None:
+        return cached
+
+    program_path = Path(program)
+    suite_name = program_path.parent.name
+    build_root = build_parent / suite_name / program_path.stem
+    if build_root.exists():
+        shutil.rmtree(build_root)
+
+    try:
+        result = _measure_binary_size_program(
+            program,
+            pass_sequence,
+            metric_name=metric_name,
+            opt_timeout=opt_timeout,
+            build_root=build_root,
+        )
+    except Exception as exc:
+        result = {
+            "value": float("inf"),
+            "status": str(exc),
+            "file_bytes": float("inf"),
+            "stripped_file_bytes": float("inf"),
+            "text_bytes": float("inf"),
+            "data_bytes": float("inf"),
+            "bss_bytes": float("inf"),
+            "dec_bytes": float("inf"),
+            "binary_path": None,
+        }
+
+    with cache_lock:
+        value_cache[key] = result
+    return result
+
+
+def _binarysize_programs_safe(
+    programs: Sequence[str],
+    pass_sequence: Sequence[str],
+    *,
+    metric_name: str,
+    opt_timeout: float,
+    max_workers: int,
+    build_parent: Path,
+    value_cache: dict[tuple[str, tuple[str, ...], str], dict[str, Any]],
+    cache_lock: threading.Lock,
+) -> list[dict[str, Any]]:
+    if not programs:
+        return []
+    worker_count = max(1, min(int(max_workers), len(programs)))
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        return list(
+            executor.map(
+                lambda program: _safe_binarysize_program(
+                    program,
+                    pass_sequence,
+                    metric_name=metric_name,
+                    opt_timeout=opt_timeout,
+                    build_parent=build_parent,
+                    value_cache=value_cache,
+                    cache_lock=cache_lock,
+                ),
+                programs,
+            )
+        )
+
+
+def _compose_binarysize_metrics(
+    programs: Sequence[str],
+    baseline_results: Sequence[dict[str, Any]],
+    sequence_results: Sequence[dict[str, Any]],
+    pass_sequence: Sequence[str],
+    *,
+    metric_name: str,
+    max_seq_len: int,
+    worsen_weight: float,
+) -> dict[str, Any]:
+    if not programs:
+        metrics = compose_metrics(
+            [],
+            pass_sequence,
+            [],
+            0,
+            0,
+            0,
+            {},
+            0,
+            high_variance=0,
+            max_seq_len=max_seq_len,
+            worsen_weight=worsen_weight,
+        )
+        metrics["metric_name"] = metric_name
+        metrics["metric_display_name"] = SIZE_METRIC_LABELS.get(metric_name, metric_name)
+        return metrics
+
+    ratios: list[float] = []
+    improved = tied = worsened = invalid = 0
+    per_program: dict[str, Any] = {}
+
+    for program, baseline_result, sequence_result in zip(programs, baseline_results, sequence_results):
+        baseline_value = float(baseline_result["value"])
+        sequence_value = float(sequence_result["value"])
+        baseline_status = baseline_result["status"]
+        sequence_status = sequence_result["status"]
+
+        if (
+            baseline_status != "ok"
+            or sequence_status != "ok"
+            or not math.isfinite(baseline_value)
+            or not math.isfinite(sequence_value)
+            or baseline_value <= 0
+        ):
+            invalid += 1
+            worsened += 1
+            per_program[program] = {
+                "ratio": float("inf"),
+                "raw_value": sequence_value,
+                "status": sequence_status if sequence_status != "ok" else baseline_status,
+                "variance_pct": 0.0,
+                "metric_name": metric_name,
+            }
+            continue
+
+        ratio = sequence_value / baseline_value
+        ratios.append(float(ratio))
+        if sequence_value < baseline_value:
+            improved += 1
+        elif sequence_value == baseline_value:
+            tied += 1
+        else:
+            worsened += 1
+
+        per_program[program] = {
+            "ratio": float(ratio),
+            "raw_value": float(sequence_value),
+            "status": "ok",
+            "variance_pct": 0.0,
+            "metric_name": metric_name,
+        }
+
+    metrics = compose_metrics(
+        programs,
+        pass_sequence,
+        ratios,
+        improved,
+        tied,
+        worsened,
+        per_program,
+        invalid,
+        high_variance=0,
+        max_seq_len=max_seq_len,
+        worsen_weight=worsen_weight,
+    )
+    metrics["metric_name"] = metric_name
+    metrics["metric_display_name"] = SIZE_METRIC_LABELS.get(metric_name, metric_name)
+    return metrics
+
+
+def _binarysize_details(result: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "status": result.get("status"),
+        "value": result.get("value"),
+        "file_bytes": result.get("file_bytes"),
+        "stripped_file_bytes": result.get("stripped_file_bytes"),
+        "text_bytes": result.get("text_bytes"),
+        "data_bytes": result.get("data_bytes"),
+        "bss_bytes": result.get("bss_bytes"),
+        "dec_bytes": result.get("dec_bytes"),
+        "binary_path": result.get("binary_path"),
+    }
 
 
 def _compile_pipeline_to_binary(spec: CompileSpec, pass_pipeline: str, output_root: Path) -> dict[str, Any]:
@@ -1107,6 +1469,230 @@ def evaluate_external_instrcount(
     }
 
 
+def evaluate_external_binarysize(
+    *,
+    sequence: Sequence[str],
+    selected_suites: Sequence[str] | None = None,
+    exclude_suites: Sequence[str] | None = None,
+    benchmarks: Sequence[str] | None = None,
+    objective_baseline: str = "oz",
+    dataset_id: int = 1,
+    force_sync: bool = False,
+    force_ir: bool = False,
+    frontend_mode: str = DEFAULT_IR_FRONTEND_MODE,
+    binarysize_timeout: float = DEFAULT_BINARYSIZE_TIMEOUT,
+    binarysize_workers: int = DEFAULT_BINARYSIZE_MAX_WORKERS,
+    metric_name: str = DEFAULT_BINARYSIZE_METRIC,
+) -> dict[str, Any]:
+    ensure_layout()
+    suites = suite_names(selected_suites, exclude_suites)
+    ir_manifest = build_external_ir(
+        suites,
+        benchmarks=benchmarks,
+        dataset_id=dataset_id,
+        force_sync=force_sync,
+        force_rebuild=force_ir,
+        frontend_mode=frontend_mode,
+    )
+    sequence = list(sequence)
+    baseline_name = normalize_objective_baseline(objective_baseline)
+    baseline_pipeline = objective_baseline_pipeline(baseline_name)
+    metric_name = normalize_binary_size_metric(metric_name)
+    metric_display_name = SIZE_METRIC_LABELS.get(metric_name, metric_name)
+    value_cache: dict[tuple[str, tuple[str, ...], str], dict[str, Any]] = {}
+    cache_lock = threading.Lock()
+
+    suite_results: dict[str, Any] = {}
+    combined_programs: list[str] = []
+    combined_baseline_results: list[dict[str, Any]] = []
+    combined_seq_results: list[dict[str, Any]] = []
+    combined_seq_values: list[float] = []
+    combined_none_values: list[float] = []
+    combined_oz_values: list[float] = []
+    combined_o3_values: list[float] = []
+    build_parent = BUILD_DIR / "binarysize"
+
+    for suite in suites:
+        program_paths = [entry["ll_path"] for entry in ir_manifest["records"][suite]]
+        combined_programs.extend(program_paths)
+
+        baseline_results = _binarysize_programs_safe(
+            program_paths,
+            [baseline_pipeline],
+            metric_name=metric_name,
+            opt_timeout=binarysize_timeout,
+            max_workers=binarysize_workers,
+            build_parent=build_parent / baseline_name,
+            value_cache=value_cache,
+            cache_lock=cache_lock,
+        )
+        seq_results = _binarysize_programs_safe(
+            program_paths,
+            sequence,
+            metric_name=metric_name,
+            opt_timeout=binarysize_timeout,
+            max_workers=binarysize_workers,
+            build_parent=build_parent / "universal",
+            value_cache=value_cache,
+            cache_lock=cache_lock,
+        )
+        none_results = _binarysize_programs_safe(
+            program_paths,
+            [],
+            metric_name=metric_name,
+            opt_timeout=binarysize_timeout,
+            max_workers=binarysize_workers,
+            build_parent=build_parent / "none",
+            value_cache=value_cache,
+            cache_lock=cache_lock,
+        )
+        oz_results = (
+            baseline_results
+            if baseline_pipeline == "-Oz"
+            else _binarysize_programs_safe(
+                program_paths,
+                ["-Oz"],
+                metric_name=metric_name,
+                opt_timeout=binarysize_timeout,
+                max_workers=binarysize_workers,
+                build_parent=build_parent / "oz",
+                value_cache=value_cache,
+                cache_lock=cache_lock,
+            )
+        )
+        o3_results = (
+            baseline_results
+            if baseline_pipeline == "-O3"
+            else _binarysize_programs_safe(
+                program_paths,
+                ["-O3"],
+                metric_name=metric_name,
+                opt_timeout=binarysize_timeout,
+                max_workers=binarysize_workers,
+                build_parent=build_parent / "o3",
+                value_cache=value_cache,
+                cache_lock=cache_lock,
+            )
+        )
+
+        metrics = _compose_binarysize_metrics(
+            program_paths,
+            baseline_results,
+            seq_results,
+            sequence,
+            metric_name=metric_name,
+            max_seq_len=MAX_SEQ_LEN,
+            worsen_weight=OBJ_WORSEN_WEIGHT,
+        )
+        combined_baseline_results.extend(baseline_results)
+        combined_seq_results.extend(seq_results)
+
+        seq_values = [entry["value"] for entry in seq_results]
+        none_values = [entry["value"] for entry in none_results]
+        oz_values = [entry["value"] for entry in oz_results]
+        o3_values = [entry["value"] for entry in o3_results]
+        combined_seq_values.extend(seq_values)
+        combined_none_values.extend(none_values)
+        combined_oz_values.extend(oz_values)
+        combined_o3_values.extend(o3_values)
+
+        per_program: list[dict[str, Any]] = []
+        failures: list[dict[str, Any]] = []
+        for entry, seq_result, none_result, oz_result, o3_result in zip(
+            ir_manifest["records"][suite],
+            seq_results,
+            none_results,
+            oz_results,
+            o3_results,
+        ):
+            seq_value = float(seq_result["value"])
+            none_value = float(none_result["value"])
+            oz_value = float(oz_result["value"])
+            o3_value = float(o3_result["value"])
+
+            if seq_result["status"] != "ok":
+                failures.append({"suite": suite, "name": entry["name"], "pipeline": "universal", "error": seq_result["status"]})
+            if none_result["status"] != "ok":
+                failures.append({"suite": suite, "name": entry["name"], "pipeline": "none", "error": none_result["status"]})
+            if oz_result["status"] != "ok":
+                failures.append({"suite": suite, "name": entry["name"], "pipeline": "oz", "error": oz_result["status"]})
+            if o3_result["status"] != "ok":
+                failures.append({"suite": suite, "name": entry["name"], "pipeline": "o3", "error": o3_result["status"]})
+
+            per_program.append(
+                {
+                    "suite": suite,
+                    "name": entry["name"],
+                    "ll_path": entry["ll_path"],
+                    "universal": seq_value,
+                    "none": none_value,
+                    "oz": oz_value,
+                    "o3": o3_value,
+                    "universal_status": seq_result["status"],
+                    "none_status": none_result["status"],
+                    "oz_status": oz_result["status"],
+                    "o3_status": o3_result["status"],
+                    "ratio_vs_none": _safe_ratio_value(seq_value, none_value),
+                    "ratio_vs_oz": _safe_ratio_value(seq_value, oz_value),
+                    "ratio_vs_o3": _safe_ratio_value(seq_value, o3_value),
+                    "universal_sizes": _binarysize_details(seq_result),
+                    "none_sizes": _binarysize_details(none_result),
+                    "oz_sizes": _binarysize_details(oz_result),
+                    "o3_sizes": _binarysize_details(o3_result),
+                }
+            )
+
+        suite_results[suite] = {
+            "count": len(program_paths),
+            "selected_names": [entry["name"] for entry in ir_manifest["records"][suite]],
+            "metric_name": metric_name,
+            "metric_display_name": metric_display_name,
+            "primary_metrics": metrics,
+            "fixed_baselines": {
+                "none": _as_ratio_dict(_ratio_summary(seq_values, none_values)),
+                "oz": _as_ratio_dict(_ratio_summary(seq_values, oz_values)),
+                "o3": _as_ratio_dict(_ratio_summary(seq_values, o3_values)),
+            },
+            "per_program": per_program,
+            "failures": failures,
+        }
+
+    combined_metrics = _compose_binarysize_metrics(
+        combined_programs,
+        combined_baseline_results,
+        combined_seq_results,
+        sequence,
+        metric_name=metric_name,
+        max_seq_len=MAX_SEQ_LEN,
+        worsen_weight=OBJ_WORSEN_WEIGHT,
+    )
+
+    return {
+        "mode": "binarysize",
+        "objective_baseline": baseline_name,
+        "size_metric": metric_name,
+        "size_metric_display_name": metric_display_name,
+        "suites": suites,
+        "sequence": sequence,
+        "frontend_mode": frontend_mode,
+        "binarysize_timeout": binarysize_timeout,
+        "binarysize_workers": binarysize_workers,
+        "ir_manifest_path": ir_manifest["manifest_path"],
+        "suite_results": suite_results,
+        "combined": {
+            "count": len(combined_programs),
+            "metric_name": metric_name,
+            "metric_display_name": metric_display_name,
+            "primary_metrics": combined_metrics,
+            "fixed_baselines": {
+                "none": _as_ratio_dict(_ratio_summary(combined_seq_values, combined_none_values)),
+                "oz": _as_ratio_dict(_ratio_summary(combined_seq_values, combined_oz_values)),
+                "o3": _as_ratio_dict(_ratio_summary(combined_seq_values, combined_o3_values)),
+            },
+        },
+    }
+
+
 def evaluate_external_runtime(
     *,
     sequence: Sequence[str],
@@ -1264,6 +1850,14 @@ def write_report_files(
         f"- Sequence source: {payload['sequence_source']}",
         f"- Suites: {', '.join(payload['suites'])}",
         f"- Sequence length: {len(payload['sequence'])}",
+    ]
+    if payload.get("objective_baseline"):
+        lines.append(f"- Objective baseline: {payload['objective_baseline']}")
+    if payload.get("frontend_mode"):
+        lines.append(f"- Frontend mode: {payload['frontend_mode']}")
+    if payload.get("size_metric"):
+        lines.append(f"- Size metric: {payload['size_metric']}")
+    lines.extend([
         "",
         "## Sequence",
         "",
@@ -1279,7 +1873,7 @@ def write_report_files(
         "",
         "## Per Suite",
         "",
-    ]
+    ])
     for suite in payload["suites"]:
         lines.append(f"### {suite}")
         lines.append("")
@@ -1309,6 +1903,9 @@ def run_external_validation(
     frontend_mode: str,
     instrcount_timeout: float,
     instrcount_workers: int,
+    binarysize_timeout: float,
+    binarysize_workers: int,
+    binarysize_metric: str,
 ) -> dict[str, Any]:
     sequence_info = load_sequence_from_result(result_json_path, sequence_text=sequence_text)
     suites = suite_names(selected_suites, exclude_suites)
@@ -1325,6 +1922,20 @@ def run_external_validation(
             frontend_mode=frontend_mode,
             instrcount_timeout=instrcount_timeout,
             instrcount_workers=instrcount_workers,
+        )
+    elif mode == "binarysize":
+        eval_payload = evaluate_external_binarysize(
+            sequence=sequence_info["sequence"],
+            selected_suites=suites,
+            benchmarks=benchmarks,
+            objective_baseline=objective_baseline,
+            dataset_id=dataset_id,
+            force_sync=force_sync,
+            force_ir=force_ir,
+            frontend_mode=frontend_mode,
+            binarysize_timeout=binarysize_timeout,
+            binarysize_workers=binarysize_workers,
+            metric_name=binarysize_metric,
         )
     elif mode == "runtime":
         eval_payload = evaluate_external_runtime(

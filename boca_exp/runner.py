@@ -28,6 +28,7 @@ from .objective import (
     prepare_objective_backend,
     reset_objective_backend,
 )
+from .objective_size import BinarySizeEvaluator
 from .paths import (
     DEFAULT_DATA_DIR,
     default_result_json_path,
@@ -35,6 +36,7 @@ from .paths import (
     ensure_results_layout,
     normalize_objective_kind,
 )
+from .runtime import format_pipeline_for_display, sequence_to_pipeline, split_pipeline_steps
 from .search import get_nd_solutions
 from .selection import (
     _primary_metrics_for_selection,
@@ -44,6 +46,8 @@ from .selection import (
 )
 from .settings import (
     BACKEND_OPT_LEVEL,
+    BINARY_SIZE_METRIC,
+    BINARY_SIZE_REPORT_METRICS,
     GA_ELITE_RATIO,
     GA_GENERATIONS,
     GA_MUTATE_RATE,
@@ -89,6 +93,19 @@ def _unique_ordered(items: Iterable[str]) -> List[str]:
         seen.add(item)
         result.append(item)
     return result
+
+
+def _sequence_views(sequence: Sequence[str]) -> Dict[str, Any]:
+    """同时构造 raw 序列与 effective pipeline 视图，避免日志和结果含义不一致。"""
+    raw_sequence = list(sequence)
+    effective_pipeline = sequence_to_pipeline(raw_sequence)
+    effective_sequence = split_pipeline_steps(effective_pipeline)
+    return {
+        "raw_sequence": raw_sequence,
+        "effective_pipeline": effective_pipeline,
+        "effective_sequence": effective_sequence,
+        "effective_display": format_pipeline_for_display(effective_pipeline),
+    }
 
 
 def _resolve_program_pool_kind(objective_kind: str, requested_pool_kind: str) -> str:
@@ -180,8 +197,8 @@ def _format_metrics(label: str, metrics: Dict[str, Any]) -> str:
     ])
 
 
-def _format_runtime_comparisons(metrics: Optional[Dict[str, Any]]) -> str:
-    """把相对 [] / -Oz / -O3 的运行时间对比格式化为单行文本。"""
+def _format_relative_comparisons(metrics: Optional[Dict[str, Any]]) -> str:
+    """把相对 [] / -Oz / -O3 的归一化对比格式化为单行文本。"""
     if not metrics:
         return ""
 
@@ -220,6 +237,112 @@ def _format_fixed_baseline_panel(panel: Optional[Dict[str, Any]]) -> str:
         improvement_pct = float(item.get('improvement_pct', (1.0 - mean_norm) * 100.0))
         parts.append(f"{item.get('label', name)}={mean_norm:.3f} ({improvement_pct:+.1f}%)")
     return "  ".join(parts)
+
+
+def _build_ranked_sequence_report(
+    *,
+    rank: int,
+    selection_split: str,
+    sequence: Sequence[str],
+    train_metrics: Dict[str, Any],
+    val_metrics: Optional[Dict[str, Any]],
+    test_metrics: Optional[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """把单条 Top-K 序列整理成统一的结构化摘要。"""
+    seq_views = _sequence_views(sequence)
+    primary_metrics = _primary_metrics_for_selection(train_metrics, val_metrics)
+    return {
+        'rank': rank,
+        'selection_split': selection_split,
+        'selection_metrics': primary_metrics,
+        'train_metrics': train_metrics,
+        'validation_metrics': val_metrics,
+        'test_metrics': test_metrics,
+        'length_raw': len(seq_views['raw_sequence']),
+        'length_effective': len(seq_views['effective_sequence']),
+        'syn_rate_raw': get_sequence_syn_rate(sequence),
+        'sequence_raw': seq_views['raw_sequence'],
+        'sequence_effective': seq_views['effective_sequence'],
+        'pipeline_effective': seq_views['effective_pipeline'],
+        'display_effective': seq_views['effective_display'],
+    }
+
+
+def _build_top_ranked_sequence_reports(
+    *,
+    evaluated_sequences: Sequence[Sequence[str]],
+    evaluated_train_metrics: Sequence[Dict[str, Any]],
+    evaluated_val_metrics: Sequence[Optional[Dict[str, Any]]],
+    selection_split: str,
+    topn: int,
+    test_programs: Sequence[str],
+    test_baseline_values: Optional[Sequence[float]],
+) -> List[Dict[str, Any]]:
+    """生成 Top-K 序列的结构化结果，并附带测试集表现。"""
+    ranked_top = rank_top_unique_sequences(
+        evaluated_sequences,
+        evaluated_train_metrics,
+        evaluated_val_metrics,
+        topn=topn,
+    )
+
+    reports: List[Dict[str, Any]] = []
+    for rank_id, idx in enumerate(ranked_top, start=1):
+        seq = evaluated_sequences[idx]
+        train_metrics = evaluated_train_metrics[idx]
+        val_metrics = evaluated_val_metrics[idx]
+        test_metrics = None
+        if test_programs and test_baseline_values:
+            test_metrics = evaluate_sequence_metrics(test_programs, test_baseline_values, seq)
+        reports.append(
+            _build_ranked_sequence_report(
+                rank=rank_id,
+                selection_split=selection_split,
+                sequence=seq,
+                train_metrics=train_metrics,
+                val_metrics=val_metrics,
+                test_metrics=test_metrics,
+            )
+        )
+    return reports
+
+
+def _print_top_ranked_sequence_reports(
+    top_ranked_sequences: Sequence[Dict[str, Any]],
+    *,
+    selection_split: str,
+    title: Optional[str] = None,
+) -> None:
+    """统一打印 Top-K 序列摘要，避免日志与 JSON 含义漂移。"""
+    if title is None:
+        title = f"\nTop-{len(top_ranked_sequences)} 最佳序列（按 {selection_split} 多目标 objective 升序）:"
+    print(title)
+    for report in top_ranked_sequences:
+        primary_metrics = report['selection_metrics']
+        train_metrics = report['train_metrics']
+        test_metrics = report.get('test_metrics')
+        msg = (
+            f"  #{report['rank']}: "
+            f"{selection_split}_obj={primary_metrics['objective']:.4f}, "
+            f"{selection_split}_mean={primary_metrics['mean_norm']:.4f}, "
+            f"{selection_split}_worsen={primary_metrics['worsen_rate']:.2%}, "
+            f"{selection_split}_highvar={primary_metrics.get('high_variance_rate', 0.0):.2%}, "
+            f"train_obj={train_metrics['objective']:.4f}, "
+            f"train_mean={train_metrics['mean_norm']:.4f}, "
+            f"train_highvar={train_metrics.get('high_variance_rate', 0.0):.2%}, "
+            f"len={report['length_raw']}, syn_rate={report['syn_rate_raw']:.2f}"
+        )
+        if test_metrics is not None:
+            msg += (
+                f", test_obj={test_metrics['objective']:.4f}, "
+                f"test_mean={test_metrics['mean_norm']:.4f}, "
+                f"test_worsen={test_metrics['worsen_rate']:.2%}, "
+                f"test_highvar={test_metrics.get('high_variance_rate', 0.0):.2%}"
+            )
+        print(msg)
+        print("     " + report['display_effective'])
+        if report['sequence_raw'] != report['sequence_effective']:
+            print("     raw: " + (" → ".join(report['sequence_raw']) if report['sequence_raw'] else "(空序列)"))
 
 
 def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
@@ -395,10 +518,10 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             f"worsen={train_metrics['worsen_rate']:.2%}  "
             f"highvar={train_metrics.get('high_variance_rate', 0.0):.2%}"
         )
-        train_compare_text = _format_runtime_comparisons(train_metrics)
+        train_compare_text = _format_relative_comparisons(train_metrics)
         if train_compare_text:
             print(f"                 search_train: {train_compare_text}")
-        val_compare_text = _format_runtime_comparisons(val_metrics)
+        val_compare_text = _format_relative_comparisons(val_metrics)
         if val_compare_text:
             print(f"                 validation:   {val_compare_text}")
 
@@ -427,12 +550,12 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
 
     print("  选择结果:")
     print(f"    {_format_metrics('search_train', final_train_metrics)}")
-    final_train_compare_text = _format_runtime_comparisons(final_train_metrics)
+    final_train_compare_text = _format_relative_comparisons(final_train_metrics)
     if final_train_compare_text:
         print(f"    search_train: {final_train_compare_text}")
     if final_val_metrics is not None:
         print(f"    {_format_metrics('validation', final_val_metrics)}")
-        final_val_compare_text = _format_runtime_comparisons(final_val_metrics)
+        final_val_compare_text = _format_relative_comparisons(final_val_metrics)
         if final_val_compare_text:
             print(f"    validation:   {final_val_compare_text}")
 
@@ -472,59 +595,45 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     )
 
     final_syn_rate = get_sequence_syn_rate(final_seq)
-    print(f"\n最终通用 pass 序列（{len(final_seq)} 个 pass, syn_rate={final_syn_rate:.2f}）:")
-    print("  " + " → ".join(final_seq) if final_seq else "  (空序列)")
+    final_views = _sequence_views(final_seq)
+    print(
+        f"\n最终通用 pass 序列（effective={len(final_views['effective_sequence'])} 个顶层 pass, "
+        f"raw={len(final_views['raw_sequence'])} 个 pass, syn_rate(raw)={final_syn_rate:.2f}）:"
+    )
+    print("  " + final_views["effective_display"])
     print(f"  {_format_metrics('search_train', final_train_metrics)}")
-    final_train_compare_text = _format_runtime_comparisons(final_train_metrics)
+    final_train_compare_text = _format_relative_comparisons(final_train_metrics)
     if final_train_compare_text:
         print(f"  search_train: {final_train_compare_text}")
     if final_val_metrics is not None:
         print(f"  {_format_metrics('validation', final_val_metrics)}")
-        final_val_compare_text = _format_runtime_comparisons(final_val_metrics)
+        final_val_compare_text = _format_relative_comparisons(final_val_metrics)
         if final_val_compare_text:
             print(f"  validation:   {final_val_compare_text}")
     if final_test_metrics is not None:
         print(f"  {_format_metrics('test', final_test_metrics)}")
-        final_test_compare_text = _format_runtime_comparisons(final_test_metrics)
+        final_test_compare_text = _format_relative_comparisons(final_test_metrics)
         if final_test_compare_text:
             print(f"  test:         {final_test_compare_text}")
+    if final_views["raw_sequence"] != final_views["effective_sequence"]:
+        print(f"  raw_sequence ({len(final_views['raw_sequence'])} passes):")
+        print("  " + (" → ".join(final_views["raw_sequence"]) if final_views["raw_sequence"] else "(空序列)"))
+        print(f"  effective_pipeline: {final_views['effective_pipeline']}")
 
     # ---- Step 7: 输出 Top-N 序列 ----
-    ranked_top = rank_top_unique_sequences(
-        evaluated_sequences,
-        evaluated_train_metrics,
-        evaluated_val_metrics,
+    top_ranked_sequences = _build_top_ranked_sequence_reports(
+        evaluated_sequences=evaluated_sequences,
+        evaluated_train_metrics=evaluated_train_metrics,
+        evaluated_val_metrics=evaluated_val_metrics,
+        selection_split=primary_split_name,
         topn=topn,
+        test_programs=test_programs,
+        test_baseline_values=test_baseline_values,
     )
-    print(f"\nTop-{len(ranked_top)} 最佳序列（按 {primary_split_name} 多目标 objective 升序）:")
-    for rank_id, idx in enumerate(ranked_top, start=1):
-        seq = evaluated_sequences[idx]
-        train_metrics = evaluated_train_metrics[idx]
-        val_metrics = evaluated_val_metrics[idx]
-        primary_metrics = _primary_metrics_for_selection(train_metrics, val_metrics)
-        syn_rate = get_sequence_syn_rate(seq)
-
-        msg = (
-            f"  #{rank_id}: "
-            f"{primary_split_name}_obj={primary_metrics['objective']:.4f}, "
-            f"{primary_split_name}_mean={primary_metrics['mean_norm']:.4f}, "
-            f"{primary_split_name}_worsen={primary_metrics['worsen_rate']:.2%}, "
-            f"{primary_split_name}_highvar={primary_metrics.get('high_variance_rate', 0.0):.2%}, "
-            f"train_obj={train_metrics['objective']:.4f}, "
-            f"train_mean={train_metrics['mean_norm']:.4f}, "
-            f"train_highvar={train_metrics.get('high_variance_rate', 0.0):.2%}, "
-            f"len={len(seq)}, syn_rate={syn_rate:.2f}"
-        )
-        if test_programs and test_baseline_values:
-            test_metrics = evaluate_sequence_metrics(test_programs, test_baseline_values, seq)
-            msg += (
-                f", test_obj={test_metrics['objective']:.4f}, "
-                f"test_mean={test_metrics['mean_norm']:.4f}, "
-                f"test_worsen={test_metrics['worsen_rate']:.2%}, "
-                f"test_highvar={test_metrics.get('high_variance_rate', 0.0):.2%}"
-            )
-        print(msg)
-        print("     " + (" → ".join(seq) if seq else "(空序列)"))
+    _print_top_ranked_sequence_reports(
+        top_ranked_sequences,
+        selection_split=primary_split_name,
+    )
 
     return {
         'objective_kind': backend.objective_kind,
@@ -532,12 +641,16 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
         'timestamps': timestamps,
         'search_best_objective': search_best_objective,
         'search_best_sequence': search_best_seq,
-        'final_sequence': final_seq,
+        'final_sequence': final_views['effective_sequence'],
+        'final_sequence_raw': final_views['raw_sequence'],
+        'final_pipeline_effective': final_views['effective_pipeline'],
         'final_train_metrics': final_train_metrics,
         'final_val_metrics': final_val_metrics,
         'final_test_metrics': final_test_metrics,
         'selection_split': primary_split_name,
         'selection_objective': final_primary_metrics['objective'],
+        'topn_requested': topn,
+        'top_ranked_sequences': top_ranked_sequences,
         'fixed_baseline_summaries': fixed_baseline_summaries,
         'iteration_compare_history': iteration_compare_history,
     }
@@ -592,6 +705,193 @@ def _build_cross_instrcount_metrics(best_sequence: Sequence[str], test_programs:
         return instr_backend.evaluate_sequence_metrics(test_programs, baselines, best_sequence)
     except Exception as exc:
         return {'status': f'failed: {exc}'}
+
+
+def _build_binary_size_sequence_metrics(
+    evaluator: BinarySizeEvaluator,
+    test_programs: Sequence[str],
+    sequence_raw: Sequence[str],
+    sequence_effective: Sequence[str],
+):
+    """用同一个 evaluator 评估一条序列的 binary-size 多指标面板。"""
+    metrics_by_name = evaluator.evaluate_metric_suite(
+        test_programs,
+        sequence_raw,
+        BINARY_SIZE_REPORT_METRICS,
+    )
+    metric_names = list(metrics_by_name)
+    payload_by_name = {
+        metric_name: {
+            'sequence_raw': list(sequence_raw),
+            'sequence_effective': list(sequence_effective),
+            **metrics,
+        }
+        for metric_name, metrics in metrics_by_name.items()
+    }
+    return {
+        'status': 'ok',
+        'primary_metric_name': evaluator.metric_name,
+        'primary_metric_display_name': evaluator.metric_display_name,
+        'metric_names': metric_names,
+        'metrics_by_name': payload_by_name,
+        'primary_metrics': payload_by_name.get(evaluator.metric_name),
+    }
+
+
+def _build_cross_binary_size_metrics(
+    best_sequence_raw: Sequence[str],
+    best_sequence_effective: Sequence[str],
+    test_programs: Sequence[str],
+    *,
+    objective_baseline: str,
+):
+    """
+    旁路记录最终通用序列的 binary size 表现。
+
+    第一阶段只把它作为分析指标写入结果 JSON，不改变 BO 搜索目标。
+    """
+    if not test_programs:
+        return None
+
+    try:
+        evaluator = BinarySizeEvaluator(
+            objective_baseline=objective_baseline,
+            metric_name=BINARY_SIZE_METRIC,
+        )
+        return _build_binary_size_sequence_metrics(
+            evaluator,
+            test_programs,
+            best_sequence_raw,
+            best_sequence_effective,
+        )
+    except Exception as exc:
+        return {'status': f'failed: {exc}'}
+
+
+def _build_top_ranked_binary_size_metrics(
+    top_ranked_sequences: Sequence[Dict[str, Any]],
+    test_programs: Sequence[str],
+    *,
+    objective_baseline: str,
+):
+    """为最优轮次 Top-K 序列逐条记录 binary-size 多指标测试集表现。"""
+    if not test_programs or not top_ranked_sequences:
+        return None
+
+    try:
+        evaluator = BinarySizeEvaluator(
+            objective_baseline=objective_baseline,
+            metric_name=BINARY_SIZE_METRIC,
+        )
+    except Exception as exc:
+        return {'status': f'failed: {exc}', 'sequences': []}
+
+    sequence_reports = []
+    for report in top_ranked_sequences:
+        sequence_raw = list(report.get('sequence_raw') or report.get('sequence_effective') or [])
+        sequence_effective = list(report.get('sequence_effective') or split_pipeline_steps(sequence_to_pipeline(sequence_raw)))
+        pipeline_effective = report.get('pipeline_effective') or sequence_to_pipeline(sequence_raw)
+        display_effective = report.get('display_effective') or format_pipeline_for_display(pipeline_effective)
+
+        try:
+            binary_suite = _build_binary_size_sequence_metrics(
+                evaluator,
+                test_programs,
+                sequence_raw,
+                sequence_effective,
+            )
+        except Exception as exc:
+            binary_suite = {
+                'status': f'failed: {exc}',
+                'primary_metric_name': evaluator.metric_name,
+                'primary_metric_display_name': evaluator.metric_display_name,
+                'metric_names': [],
+                'metrics_by_name': {},
+                'primary_metrics': None,
+            }
+
+        compact_binary_suite = {
+            'status': binary_suite.get('status', 'ok'),
+            'primary_metric_name': binary_suite.get('primary_metric_name'),
+            'primary_metric_display_name': binary_suite.get('primary_metric_display_name'),
+            'metric_names': binary_suite.get('metric_names'),
+            'primary_metrics': binary_suite.get('primary_metrics'),
+            'metrics_by_name': binary_suite.get('metrics_by_name'),
+        }
+        report['binary_size_test'] = compact_binary_suite
+        sequence_reports.append({
+            'rank': report.get('rank'),
+            'selection_split': report.get('selection_split'),
+            'selection_metrics': report.get('selection_metrics'),
+            'objective_test_metrics': report.get('test_metrics'),
+            'length_raw': report.get('length_raw'),
+            'length_effective': report.get('length_effective'),
+            'syn_rate_raw': report.get('syn_rate_raw'),
+            'sequence_raw': sequence_raw,
+            'sequence_effective': sequence_effective,
+            'pipeline_effective': pipeline_effective,
+            'display_effective': display_effective,
+            **binary_suite,
+        })
+
+    metric_names = []
+    for sequence_report in sequence_reports:
+        metric_names = list(sequence_report.get('metric_names') or [])
+        if metric_names:
+            break
+
+    return {
+        'primary_metric_name': evaluator.metric_name,
+        'primary_metric_display_name': evaluator.metric_display_name,
+        'metric_names': metric_names,
+        'sequence_count': len(sequence_reports),
+        'sequences': sequence_reports,
+    }
+
+
+def _format_binary_size_metric_summary(metric_name: str, metrics: Optional[Dict[str, Any]]) -> str:
+    """把单个 binary-size 指标压成可读的一行。"""
+    if not metrics:
+        return f"{metric_name}: unavailable"
+    parts = [
+        f"{metric_name}: obj={metrics['objective']:.4f}",
+        f"mean={metrics['mean_norm']:.4f}",
+        f"worsen={metrics['worsen_rate']:.2%}",
+    ]
+    comparison_text = _format_relative_comparisons(metrics)
+    if comparison_text:
+        parts.append(comparison_text)
+    return ", ".join(parts)
+
+
+def _print_top_ranked_binary_size_metrics(panel: Optional[Dict[str, Any]]) -> None:
+    """打印最优轮次 Top-K 序列的 binary-size 测试集面板。"""
+    if not panel:
+        return
+    status = str(panel.get('status', ''))
+    if status.startswith('failed'):
+        print(f"Top-K binarysize_test: {status}")
+        return
+
+    metric_names = list(panel.get('metric_names') or [])
+    primary_metric_name = str(panel.get('primary_metric_name') or BINARY_SIZE_METRIC)
+    print(
+        f"\n最优轮次 Top-{panel.get('sequence_count', 0)} binarysize_test "
+        f"序列面板（primary={primary_metric_name}）:"
+    )
+    for sequence_report in panel.get('sequences') or []:
+        rank = sequence_report.get('rank')
+        print(
+            f"  #{rank}: len={sequence_report.get('length_raw')}, "
+            f"syn_rate={float(sequence_report.get('syn_rate_raw') or 0.0):.2f}"
+        )
+        metrics_by_name = sequence_report.get('metrics_by_name') or {}
+        primary_metrics = metrics_by_name.get(primary_metric_name)
+        print("     " + _format_binary_size_metric_summary(primary_metric_name, primary_metrics))
+        for metric_name in metric_names:
+            if metric_name == primary_metric_name:
+                continue
+            print("     " + _format_binary_size_metric_summary(metric_name, metrics_by_name.get(metric_name)))
 
 
 def cli_main() -> int:
@@ -675,7 +975,9 @@ def cli_main() -> int:
         selection_scores = [result['selection_objective'] for result in run_results]
         best_run = int(np.argmin(selection_scores))
         best_result = run_results[best_run]
-        best_seq_overall = best_result['final_sequence']
+        best_seq_overall = list(best_result['final_sequence'])
+        best_seq_raw = list(best_result.get('final_sequence_raw') or best_seq_overall)
+        best_pipeline_effective = best_result.get('final_pipeline_effective') or sequence_to_pipeline(best_seq_raw)
 
         print(f"\n{'=' * 60}")
         print(
@@ -683,21 +985,35 @@ def cli_main() -> int:
             f"{best_result['selection_objective']:.4f}"
         )
         print(f"最优通用 pass 序列 ({len(best_seq_overall)} passes):")
-        print(f"  {' → '.join(best_seq_overall)}")
+        print(f"  {format_pipeline_for_display(best_pipeline_effective)}")
         print(f"  {_format_metrics('search_train', best_result['final_train_metrics'])}")
-        best_train_compare_text = _format_runtime_comparisons(best_result['final_train_metrics'])
+        best_train_compare_text = _format_relative_comparisons(best_result['final_train_metrics'])
         if best_train_compare_text:
             print(f"  search_train: {best_train_compare_text}")
         if best_result['final_val_metrics'] is not None:
             print(f"  {_format_metrics('validation', best_result['final_val_metrics'])}")
-            best_val_compare_text = _format_runtime_comparisons(best_result['final_val_metrics'])
+            best_val_compare_text = _format_relative_comparisons(best_result['final_val_metrics'])
             if best_val_compare_text:
                 print(f"  validation:   {best_val_compare_text}")
         if best_result['final_test_metrics'] is not None:
             print(f"  {_format_metrics('test', best_result['final_test_metrics'])}")
-            best_test_compare_text = _format_runtime_comparisons(best_result['final_test_metrics'])
+            best_test_compare_text = _format_relative_comparisons(best_result['final_test_metrics'])
             if best_test_compare_text:
                 print(f"  test:         {best_test_compare_text}")
+        if best_seq_raw != best_seq_overall:
+            print(f"  raw_sequence ({len(best_seq_raw)} passes):")
+            print(f"  {' → '.join(best_seq_raw)}")
+            print(f"  effective_pipeline: {best_pipeline_effective}")
+        best_top_ranked_sequences = list(best_result.get('top_ranked_sequences') or [])
+        if best_top_ranked_sequences:
+            _print_top_ranked_sequence_reports(
+                best_top_ranked_sequences,
+                selection_split=best_result['selection_split'],
+                title=(
+                    f"\n最优轮次 Top-{len(best_top_ranked_sequences)} 序列"
+                    f"（含测试集效果，按 {best_result['selection_split']} objective 升序）:"
+                ),
+            )
 
         fixed_runtime_baselines = best_result.get('fixed_baseline_summaries')
         if fixed_runtime_baselines:
@@ -708,6 +1024,49 @@ def cli_main() -> int:
                     print(f"  {split_name}: {_format_fixed_baseline_panel(panel)}")
 
         cross_instrcount_metrics = _build_cross_instrcount_metrics(best_seq_overall, test_programs)
+        binary_objective_baseline = getattr(backend, 'baseline_name', 'oz')
+        cross_binary_size_suite = _build_cross_binary_size_metrics(
+            best_seq_raw,
+            best_seq_overall,
+            test_programs,
+            objective_baseline=binary_objective_baseline,
+        )
+        binary_size_status = (
+            str(cross_binary_size_suite.get('status', ''))
+            if isinstance(cross_binary_size_suite, dict) else ''
+        )
+        cross_binary_size_metrics = None
+        cross_binary_size_metrics_by_name = None
+        cross_binary_size_metric_names = None
+        if cross_binary_size_suite and not binary_size_status.startswith('failed'):
+            cross_binary_size_metric_names = list(cross_binary_size_suite.get('metric_names') or [])
+            cross_binary_size_metrics_by_name = cross_binary_size_suite.get('metrics_by_name') or {}
+            primary_metric_name = str(cross_binary_size_suite.get('primary_metric_name') or BINARY_SIZE_METRIC)
+            cross_binary_size_metrics = cross_binary_size_metrics_by_name.get(primary_metric_name)
+            if cross_binary_size_metrics:
+                print(
+                    "binarysize_test: "
+                    f"{_format_relative_comparisons(cross_binary_size_metrics)} "
+                    f"[metric={primary_metric_name}]"
+                )
+            for metric_name in cross_binary_size_metric_names or ():
+                if metric_name == primary_metric_name:
+                    continue
+                metric_metrics = cross_binary_size_metrics_by_name.get(metric_name)
+                if not metric_metrics:
+                    continue
+                print(
+                    f"binarysize_test[{metric_name}]: "
+                    f"{_format_relative_comparisons(metric_metrics)}"
+                )
+
+        top_ranked_binary_size_suite = _build_top_ranked_binary_size_metrics(
+            best_top_ranked_sequences,
+            test_programs,
+            objective_baseline=binary_objective_baseline,
+        )
+        _print_top_ranked_binary_size_metrics(top_ranked_binary_size_suite)
+
         summary_payload = {
             'run_id': run_id,
             'tuning_csv': tuning_csv,
@@ -748,8 +1107,17 @@ def cli_main() -> int:
             'run_results': run_results,
             'best_run_index': best_run,
             'best_result': best_result,
+            'best_top_ranked_sequences': best_result.get('top_ranked_sequences'),
             'fixed_runtime_baselines': fixed_runtime_baselines,
             'best_runtime_sequence_instruction_test_metrics': cross_instrcount_metrics,
+            'best_sequence_binary_size_test_metrics': cross_binary_size_metrics,
+            'best_sequence_binary_size_test_metric_names': cross_binary_size_metric_names,
+            'best_sequence_binary_size_test_metrics_by_name': cross_binary_size_metrics_by_name,
+            'best_top_ranked_binary_size_test_metrics': top_ranked_binary_size_suite,
+            'best_top_ranked_binary_size_test_metric_names': (
+                list(top_ranked_binary_size_suite.get('metric_names') or [])
+                if isinstance(top_ranked_binary_size_suite, dict) else None
+            ),
         }
         _write_summary_json(summary_payload, result_json_path)
         print(f"结果已写入: {result_json_path}")

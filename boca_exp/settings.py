@@ -67,10 +67,69 @@ def objective_baseline_label(value=None):
     return objective_baseline_pipeline(value)
 
 
+def normalize_binary_size_metric(value=None):
+    """把 binary size 指标名字规范化为内部统一标识。"""
+    raw_value = 'stripped_file_bytes' if value is None else str(value).strip().lower()
+    aliases = {
+        'file': 'file_bytes',
+        'file_bytes': 'file_bytes',
+        'binary': 'file_bytes',
+        'binary_bytes': 'file_bytes',
+        'stripped': 'stripped_file_bytes',
+        'stripped_file_bytes': 'stripped_file_bytes',
+        'strip': 'stripped_file_bytes',
+        'text': 'text_bytes',
+        'text_bytes': 'text_bytes',
+        'code': 'text_bytes',
+        'code_bytes': 'text_bytes',
+        'data': 'data_bytes',
+        'data_bytes': 'data_bytes',
+        'bss': 'bss_bytes',
+        'bss_bytes': 'bss_bytes',
+        'dec': 'dec_bytes',
+        'dec_bytes': 'dec_bytes',
+        'llvm_size_dec': 'dec_bytes',
+    }
+    try:
+        return aliases[raw_value]
+    except KeyError as exc:
+        raise ValueError(
+            "BINARY_SIZE_METRIC must be one of: file_bytes, stripped_file_bytes, "
+            "text_bytes, data_bytes, bss_bytes, dec_bytes; "
+            f"got {value!r}"
+        ) from exc
+
+
+def normalize_binary_size_metric_list(value=None, *, default=()):
+    """把逗号分隔或序列形式的 binary size 指标列表规范化并去重。"""
+    if value is None:
+        raw_items = list(default)
+    elif isinstance(value, str):
+        text = value.strip()
+        raw_items = [item.strip() for item in text.split(',') if item.strip()] if text else []
+    else:
+        raw_items = [str(item).strip() for item in value if str(item).strip()]
+
+    normalized_items = []
+    seen = set()
+    for item in raw_items:
+        normalized = normalize_binary_size_metric(item)
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        normalized_items.append(normalized)
+    return tuple(normalized_items)
+
+
 OBJECTIVE_KIND = os.environ.get('OBJECTIVE_KIND', 'instrcount').strip().lower()
 OBJECTIVE_BASELINE = normalize_objective_baseline(os.environ.get('OBJECTIVE_BASELINE', 'oz'))
 OBJECTIVE_BASELINE_PIPELINE = objective_baseline_pipeline(OBJECTIVE_BASELINE)
 OBJECTIVE_BASELINE_LABEL = objective_baseline_label(OBJECTIVE_BASELINE)
+BINARY_SIZE_METRIC = normalize_binary_size_metric(os.environ.get('BINARY_SIZE_METRIC', 'stripped_file_bytes'))
+BINARY_SIZE_REPORT_METRICS = normalize_binary_size_metric_list(
+    os.environ.get('BINARY_SIZE_REPORT_METRICS'),
+    default=('text_bytes', 'data_bytes', 'bss_bytes', 'dec_bytes'),
+)
 PROGRAM_POOL_KIND = os.environ.get('PROGRAM_POOL_KIND', 'auto').strip().lower()
 
 # LLVM 工具路径
