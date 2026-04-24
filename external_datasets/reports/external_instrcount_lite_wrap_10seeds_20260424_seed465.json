@@ -1,0 +1,1028 @@
+{
+  "generated_at": "2026-04-24 16:31:16",
+  "mode": "instrcount",
+  "sequence_source": "/root/exp/RFunipassLab/results/instrcount/summaries/20260423_231957_016941_feature_lite_seed465.json",
+  "sequence_source_payload": {
+    "objective_kind": "instrcount",
+    "tuning_csv": "/root/exp/RFunipassLab/data/tuning_results.csv",
+    "selection_split": "validation"
+  },
+  "sequence": [
+    "module(elim-avail-extern)",
+    "module(globalopt)",
+    "module(attributor)",
+    "module(iroutliner)",
+    "module(attributor)",
+    "function(gvn-sink)",
+    "function(dse)",
+    "module(inferattrs)",
+    "function(loop(loop-simplifycfg))",
+    "cgscc(attributor-cgscc)",
+    "module(iroutliner)",
+    "module(attributor)",
+    "module(scc-oz-module-inliner)",
+    "function(jump-threading)"
+  ],
+  "suites": [
+    "cbench",
+    "polybench",
+    "csmith"
+  ],
+  "objective_baseline": "oz",
+  "frontend_mode": "canonical",
+  "instrcount_timeout": 60.0,
+  "instrcount_workers": 4,
+  "ir_manifest_path": "/root/exp/RFunipassLab/external_datasets/manifests/external_ir_manifest.json",
+  "suite_results": {
+    "cbench": {
+      "count": 10,
+      "selected_names": [
+        "consumer_jpeg_c",
+        "security_sha",
+        "automotive_bitcount",
+        "automotive_susan_e",
+        "automotive_susan_c",
+        "automotive_susan_s",
+        "bzip2e",
+        "consumer_tiff2rgba",
+        "telecom_adpcm_c",
+        "office_rsynth"
+      ],
+      "primary_metrics": {
+        "count": 10,
+        "mean_norm": 0.8489883108143643,
+        "median_norm": 0.9929693961952026,
+        "improved": 2,
+        "tied": 1,
+        "worsened": 7,
+        "invalid": 6,
+        "high_variance": 0,
+        "improved_rate": 0.2,
+        "tie_rate": 0.1,
+        "worsen_rate": 0.7,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.11666666666666667,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll": {
+            "ratio": 0.407514450867052,
+            "raw_value": 141.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll": {
+            "ratio": 1.0025,
+            "raw_value": 401.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll": {
+            "ratio": 1.0,
+            "raw_value": 196.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll": {
+            "ratio": 0.9859387923904053,
+            "raw_value": 3576.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.9539883108143643
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 4,
+          "tied": 0,
+          "worsened": 6
+        },
+        "oz": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 2,
+          "tied": 1,
+          "worsened": 7
+        },
+        "o3": {
+          "count": 10,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 4,
+          "tied": 0,
+          "worsened": 6
+        }
+      },
+      "per_program": [
+        {
+          "suite": "cbench",
+          "name": "consumer_jpeg_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll",
+          "universal": Infinity,
+          "none": 57914.0,
+          "oz": 27748.0,
+          "o3": 37087.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "security_sha",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll",
+          "universal": 141.0,
+          "none": 750.0,
+          "oz": 346.0,
+          "o3": 604.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.188,
+          "ratio_vs_oz": 0.407514450867052,
+          "ratio_vs_o3": 0.23344370860927152
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_bitcount",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll",
+          "universal": 401.0,
+          "none": 803.0,
+          "oz": 400.0,
+          "o3": 441.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.49937733499377335,
+          "ratio_vs_oz": 1.0025,
+          "ratio_vs_o3": 0.909297052154195
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_e",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll",
+          "universal": Infinity,
+          "none": 12982.0,
+          "oz": 5203.0,
+          "o3": 6142.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll",
+          "universal": Infinity,
+          "none": 12982.0,
+          "oz": 5203.0,
+          "o3": 6142.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_s",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll",
+          "universal": Infinity,
+          "none": 12982.0,
+          "oz": 5203.0,
+          "o3": 6142.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "bzip2e",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll",
+          "universal": Infinity,
+          "none": 27805.0,
+          "oz": 15768.0,
+          "o3": 18913.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "consumer_tiff2rgba",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll",
+          "universal": Infinity,
+          "none": 55593.0,
+          "oz": 28920.0,
+          "o3": 37352.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "cbench",
+          "name": "telecom_adpcm_c",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll",
+          "universal": 196.0,
+          "none": 511.0,
+          "oz": 196.0,
+          "o3": 303.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.3835616438356164,
+          "ratio_vs_oz": 1.0,
+          "ratio_vs_o3": 0.6468646864686468
+        },
+        {
+          "suite": "cbench",
+          "name": "office_rsynth",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll",
+          "universal": 3576.0,
+          "none": 7388.0,
+          "oz": 3627.0,
+          "o3": 5674.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.4840281537628587,
+          "ratio_vs_oz": 0.9859387923904053,
+          "ratio_vs_o3": 0.6302432146633768
+        }
+      ],
+      "failures": [
+        {
+          "suite": "cbench",
+          "name": "consumer_jpeg_c",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_e",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_c",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "automotive_susan_s",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "bzip2e",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "cbench",
+          "name": "consumer_tiff2rgba",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        }
+      ]
+    },
+    "polybench": {
+      "count": 10,
+      "selected_names": [
+        "2mm",
+        "3mm",
+        "cholesky",
+        "jacobi-2d",
+        "lu",
+        "correlation",
+        "nussinov",
+        "symm",
+        "heat-3d",
+        "covariance"
+      ],
+      "primary_metrics": {
+        "count": 10,
+        "mean_norm": 0.6688716983037662,
+        "median_norm": 0.6902880621275058,
+        "improved": 9,
+        "tied": 0,
+        "worsened": 1,
+        "invalid": 0,
+        "high_variance": 0,
+        "improved_rate": 0.9,
+        "tie_rate": 0.0,
+        "worsen_rate": 0.1,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.11666666666666667,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+            "ratio": 0.978448275862069,
+            "raw_value": 227.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll": {
+            "ratio": 0.9768339768339769,
+            "raw_value": 253.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll": {
+            "ratio": 0.29694323144104806,
+            "raw_value": 68.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll": {
+            "ratio": 0.3877551020408163,
+            "raw_value": 76.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll": {
+            "ratio": 0.2943722943722944,
+            "raw_value": 68.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll": {
+            "ratio": 0.9469026548672567,
+            "raw_value": 214.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll": {
+            "ratio": 1.094972067039106,
+            "raw_value": 196.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll": {
+            "ratio": 0.4336734693877551,
+            "raw_value": 85.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll": {
+            "ratio": 0.9744680851063829,
+            "raw_value": 229.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll": {
+            "ratio": 0.30434782608695654,
+            "raw_value": 56.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.6838716983037663
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 10,
+          "mean_ratio": 0.21882404103134623,
+          "median_ratio": 0.21411332960129376,
+          "improved": 10,
+          "tied": 0,
+          "worsened": 0
+        },
+        "oz": {
+          "count": 10,
+          "mean_ratio": 0.6688716983037662,
+          "median_ratio": 0.6902880621275058,
+          "improved": 9,
+          "tied": 0,
+          "worsened": 1
+        },
+        "o3": {
+          "count": 10,
+          "mean_ratio": 0.43497002723738376,
+          "median_ratio": 0.39584970401802083,
+          "improved": 10,
+          "tied": 0,
+          "worsened": 0
+        }
+      },
+      "per_program": [
+        {
+          "suite": "polybench",
+          "name": "2mm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll",
+          "universal": 227.0,
+          "none": 682.0,
+          "oz": 232.0,
+          "o3": 343.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.33284457478005863,
+          "ratio_vs_oz": 0.978448275862069,
+          "ratio_vs_o3": 0.6618075801749271
+        },
+        {
+          "suite": "polybench",
+          "name": "3mm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll",
+          "universal": 253.0,
+          "none": 761.0,
+          "oz": 259.0,
+          "o3": 394.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.3324572930354796,
+          "ratio_vs_oz": 0.9768339768339769,
+          "ratio_vs_o3": 0.6421319796954315
+        },
+        {
+          "suite": "polybench",
+          "name": "cholesky",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll",
+          "universal": 68.0,
+          "none": 617.0,
+          "oz": 229.0,
+          "o3": 347.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.11021069692058347,
+          "ratio_vs_oz": 0.29694323144104806,
+          "ratio_vs_o3": 0.19596541786743515
+        },
+        {
+          "suite": "polybench",
+          "name": "jacobi-2d",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll",
+          "universal": 76.0,
+          "none": 524.0,
+          "oz": 196.0,
+          "o3": 338.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.1450381679389313,
+          "ratio_vs_oz": 0.3877551020408163,
+          "ratio_vs_o3": 0.22485207100591717
+        },
+        {
+          "suite": "polybench",
+          "name": "lu",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll",
+          "universal": 68.0,
+          "none": 612.0,
+          "oz": 231.0,
+          "o3": 345.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.1111111111111111,
+          "ratio_vs_oz": 0.2943722943722944,
+          "ratio_vs_o3": 0.19710144927536233
+        },
+        {
+          "suite": "polybench",
+          "name": "correlation",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll",
+          "universal": 214.0,
+          "none": 677.0,
+          "oz": 226.0,
+          "o3": 337.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.31610044313146235,
+          "ratio_vs_oz": 0.9469026548672567,
+          "ratio_vs_o3": 0.6350148367952523
+        },
+        {
+          "suite": "polybench",
+          "name": "nussinov",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll",
+          "universal": 196.0,
+          "none": 699.0,
+          "oz": 179.0,
+          "o3": 246.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.2804005722460658,
+          "ratio_vs_oz": 1.094972067039106,
+          "ratio_vs_o3": 0.7967479674796748
+        },
+        {
+          "suite": "polybench",
+          "name": "symm",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll",
+          "universal": 85.0,
+          "none": 575.0,
+          "oz": 196.0,
+          "o3": 378.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.14782608695652175,
+          "ratio_vs_oz": 0.4336734693877551,
+          "ratio_vs_o3": 0.22486772486772486
+        },
+        {
+          "suite": "polybench",
+          "name": "heat-3d",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll",
+          "universal": 229.0,
+          "none": 745.0,
+          "oz": 235.0,
+          "o3": 404.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.3073825503355705,
+          "ratio_vs_oz": 0.9744680851063829,
+          "ratio_vs_o3": 0.5668316831683168
+        },
+        {
+          "suite": "polybench",
+          "name": "covariance",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll",
+          "universal": 56.0,
+          "none": 534.0,
+          "oz": 184.0,
+          "o3": 274.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.10486891385767791,
+          "ratio_vs_oz": 0.30434782608695654,
+          "ratio_vs_o3": 0.20437956204379562
+        }
+      ],
+      "failures": []
+    },
+    "csmith": {
+      "count": 5,
+      "selected_names": [
+        "trainprogram1",
+        "trainprogram2",
+        "trainprogram3",
+        "trainprogram4",
+        "trainprogram5"
+      ],
+      "primary_metrics": {
+        "count": 5,
+        "mean_norm": 0.0019175455417066154,
+        "median_norm": 0.0019175455417066154,
+        "improved": 1,
+        "tied": 0,
+        "worsened": 4,
+        "invalid": 4,
+        "high_variance": 0,
+        "improved_rate": 0.2,
+        "tie_rate": 0.0,
+        "worsen_rate": 0.8,
+        "high_variance_rate": 0.0,
+        "len_ratio": 0.11666666666666667,
+        "per_program": {
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll": {
+            "ratio": 0.0019175455417066154,
+            "raw_value": 2.0,
+            "status": "ok",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          },
+          "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll": {
+            "ratio": Infinity,
+            "raw_value": Infinity,
+            "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+            "variance_pct": 0.0
+          }
+        },
+        "objective": 0.12191754554170661
+      },
+      "fixed_baselines": {
+        "none": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 1,
+          "tied": 0,
+          "worsened": 4
+        },
+        "oz": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 1,
+          "tied": 0,
+          "worsened": 4
+        },
+        "o3": {
+          "count": 5,
+          "mean_ratio": Infinity,
+          "median_ratio": Infinity,
+          "improved": 1,
+          "tied": 0,
+          "worsened": 4
+        }
+      },
+      "per_program": [
+        {
+          "suite": "csmith",
+          "name": "trainprogram1",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll",
+          "universal": Infinity,
+          "none": 26772.0,
+          "oz": 1551.0,
+          "o3": 4755.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram2",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll",
+          "universal": Infinity,
+          "none": 15618.0,
+          "oz": 3400.0,
+          "o3": 19915.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram3",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll",
+          "universal": 2.0,
+          "none": 3005.0,
+          "oz": 1043.0,
+          "o3": 15371.0,
+          "universal_status": "ok",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": 0.0006655574043261231,
+          "ratio_vs_oz": 0.0019175455417066154,
+          "ratio_vs_o3": 0.00013011515190943984
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram4",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll",
+          "universal": Infinity,
+          "none": 22695.0,
+          "oz": 12962.0,
+          "o3": 44156.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram5",
+          "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll",
+          "universal": Infinity,
+          "none": 19257.0,
+          "oz": 7083.0,
+          "o3": 29463.0,
+          "universal_status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "none_status": "ok",
+          "oz_status": "ok",
+          "o3_status": "ok",
+          "ratio_vs_none": Infinity,
+          "ratio_vs_oz": Infinity,
+          "ratio_vs_o3": Infinity
+        }
+      ],
+      "failures": [
+        {
+          "suite": "csmith",
+          "name": "trainprogram1",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram2",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram4",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        },
+        {
+          "suite": "csmith",
+          "name": "trainprogram5",
+          "pipeline": "universal",
+          "error": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu"
+        }
+      ]
+    }
+  },
+  "combined": {
+    "count": 25,
+    "primary_metrics": {
+      "count": 25,
+      "mean_norm": 0.6724391847891217,
+      "median_norm": 0.9469026548672567,
+      "improved": 12,
+      "tied": 1,
+      "worsened": 12,
+      "invalid": 10,
+      "high_variance": 0,
+      "improved_rate": 0.48,
+      "tie_rate": 0.04,
+      "worsen_rate": 0.48,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.11666666666666667,
+      "per_program": {
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_jpeg_c.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/security_sha.ll": {
+          "ratio": 0.407514450867052,
+          "raw_value": 141.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_bitcount.ll": {
+          "ratio": 1.0025,
+          "raw_value": 401.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_e.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_c.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/automotive_susan_s.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/bzip2e.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/consumer_tiff2rgba.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/telecom_adpcm_c.ll": {
+          "ratio": 1.0,
+          "raw_value": 196.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/cbench/office_rsynth.ll": {
+          "ratio": 0.9859387923904053,
+          "raw_value": 3576.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/2mm.ll": {
+          "ratio": 0.978448275862069,
+          "raw_value": 227.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/3mm.ll": {
+          "ratio": 0.9768339768339769,
+          "raw_value": 253.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/cholesky.ll": {
+          "ratio": 0.29694323144104806,
+          "raw_value": 68.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/jacobi-2d.ll": {
+          "ratio": 0.3877551020408163,
+          "raw_value": 76.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/lu.ll": {
+          "ratio": 0.2943722943722944,
+          "raw_value": 68.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/correlation.ll": {
+          "ratio": 0.9469026548672567,
+          "raw_value": 214.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/nussinov.ll": {
+          "ratio": 1.094972067039106,
+          "raw_value": 196.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/symm.ll": {
+          "ratio": 0.4336734693877551,
+          "raw_value": 85.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/heat-3d.ll": {
+          "ratio": 0.9744680851063829,
+          "raw_value": 229.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/polybench/covariance.ll": {
+          "ratio": 0.30434782608695654,
+          "raw_value": 56.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram1.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram2.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram3.ll": {
+          "ratio": 0.0019175455417066154,
+          "raw_value": 2.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram4.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        },
+        "/root/exp/RFunipassLab/external_datasets/ir/csmith/trainprogram5.ll": {
+          "ratio": Infinity,
+          "raw_value": Infinity,
+          "status": "opt timed out after 60.0s for pipeline='module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading)', target_triple=x86_64-unknown-linux-gnu, cmd=/root/opt/rv64gc_llvm_21/bin/opt -S -passes=module(elim-avail-extern),module(globalopt),module(attributor),module(iroutliner),module(attributor),function(gvn-sink),function(dse),module(inferattrs),function(loop(loop-simplifycfg)),cgscc(attributor-cgscc),module(iroutliner),module(attributor),module(scc-oz-module-inliner),function(jump-threading) --mtriple=x86_64-unknown-linux-gnu",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 0.7444391847891216
+    },
+    "fixed_baselines": {
+      "none": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 0.3835616438356164,
+        "improved": 15,
+        "tied": 0,
+        "worsened": 10
+      },
+      "oz": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 1.0,
+        "improved": 12,
+        "tied": 1,
+        "worsened": 12
+      },
+      "o3": {
+        "count": 25,
+        "mean_ratio": Infinity,
+        "median_ratio": 0.6618075801749271,
+        "improved": 15,
+        "tied": 0,
+        "worsened": 10
+      }
+    }
+  }
+}
