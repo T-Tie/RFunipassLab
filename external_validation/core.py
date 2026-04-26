@@ -41,6 +41,7 @@ from .registry import (
 
 LOCAL_BOCA_ROOT = Path("/root/projects/BOCA")
 LOCAL_CSMITH_RUNTIME = Path("/root/projects/datasets/csmith/runtime")
+LOCAL_POLYBENCH_FULL_ROOT = Path("/root/datasets/PolyBenchC-4.2.1")
 DEFAULT_IR_FRONTEND_MODE = "canonical"
 DEFAULT_INSTRCOUNT_TIMEOUT = 60.0
 DEFAULT_INSTRCOUNT_MAX_WORKERS = 4
@@ -254,6 +255,25 @@ def _resolve_csmith_runtime_root() -> tuple[Path, str]:
     return runtime_dir, dataset_upstreams()["csmith_runtime"]["url"]
 
 
+def _resolve_polybench_full_root() -> tuple[Path, str]:
+    if LOCAL_POLYBENCH_FULL_ROOT.is_dir():
+        return LOCAL_POLYBENCH_FULL_ROOT, "local:/root/datasets/PolyBenchC-4.2.1"
+
+    cloned_root = UPSTREAM_CACHE_DIR / "PolyBenchC-4.2.1"
+    if not cloned_root.is_dir():
+        _run_checked(
+            [
+                "git",
+                "clone",
+                "--depth",
+                "1",
+                dataset_upstreams()["polybench_full"]["url"],
+                str(cloned_root),
+            ]
+        )
+    return cloned_root, dataset_upstreams()["polybench_full"]["url"]
+
+
 def sync_external_sources(
     selected_suites: Sequence[str] | None = None,
     exclude_suites: Sequence[str] | None = None,
@@ -328,6 +348,19 @@ def sync_external_sources(
             if force or not dst_dir.exists():
                 _safe_copytree(src_dir, dst_dir)
         copied["polybench"] = {"origin": boca_origin, "source_root": str(poly_root)}
+
+    if "polybench_full" in suites:
+        polybench_full_src, polybench_full_origin = _resolve_polybench_full_root()
+        polybench_full_root = SOURCES_DIR / "polybench_full"
+        if force and polybench_full_root.exists():
+            shutil.rmtree(polybench_full_root)
+        if force or not polybench_full_root.exists():
+            _safe_copytree(polybench_full_src, polybench_full_root)
+        copied["polybench_full"] = {
+            "origin": polybench_full_origin,
+            "source_root": str(polybench_full_root),
+            "benchmark_count": 30,
+        }
 
     if "csmith" in suites:
         csmith_root = SOURCES_DIR / "csmith"

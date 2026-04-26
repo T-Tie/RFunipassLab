@@ -18,18 +18,23 @@
 - `upstream_cache/`
   - 当本机不存在本地镜像时，按需从 GitHub 克隆的缓存
 
-默认已接入三套可互为外部数据集的 benchmark：
+默认已接入四套可互为外部数据集的 benchmark：
 
 - `cbench`
-- `polybench`
+- `polybench`：BOCA 兼容的 10-program PolyBench subset
+- `polybench_full`：完整 PolyBench/C 4.2.1，30 个 benchmark
 - `csmith`
 
 当前已扩好的 `IR + instcount` 外部程序集规模：
 
 - `cbench`: 10 个 linked `.ll`
 - `polybench`: 10 个 linked `.ll`
+- `polybench_full`: 按需构建，完整规模为 30 个 linked `.ll`
 - `csmith`: 5 个 linked `.ll`
-- 合计: 25 个 linked `.ll`
+- 当前默认 subset 合计: 25 个 linked `.ll`；加入 `polybench_full` 后可扩展为 55 个 linked `.ll`
+
+注意：`polybench` 保留为 BOCA subset，便于和 BOCA 风格实验对齐；论文中若要声称
+完整 PolyBench/C，应使用 `polybench_full` 的结果。
 
 默认的源码到 IR 生成策略是 `canonical`：
 
@@ -69,9 +74,16 @@
 1. 本地镜像
    - `/root/projects/BOCA`
    - `/root/projects/datasets/csmith/runtime`
+   - `/root/datasets/PolyBenchC-4.2.1`
 2. GitHub 回退
    - `https://github.com/BOCA313/BOCA.git`
    - `https://github.com/csmith-project/csmith.git`
+   - `https://github.com/MatthiasJReisinger/PolyBenchC-4.2.1.git`
+
+所有 LLVM 工具优先来自项目配置的 LLVM 21 路径：
+
+- 默认：`/root/llvm/llvm-project-21/build/bin`
+- 可通过 `LLVM_TOOLS_PATH` 覆盖
 
 典型用法：
 
@@ -81,6 +93,10 @@ python run_external_validation.py sync
 python run_external_validation.py build-ir \
   --suite polybench \
   --suite csmith \
+  --frontend-mode canonical
+
+python run_external_validation.py build-ir \
+  --suite polybench_full \
   --frontend-mode canonical
 
 python run_external_validation.py evaluate \
@@ -96,6 +112,17 @@ python run_external_validation.py evaluate \
   --suite polybench \
   --binarysize-metric stripped_file_bytes \
   --binarysize-timeout 60
+
+python run_external_multi_seed.py \
+  --batch-csv results/reports/<wrap_10seeds>.csv \
+  --tag external_instrcount_polybench_full_wrap_10seeds \
+  --mode instrcount \
+  --suite polybench_full \
+  --objective-baseline oz \
+  --frontend-mode canonical \
+  --instrcount-timeout 120 \
+  --instrcount-workers 4 \
+  --continue-on-error
 ```
 
 当前阶段建议优先使用 `instrcount + binarysize` 做外部泛化验证；`runtime` 入口仍保留，但不是当前扩展重点。

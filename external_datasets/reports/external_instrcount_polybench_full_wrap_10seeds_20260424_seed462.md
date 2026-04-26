@@ -1,0 +1,996 @@
+# External Validation Report
+
+- Generated at: 2026-04-24 18:35:01
+- Mode: instrcount
+- Sequence source: /root/exp/RFunipassLab/results/instrcount/summaries/20260423_214113_355045_feature_lite_seed462.json
+- Suites: polybench_full
+- Sequence length: 14
+- Objective baseline: oz
+- Frontend mode: canonical
+
+## Sequence
+
+```text
+module(iroutliner),cgscc(attributor-cgscc),module(elim-avail-extern),module(globalopt),module(iroutliner),function(dse),module(attributor),module(scc-oz-module-inliner),module(attributor),module(scc-oz-module-inliner),module(iroutliner),module(scc-oz-module-inliner),module(iroutliner),function(gvn-sink)
+```
+
+## Combined
+
+```json
+{
+  "count": 30,
+  "primary_metrics": {
+    "count": 30,
+    "mean_norm": 0.5214329899332139,
+    "median_norm": 0.45367382034912485,
+    "improved": 26,
+    "tied": 0,
+    "worsened": 4,
+    "invalid": 0,
+    "high_variance": 0,
+    "improved_rate": 0.8666666666666667,
+    "tie_rate": 0.0,
+    "worsen_rate": 0.13333333333333333,
+    "high_variance_rate": 0.0,
+    "len_ratio": 0.11666666666666667,
+    "per_program": {
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/correlation.ll": {
+        "ratio": 1.0353982300884956,
+        "raw_value": 234.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/covariance.ll": {
+        "ratio": 0.5054347826086957,
+        "raw_value": 93.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/2mm.ll": {
+        "ratio": 0.5560344827586207,
+        "raw_value": 129.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/3mm.ll": {
+        "ratio": 0.5096525096525096,
+        "raw_value": 132.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/atax.ll": {
+        "ratio": 0.5121951219512195,
+        "raw_value": 84.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/bicg.ll": {
+        "ratio": 0.44919786096256686,
+        "raw_value": 84.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/doitgen.ll": {
+        "ratio": 0.62,
+        "raw_value": 124.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/mvt.ll": {
+        "ratio": 0.3793103448275862,
+        "raw_value": 77.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemm.ll": {
+        "ratio": 0.5684210526315789,
+        "raw_value": 108.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemver.ll": {
+        "ratio": 0.4581497797356828,
+        "raw_value": 104.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gesummv.ll": {
+        "ratio": 0.36419753086419754,
+        "raw_value": 59.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/symm.ll": {
+        "ratio": 0.4336734693877551,
+        "raw_value": 85.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syr2k.ll": {
+        "ratio": 0.5425531914893617,
+        "raw_value": 102.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syrk.ll": {
+        "ratio": 0.5491329479768786,
+        "raw_value": 95.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trmm.ll": {
+        "ratio": 0.4658385093167702,
+        "raw_value": 75.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/cholesky.ll": {
+        "ratio": 0.31004366812227074,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/durbin.ll": {
+        "ratio": 0.43902439024390244,
+        "raw_value": 72.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gramschmidt.ll": {
+        "ratio": 1.0833333333333333,
+        "raw_value": 247.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/lu.ll": {
+        "ratio": 0.30735930735930733,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/ludcmp.ll": {
+        "ratio": 1.0614334470989761,
+        "raw_value": 311.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trisolv.ll": {
+        "ratio": 0.40268456375838924,
+        "raw_value": 60.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/deriche.ll": {
+        "ratio": 0.30278884462151395,
+        "raw_value": 76.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/floyd-warshall.ll": {
+        "ratio": 0.5231788079470199,
+        "raw_value": 79.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/nussinov.ll": {
+        "ratio": 1.089385474860335,
+        "raw_value": 195.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/adi.ll": {
+        "ratio": 0.2971887550200803,
+        "raw_value": 74.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/fdtd-2d.ll": {
+        "ratio": 0.3286219081272085,
+        "raw_value": 93.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/heat-3d.ll": {
+        "ratio": 0.34893617021276596,
+        "raw_value": 82.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-1d.ll": {
+        "ratio": 0.3767123287671233,
+        "raw_value": 55.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-2d.ll": {
+        "ratio": 0.3979591836734694,
+        "raw_value": 78.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/seidel-2d.ll": {
+        "ratio": 0.4251497005988024,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      }
+    },
+    "objective": 0.5414329899332139
+  },
+  "fixed_baselines": {
+    "none": {
+      "count": 30,
+      "mean_ratio": 0.18008654580820063,
+      "median_ratio": 0.16217113089647744,
+      "improved": 30,
+      "tied": 0,
+      "worsened": 0
+    },
+    "oz": {
+      "count": 30,
+      "mean_ratio": 0.5214329899332139,
+      "median_ratio": 0.45367382034912485,
+      "improved": 26,
+      "tied": 0,
+      "worsened": 4
+    },
+    "o3": {
+      "count": 30,
+      "mean_ratio": 0.325991172463027,
+      "median_ratio": 0.29517877888214794,
+      "improved": 30,
+      "tied": 0,
+      "worsened": 0
+    }
+  }
+}
+```
+
+## Per Suite
+
+### polybench_full
+
+```json
+{
+  "count": 30,
+  "selected_names": [
+    "correlation",
+    "covariance",
+    "2mm",
+    "3mm",
+    "atax",
+    "bicg",
+    "doitgen",
+    "mvt",
+    "gemm",
+    "gemver",
+    "gesummv",
+    "symm",
+    "syr2k",
+    "syrk",
+    "trmm",
+    "cholesky",
+    "durbin",
+    "gramschmidt",
+    "lu",
+    "ludcmp",
+    "trisolv",
+    "deriche",
+    "floyd-warshall",
+    "nussinov",
+    "adi",
+    "fdtd-2d",
+    "heat-3d",
+    "jacobi-1d",
+    "jacobi-2d",
+    "seidel-2d"
+  ],
+  "primary_metrics": {
+    "count": 30,
+    "mean_norm": 0.5214329899332139,
+    "median_norm": 0.45367382034912485,
+    "improved": 26,
+    "tied": 0,
+    "worsened": 4,
+    "invalid": 0,
+    "high_variance": 0,
+    "improved_rate": 0.8666666666666667,
+    "tie_rate": 0.0,
+    "worsen_rate": 0.13333333333333333,
+    "high_variance_rate": 0.0,
+    "len_ratio": 0.11666666666666667,
+    "per_program": {
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/correlation.ll": {
+        "ratio": 1.0353982300884956,
+        "raw_value": 234.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/covariance.ll": {
+        "ratio": 0.5054347826086957,
+        "raw_value": 93.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/2mm.ll": {
+        "ratio": 0.5560344827586207,
+        "raw_value": 129.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/3mm.ll": {
+        "ratio": 0.5096525096525096,
+        "raw_value": 132.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/atax.ll": {
+        "ratio": 0.5121951219512195,
+        "raw_value": 84.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/bicg.ll": {
+        "ratio": 0.44919786096256686,
+        "raw_value": 84.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/doitgen.ll": {
+        "ratio": 0.62,
+        "raw_value": 124.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/mvt.ll": {
+        "ratio": 0.3793103448275862,
+        "raw_value": 77.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemm.ll": {
+        "ratio": 0.5684210526315789,
+        "raw_value": 108.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemver.ll": {
+        "ratio": 0.4581497797356828,
+        "raw_value": 104.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gesummv.ll": {
+        "ratio": 0.36419753086419754,
+        "raw_value": 59.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/symm.ll": {
+        "ratio": 0.4336734693877551,
+        "raw_value": 85.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syr2k.ll": {
+        "ratio": 0.5425531914893617,
+        "raw_value": 102.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syrk.ll": {
+        "ratio": 0.5491329479768786,
+        "raw_value": 95.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trmm.ll": {
+        "ratio": 0.4658385093167702,
+        "raw_value": 75.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/cholesky.ll": {
+        "ratio": 0.31004366812227074,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/durbin.ll": {
+        "ratio": 0.43902439024390244,
+        "raw_value": 72.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gramschmidt.ll": {
+        "ratio": 1.0833333333333333,
+        "raw_value": 247.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/lu.ll": {
+        "ratio": 0.30735930735930733,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/ludcmp.ll": {
+        "ratio": 1.0614334470989761,
+        "raw_value": 311.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trisolv.ll": {
+        "ratio": 0.40268456375838924,
+        "raw_value": 60.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/deriche.ll": {
+        "ratio": 0.30278884462151395,
+        "raw_value": 76.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/floyd-warshall.ll": {
+        "ratio": 0.5231788079470199,
+        "raw_value": 79.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/nussinov.ll": {
+        "ratio": 1.089385474860335,
+        "raw_value": 195.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/adi.ll": {
+        "ratio": 0.2971887550200803,
+        "raw_value": 74.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/fdtd-2d.ll": {
+        "ratio": 0.3286219081272085,
+        "raw_value": 93.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/heat-3d.ll": {
+        "ratio": 0.34893617021276596,
+        "raw_value": 82.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-1d.ll": {
+        "ratio": 0.3767123287671233,
+        "raw_value": 55.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-2d.ll": {
+        "ratio": 0.3979591836734694,
+        "raw_value": 78.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      },
+      "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/seidel-2d.ll": {
+        "ratio": 0.4251497005988024,
+        "raw_value": 71.0,
+        "status": "ok",
+        "variance_pct": 0.0
+      }
+    },
+    "objective": 0.5414329899332139
+  },
+  "fixed_baselines": {
+    "none": {
+      "count": 30,
+      "mean_ratio": 0.18008654580820063,
+      "median_ratio": 0.16217113089647744,
+      "improved": 30,
+      "tied": 0,
+      "worsened": 0
+    },
+    "oz": {
+      "count": 30,
+      "mean_ratio": 0.5214329899332139,
+      "median_ratio": 0.45367382034912485,
+      "improved": 26,
+      "tied": 0,
+      "worsened": 4
+    },
+    "o3": {
+      "count": 30,
+      "mean_ratio": 0.325991172463027,
+      "median_ratio": 0.29517877888214794,
+      "improved": 30,
+      "tied": 0,
+      "worsened": 0
+    }
+  },
+  "per_program": [
+    {
+      "suite": "polybench_full",
+      "name": "correlation",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/correlation.ll",
+      "universal": 234.0,
+      "none": 677.0,
+      "oz": 226.0,
+      "o3": 337.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.345642540620384,
+      "ratio_vs_oz": 1.0353982300884956,
+      "ratio_vs_o3": 0.6943620178041543
+    },
+    {
+      "suite": "polybench_full",
+      "name": "covariance",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/covariance.ll",
+      "universal": 93.0,
+      "none": 534.0,
+      "oz": 184.0,
+      "o3": 274.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.17415730337078653,
+      "ratio_vs_oz": 0.5054347826086957,
+      "ratio_vs_o3": 0.33941605839416056
+    },
+    {
+      "suite": "polybench_full",
+      "name": "2mm",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/2mm.ll",
+      "universal": 129.0,
+      "none": 682.0,
+      "oz": 232.0,
+      "o3": 343.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.18914956011730205,
+      "ratio_vs_oz": 0.5560344827586207,
+      "ratio_vs_o3": 0.3760932944606414
+    },
+    {
+      "suite": "polybench_full",
+      "name": "3mm",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/3mm.ll",
+      "universal": 132.0,
+      "none": 761.0,
+      "oz": 259.0,
+      "o3": 394.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.17345597897503284,
+      "ratio_vs_oz": 0.5096525096525096,
+      "ratio_vs_o3": 0.3350253807106599
+    },
+    {
+      "suite": "polybench_full",
+      "name": "atax",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/atax.ll",
+      "universal": 84.0,
+      "none": 465.0,
+      "oz": 164.0,
+      "o3": 273.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.18064516129032257,
+      "ratio_vs_oz": 0.5121951219512195,
+      "ratio_vs_o3": 0.3076923076923077
+    },
+    {
+      "suite": "polybench_full",
+      "name": "bicg",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/bicg.ll",
+      "universal": 84.0,
+      "none": 513.0,
+      "oz": 187.0,
+      "o3": 284.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.16374269005847952,
+      "ratio_vs_oz": 0.44919786096256686,
+      "ratio_vs_o3": 0.29577464788732394
+    },
+    {
+      "suite": "polybench_full",
+      "name": "doitgen",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/doitgen.ll",
+      "universal": 124.0,
+      "none": 550.0,
+      "oz": 200.0,
+      "o3": 356.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.22545454545454546,
+      "ratio_vs_oz": 0.62,
+      "ratio_vs_o3": 0.34831460674157305
+    },
+    {
+      "suite": "polybench_full",
+      "name": "mvt",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/mvt.ll",
+      "universal": 77.0,
+      "none": 524.0,
+      "oz": 203.0,
+      "o3": 303.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.14694656488549618,
+      "ratio_vs_oz": 0.3793103448275862,
+      "ratio_vs_o3": 0.25412541254125415
+    },
+    {
+      "suite": "polybench_full",
+      "name": "gemm",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemm.ll",
+      "universal": 108.0,
+      "none": 549.0,
+      "oz": 190.0,
+      "o3": 305.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.19672131147540983,
+      "ratio_vs_oz": 0.5684210526315789,
+      "ratio_vs_o3": 0.3540983606557377
+    },
+    {
+      "suite": "polybench_full",
+      "name": "gemver",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gemver.ll",
+      "universal": 104.0,
+      "none": 689.0,
+      "oz": 227.0,
+      "o3": 430.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.1509433962264151,
+      "ratio_vs_oz": 0.4581497797356828,
+      "ratio_vs_o3": 0.24186046511627907
+    },
+    {
+      "suite": "polybench_full",
+      "name": "gesummv",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gesummv.ll",
+      "universal": 59.0,
+      "none": 490.0,
+      "oz": 162.0,
+      "o3": 287.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.12040816326530612,
+      "ratio_vs_oz": 0.36419753086419754,
+      "ratio_vs_o3": 0.20557491289198607
+    },
+    {
+      "suite": "polybench_full",
+      "name": "symm",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/symm.ll",
+      "universal": 85.0,
+      "none": 575.0,
+      "oz": 196.0,
+      "o3": 378.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.14782608695652175,
+      "ratio_vs_oz": 0.4336734693877551,
+      "ratio_vs_o3": 0.22486772486772486
+    },
+    {
+      "suite": "polybench_full",
+      "name": "syr2k",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syr2k.ll",
+      "universal": 102.0,
+      "none": 534.0,
+      "oz": 188.0,
+      "o3": 371.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.19101123595505617,
+      "ratio_vs_oz": 0.5425531914893617,
+      "ratio_vs_o3": 0.2749326145552561
+    },
+    {
+      "suite": "polybench_full",
+      "name": "syrk",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/syrk.ll",
+      "universal": 95.0,
+      "none": 481.0,
+      "oz": 173.0,
+      "o3": 298.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.19750519750519752,
+      "ratio_vs_oz": 0.5491329479768786,
+      "ratio_vs_o3": 0.3187919463087248
+    },
+    {
+      "suite": "polybench_full",
+      "name": "trmm",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trmm.ll",
+      "universal": 75.0,
+      "none": 467.0,
+      "oz": 161.0,
+      "o3": 254.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.16059957173447537,
+      "ratio_vs_oz": 0.4658385093167702,
+      "ratio_vs_o3": 0.2952755905511811
+    },
+    {
+      "suite": "polybench_full",
+      "name": "cholesky",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/cholesky.ll",
+      "universal": 71.0,
+      "none": 617.0,
+      "oz": 229.0,
+      "o3": 347.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.11507293354943274,
+      "ratio_vs_oz": 0.31004366812227074,
+      "ratio_vs_o3": 0.20461095100864554
+    },
+    {
+      "suite": "polybench_full",
+      "name": "durbin",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/durbin.ll",
+      "universal": 72.0,
+      "none": 419.0,
+      "oz": 164.0,
+      "o3": 244.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.1718377088305489,
+      "ratio_vs_oz": 0.43902439024390244,
+      "ratio_vs_o3": 0.29508196721311475
+    },
+    {
+      "suite": "polybench_full",
+      "name": "gramschmidt",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/gramschmidt.ll",
+      "universal": 247.0,
+      "none": 643.0,
+      "oz": 228.0,
+      "o3": 390.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.38413685847589424,
+      "ratio_vs_oz": 1.0833333333333333,
+      "ratio_vs_o3": 0.6333333333333333
+    },
+    {
+      "suite": "polybench_full",
+      "name": "lu",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/lu.ll",
+      "universal": 71.0,
+      "none": 612.0,
+      "oz": 231.0,
+      "o3": 345.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.11601307189542484,
+      "ratio_vs_oz": 0.30735930735930733,
+      "ratio_vs_o3": 0.20579710144927535
+    },
+    {
+      "suite": "polybench_full",
+      "name": "ludcmp",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/ludcmp.ll",
+      "universal": 311.0,
+      "none": 805.0,
+      "oz": 293.0,
+      "o3": 468.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.38633540372670805,
+      "ratio_vs_oz": 1.0614334470989761,
+      "ratio_vs_o3": 0.6645299145299145
+    },
+    {
+      "suite": "polybench_full",
+      "name": "trisolv",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/trisolv.ll",
+      "universal": 60.0,
+      "none": 404.0,
+      "oz": 149.0,
+      "o3": 248.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.1485148514851485,
+      "ratio_vs_oz": 0.40268456375838924,
+      "ratio_vs_o3": 0.24193548387096775
+    },
+    {
+      "suite": "polybench_full",
+      "name": "deriche",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/deriche.ll",
+      "universal": 76.0,
+      "none": 881.0,
+      "oz": 251.0,
+      "o3": 370.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.08626560726447219,
+      "ratio_vs_oz": 0.30278884462151395,
+      "ratio_vs_o3": 0.20540540540540542
+    },
+    {
+      "suite": "polybench_full",
+      "name": "floyd-warshall",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/floyd-warshall.ll",
+      "universal": 79.0,
+      "none": 431.0,
+      "oz": 151.0,
+      "o3": 233.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.18329466357308585,
+      "ratio_vs_oz": 0.5231788079470199,
+      "ratio_vs_o3": 0.33905579399141633
+    },
+    {
+      "suite": "polybench_full",
+      "name": "nussinov",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/nussinov.ll",
+      "universal": 195.0,
+      "none": 699.0,
+      "oz": 179.0,
+      "o3": 246.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.27896995708154504,
+      "ratio_vs_oz": 1.089385474860335,
+      "ratio_vs_o3": 0.7926829268292683
+    },
+    {
+      "suite": "polybench_full",
+      "name": "adi",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/adi.ll",
+      "universal": 74.0,
+      "none": 838.0,
+      "oz": 249.0,
+      "o3": 417.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.0883054892601432,
+      "ratio_vs_oz": 0.2971887550200803,
+      "ratio_vs_o3": 0.1774580335731415
+    },
+    {
+      "suite": "polybench_full",
+      "name": "fdtd-2d",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/fdtd-2d.ll",
+      "universal": 93.0,
+      "none": 759.0,
+      "oz": 283.0,
+      "o3": 477.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.1225296442687747,
+      "ratio_vs_oz": 0.3286219081272085,
+      "ratio_vs_o3": 0.1949685534591195
+    },
+    {
+      "suite": "polybench_full",
+      "name": "heat-3d",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/heat-3d.ll",
+      "universal": 82.0,
+      "none": 745.0,
+      "oz": 235.0,
+      "o3": 404.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.11006711409395974,
+      "ratio_vs_oz": 0.34893617021276596,
+      "ratio_vs_o3": 0.20297029702970298
+    },
+    {
+      "suite": "polybench_full",
+      "name": "jacobi-1d",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-1d.ll",
+      "universal": 55.0,
+      "none": 386.0,
+      "oz": 146.0,
+      "o3": 274.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.14248704663212436,
+      "ratio_vs_oz": 0.3767123287671233,
+      "ratio_vs_o3": 0.20072992700729927
+    },
+    {
+      "suite": "polybench_full",
+      "name": "jacobi-2d",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/jacobi-2d.ll",
+      "universal": 78.0,
+      "none": 524.0,
+      "oz": 196.0,
+      "o3": 338.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.14885496183206107,
+      "ratio_vs_oz": 0.3979591836734694,
+      "ratio_vs_o3": 0.23076923076923078
+    },
+    {
+      "suite": "polybench_full",
+      "name": "seidel-2d",
+      "ll_path": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full/seidel-2d.ll",
+      "universal": 71.0,
+      "none": 456.0,
+      "oz": 167.0,
+      "o3": 219.0,
+      "universal_status": "ok",
+      "none_status": "ok",
+      "oz_status": "ok",
+      "o3_status": "ok",
+      "ratio_vs_none": 0.15570175438596492,
+      "ratio_vs_oz": 0.4251497005988024,
+      "ratio_vs_o3": 0.3242009132420091
+    }
+  ],
+  "failures": []
+}
+```

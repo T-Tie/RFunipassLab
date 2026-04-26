@@ -1,24 +1,13 @@
 {
-  "generated_at": "2026-04-24 16:24:59",
+  "generated_at": "2026-04-24 18:35:31",
   "suites": [
-    "cbench",
-    "polybench",
-    "csmith"
+    "polybench_full"
   ],
   "copied": {
-    "cbench": {
-      "origin": "local:/root/projects/BOCA",
-      "source_root": "/root/exp/RFunipassLab/external_datasets/sources/cbench"
-    },
-    "polybench": {
-      "origin": "local:/root/projects/BOCA",
-      "source_root": "/root/exp/RFunipassLab/external_datasets/sources/polybench"
-    },
-    "csmith": {
-      "origin": "local:/root/projects/BOCA",
-      "source_root": "/root/exp/RFunipassLab/external_datasets/sources/csmith",
-      "runtime_origin": "local:/root/projects/datasets/csmith/runtime",
-      "runtime_root": "/root/exp/RFunipassLab/external_datasets/sources/csmith_runtime"
+    "polybench_full": {
+      "origin": "local:/root/datasets/PolyBenchC-4.2.1",
+      "source_root": "/root/exp/RFunipassLab/external_datasets/sources/polybench_full",
+      "benchmark_count": 30
     }
   }
 }

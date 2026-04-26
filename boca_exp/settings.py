@@ -166,7 +166,7 @@ BINARY_SIZE_REPORT_METRICS = normalize_binary_size_metric_list(
 PROGRAM_POOL_KIND = os.environ.get('PROGRAM_POOL_KIND', 'auto').strip().lower()
 
 # LLVM 工具路径
-llvm_tools_path = os.environ.get('LLVM_TOOLS_PATH', '/root/opt/rv64gc_llvm_21/bin')
+llvm_tools_path = os.environ.get('LLVM_TOOLS_PATH', '/root/llvm/llvm-project-21/build/bin')
 BACKEND_OPT_LEVEL = os.environ.get('BACKEND_OPT_LEVEL', '-O0').strip()
 
 # runtime 目标相关参数

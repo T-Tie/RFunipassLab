@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-04-24T18:35:47",
+  "runner_kind": "external_multi_seed",
+  "tag": "external_instrcount_polybench_full_wrap_10seeds_20260424",
+  "mode": "instrcount",
+  "source_batch_csv": "results/reports/20260423_181846_348878_feature_lite_multiseed_instrcount_lite_wrap_10seeds.csv",
+  "batch_started_at": "2026-04-24T18:33:12",
+  "batch_finished_at": "2026-04-24T18:35:47",
+  "seed_count": 10,
+  "seeds": [
+    456,
+    457,
+    458,
+    459,
+    460,
+    461,
+    462,
+    463,
+    464,
+    465
+  ],
+  "suites": [
+    "polybench_full"
+  ],
+  "objective_baseline": "oz",
+  "frontend_mode": "canonical",
+  "instrcount_timeout": 120.0,
+  "instrcount_workers": 4,
+  "binarysize_metric": null,
+  "binarysize_timeout": null,
+  "binarysize_workers": null,
+  "outputs": {
+    "per_seed_csv": "/root/exp/RFunipassLab/external_datasets/reports/external_instrcount_polybench_full_wrap_10seeds_20260424_per_seed.csv",
+    "per_suite_seed_csv": "/root/exp/RFunipassLab/external_datasets/reports/external_instrcount_polybench_full_wrap_10seeds_20260424_per_suite_seed.csv",
+    "by_suite_csv": "/root/exp/RFunipassLab/external_datasets/reports/external_instrcount_polybench_full_wrap_10seeds_20260424_by_suite.csv",
+    "formal_external_table_md": "/root/exp/RFunipassLab/external_datasets/reports/external_instrcount_polybench_full_wrap_10seeds_20260424_formal_external_table.md"
+  },
+  "failures": []
+}

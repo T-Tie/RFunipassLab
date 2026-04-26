@@ -1,0 +1,3 @@
+suite,program_count,seed_count,valid_count_mean_std,mean_norm_mean_std,median_norm_mean_std,improve_vs_baseline_mean_std,worsen_rate_mean_std,invalid_mean_std,timeout_mean_std
+polybench_full,30,10,30.00 ± 0.00,0.6019 ± 0.1260,0.5671 ± 0.2028,39.81% ± 12.60%,19.00% ± 14.49%,0.00 ± 0.00,0.00 ± 0.00
+all_external,30,10,30.00 ± 0.00,0.6019 ± 0.1260,0.5671 ± 0.2028,39.81% ± 12.60%,19.00% ± 14.49%,0.00 ± 0.00,0.00 ± 0.00
