@@ -37,7 +37,7 @@ OBJ_WORSEN_WEIGHT = float(os.environ.get('OBJ_WORSEN_W', 0.15))
 OBJ_HIGHVAR_WEIGHT = float(os.environ.get('OBJ_HIGHVAR_W', 0.0))
 
 # 特征编码模式
-FEATURE_MODE = os.environ.get('FEATURE_MODE', 'full').strip().lower()
+FEATURE_MODE = os.environ.get('FEATURE_MODE', 'lite').strip().lower()
 
 
 # LLVM New Pass Manager 作用域合法化策略

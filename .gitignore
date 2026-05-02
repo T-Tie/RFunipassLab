@@ -1,4 +1,5 @@
 results/runtime/**
+results/binary_size/cache/**
 **/__pycache__/**
 related/**
 datasets/**

@@ -70,7 +70,7 @@ BASE_ENV: Dict[str, str] = {
     "DECAY": "0.5",
     "SCALE": "10",
     "OFFSET": "20",
-    "FEATURE_MODE": "full",
+    "FEATURE_MODE": "lite",
     # LLVM New PM loop pass 合法化策略：
     # - wrap: 默认推荐，保持 raw 顺序，把 loop(x) 原地包装为 function(loop(x))；
     # - legacy_previous_function: 复现实验用，沿用旧版挂到前一个 function 末尾；

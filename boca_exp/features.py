@@ -8,7 +8,7 @@
 1. 对外仍然只暴露 `extract_features()` / `extract_features_batch()`；
 2. 搜索模块不需要知道当前到底是 `full` 还是 `lite`；
 3. 只有这个文件知道“某种模式下特征向量长什么样”；
-4. 默认仍然使用原始 `full` 模式，避免影响已有实验。
+4. 默认使用 `lite` 模式，正式实验如需复现实验旧设置可显式指定 `FEATURE_MODE=full`。
 """
 
 from __future__ import annotations

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .core_tuning_cost import record_objective_eval
 from .objective_common import compose_multi_objective, get_ei
 from .objective_instr import InstructionCountBackend
 from .objective_time import ProgramRuntimeHarness, RuntimeObjectiveBackend
@@ -68,6 +69,7 @@ def compute_baseline_values(programs):
 
 
 def evaluate_sequence_metrics(programs, baseline_values, pass_sequence):
+    record_objective_eval(len(programs))
     return get_objective_backend().evaluate_sequence_metrics(programs, baseline_values, pass_sequence)
 
 

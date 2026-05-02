@@ -7,6 +7,7 @@ import time
 
 import numpy as np
 
+from .core_tuning_cost import ml_phase
 from .features import extract_features_batch
 from .objective import get_ei
 from .operators import (
@@ -167,20 +168,21 @@ def get_nd_solutions(evaluated_sequences, evaluated_scores, eta, rnum, init_sequ
     """
     from sklearn.ensemble import RandomForestRegressor
 
-    feat_matrix = extract_features_batch(evaluated_sequences)
+    with ml_phase():
+        feat_matrix = extract_features_batch(evaluated_sequences)
 
-    model = RandomForestRegressor(n_estimators=50, random_state=42)
-    model.fit(feat_matrix, np.array(evaluated_scores))
+        model = RandomForestRegressor(n_estimators=50, random_state=42)
+        model.fit(feat_matrix, np.array(evaluated_scores))
 
-    # 按 rnum 调整本轮 GA 种群规模, 随 rnum 增大而扩容，最多到 2000, 由于 rnum 在主循环里会衰减，早期更探索、后期更收敛
-    ga_pop = min(max(GA_POP_SIZE, GA_POP_SIZE + int(rnum)), 2000)
+        # 按 rnum 调整本轮 GA 种群规模, 随 rnum 增大而扩容，最多到 2000, 由于 rnum 在主循环里会衰减，早期更探索、后期更收敛
+        ga_pop = min(max(GA_POP_SIZE, GA_POP_SIZE + int(rnum)), 2000)
 
-    begin = time.time()
-    candidates = ga_search(
-        evaluated_sequences, evaluated_scores, model, eta,
-        ga_pop, GA_GENERATIONS, init_sequences
-    )
-    print(f'GA search time: {time.time() - begin:.2f}s, candidates: {len(candidates)}')
+        begin = time.time()
+        candidates = ga_search(
+            evaluated_sequences, evaluated_scores, model, eta,
+            ga_pop, GA_GENERATIONS, init_sequences
+        )
+        print(f'GA search time: {time.time() - begin:.2f}s, candidates: {len(candidates)}')
 
     # 去重：避免推荐已评估过的完全相同的序列
     train_set = {tuple(s) for s in evaluated_sequences}
@@ -193,4 +195,3 @@ def get_nd_solutions(evaluated_sequences, evaluated_scores, eta, rnum, init_sequ
         rnd = random_sequence()
         if tuple(rnd) not in train_set:
             return rnd, 0.0
-

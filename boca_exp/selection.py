@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .core_tuning_cost import record_candidate_sequence
 from .objective import evaluate_sequence_metrics
 
 def _primary_metrics_for_selection(train_metrics, val_metrics):
@@ -138,6 +139,7 @@ def ablation_post_process(seq, programs, oz_values, split_name='validation', ver
         }
 
     current_seq = list(seq)
+    record_candidate_sequence()
     current_metrics = evaluate_sequence_metrics(programs, oz_values, current_seq)
     current_score = current_metrics['objective']
     if verbose:
@@ -154,6 +156,7 @@ def ablation_post_process(seq, programs, oz_values, split_name='validation', ver
         if len(current_seq) <= 1:
             break
         removed_pass = current_seq.pop(i)
+        record_candidate_sequence()
         new_metrics = evaluate_sequence_metrics(programs, oz_values, current_seq)
         new_score = new_metrics['objective']
 
@@ -189,4 +192,3 @@ def ablation_post_process(seq, programs, oz_values, split_name='validation', ver
         )
 
     return current_seq, current_metrics
-

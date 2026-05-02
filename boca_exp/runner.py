@@ -12,6 +12,13 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 import numpy as np
 
+from .core_tuning_cost import (
+    CoreTuningCostRecorder,
+    record_candidate_sequence,
+    set_active_core_tuning_cost,
+    write_core_tuning_cost_csv,
+    write_core_tuning_cost_json,
+)
 from .data import (
     init_global_state,
     load_runtime_evaluable_rows_from_tuning_csv,
@@ -375,8 +382,13 @@ def _print_top_ranked_sequence_reports(
             print("     raw: " + (" → ".join(report['sequence_raw']) if report['sequence_raw'] else "(空序列)"))
 
 
-def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
-         test_programs: Optional[Sequence[str]] = None, topn: int = 5):
+def main(
+    programs: Sequence[str],
+    suboptimal_sequences: Sequence[Sequence[str]],
+    test_programs: Optional[Sequence[str]] = None,
+    topn: int = 5,
+    core_cost_recorder: Optional[CoreTuningCostRecorder] = None,
+):
     """
     核心 BOCA 搜索函数。
 
@@ -387,6 +399,12 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     """
     backend = get_objective_backend()
     test_programs = list(test_programs or [])
+    core_cost_recorder = core_cost_recorder or CoreTuningCostRecorder(
+        method='rfunipass',
+        tuning_type='universal_offline',
+        program_count=len(programs),
+        target_program_count=len(test_programs),
+    )
 
     print("=" * 60)
     print(f"目标类型:      {backend.objective_kind}")
@@ -485,8 +503,12 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     iteration_compare_history = []
     begin_time = time.time()
 
+    core_cost_recorder.start()
+    set_active_core_tuning_cost(core_cost_recorder)
+
     print(f"\n[Step 3] 评估初始 seed 序列（共 {len(evaluated_sequences)} 条）...")
     for seq in evaluated_sequences:
+        record_candidate_sequence()
         train_metrics = evaluate_sequence_metrics(search_programs, search_baseline_values, seq)
         val_metrics = (
             evaluate_sequence_metrics(val_programs, val_baseline_values, seq)
@@ -523,6 +545,7 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
             suboptimal_sequences,
         )
 
+        record_candidate_sequence()
         train_metrics = evaluate_sequence_metrics(search_programs, search_baseline_values, new_seq)
         val_metrics = (
             evaluate_sequence_metrics(val_programs, val_baseline_values, new_seq)
@@ -633,6 +656,9 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
     else:
         print("  消融无改善，保留原序列")
 
+    core_cost_recorder.stop()
+    set_active_core_tuning_cost(None)
+
     final_test_metrics = (
         evaluate_sequence_metrics(test_programs, test_baseline_values, final_seq)
         if test_programs and test_baseline_values else None
@@ -702,6 +728,7 @@ def main(programs: Sequence[str], suboptimal_sequences: Sequence[Sequence[str]],
         'top_ranked_sequences': top_ranked_sequences,
         'fixed_baseline_summaries': fixed_baseline_summaries,
         'iteration_compare_history': iteration_compare_history,
+        'core_tuning_cost': core_cost_recorder.to_row(),
     }
 
 
@@ -998,6 +1025,7 @@ def cli_main() -> int:
     stats = []
     times = []
     run_results = []
+    core_tuning_cost_rows = []
     start_time = time.time()
 
     try:
@@ -1005,15 +1033,32 @@ def cli_main() -> int:
             print(f"\n{'=' * 60}")
             print(f"实验轮次 {run_idx + 1} / {begin2end}")
             print(f"{'=' * 60}")
+            core_cost_recorder = CoreTuningCostRecorder(
+                method='rfunipass',
+                tuning_type='universal_offline',
+                program_count=len(programs),
+                target_program_count=len(test_programs),
+                metadata={
+                    'run_index': run_idx,
+                    'objective_kind': objective_kind,
+                    'loop_nesting_policy': LOOP_NESTING_POLICY,
+                    'iters': iters,
+                    'seed_topk': effective_seed_topk,
+                    'search_pool_programs': len(programs),
+                    'test_programs': len(test_programs),
+                },
+            )
             run_result = main(
                 programs,
                 suboptimal_sequences,
                 test_programs=test_programs,
                 topn=top_n,
+                core_cost_recorder=core_cost_recorder,
             )
             stats.append(run_result['objective_history'])
             times.append(run_result['timestamps'])
             run_results.append(run_result)
+            core_tuning_cost_rows.append(run_result.get('core_tuning_cost') or core_cost_recorder.to_row())
 
         for history in stats:
             cur_best = float('inf')
@@ -1116,11 +1161,28 @@ def cli_main() -> int:
         )
         _print_top_ranked_binary_size_metrics(top_ranked_binary_size_suite)
 
+        best_core_tuning_cost = (
+            core_tuning_cost_rows[best_run]
+            if 0 <= best_run < len(core_tuning_cost_rows) else None
+        )
+        core_tuning_cost_json_path = result_json_path.with_name(
+            f"{result_json_path.stem}_core_tuning_cost.json"
+        )
+        core_tuning_cost_csv_path = result_json_path.with_name(
+            f"{result_json_path.stem}_core_tuning_cost.csv"
+        )
+        if best_core_tuning_cost:
+            write_core_tuning_cost_json(core_tuning_cost_json_path, best_core_tuning_cost)
+            write_core_tuning_cost_csv(core_tuning_cost_csv_path, best_core_tuning_cost)
+            print(f"核心调优成本已写入: {core_tuning_cost_json_path}")
+
         summary_payload = {
             'run_id': run_id,
             'tuning_csv': tuning_csv,
             'synergy_csv': synergy_csv,
             'result_json_path': str(result_json_path),
+            'core_tuning_cost_json_path': str(core_tuning_cost_json_path),
+            'core_tuning_cost_csv_path': str(core_tuning_cost_csv_path),
             'experiment_seed': EXPERIMENT_SEED,
             'split_seed': SPLIT_SEED,
             'objective_kind': objective_kind,
@@ -1162,6 +1224,8 @@ def cli_main() -> int:
             'run_results': run_results,
             'best_run_index': best_run,
             'best_result': best_result,
+            'core_tuning_costs': core_tuning_cost_rows,
+            'best_core_tuning_cost': best_core_tuning_cost,
             'best_top_ranked_sequences': best_result.get('top_ranked_sequences'),
             'fixed_runtime_baselines': fixed_runtime_baselines,
             'best_runtime_sequence_instruction_test_metrics': cross_instrcount_metrics,
@@ -1181,4 +1245,5 @@ def cli_main() -> int:
         print(f"总运行时间: {end_time - start_time:.2f} 秒")
         return 0
     finally:
+        set_active_core_tuning_cost(None)
         reset_objective_backend()
