@@ -30,6 +30,7 @@ from .settings import (
     GA_POP_SIZE,
     GA_TOURNAMENT_K,
 )
+from .surrogate import build_rf_regressor
 
 def ga_search(evaluated_sequences, evaluated_scores, model, eta,
               ga_pop_size, ga_gens, init_sequences=None):
@@ -166,12 +167,10 @@ def get_nd_solutions(evaluated_sequences, evaluated_scores, eta, rnum, init_sequ
       - GA 在序列空间搜索（而非配置空间）
       - 返回值是 pass 序列 list[str]（而非 0/1 向量）
     """
-    from sklearn.ensemble import RandomForestRegressor
-
     with ml_phase():
         feat_matrix = extract_features_batch(evaluated_sequences)
 
-        model = RandomForestRegressor(n_estimators=50, random_state=42)
+        model = build_rf_regressor(random_state=42)
         model.fit(feat_matrix, np.array(evaluated_scores))
 
         # 按 rnum 调整本轮 GA 种群规模, 随 rnum 增大而扩容，最多到 2000, 由于 rnum 在主循环里会衰减，早期更探索、后期更收敛

@@ -1,0 +1,432 @@
+# run_id: 20260505_072024_540076_feature_lite_seed464
+# name: feature_lite
+# group: feature_ablation
+# description: 切换到 Lite 特征编码，保留其余搜索流程不变。
+# changed: FEATURE_MODE=lite, GA_GEN=5, GA_POP=200, ITERS=100, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5
+# result_json: /root/exp/RFunipassLab/results/instrcount/summaries/20260505_072024_540076_feature_lite_seed464.json
+# started_at: 2026-05-05T07:20:24
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   BINARY_SIZE_METRIC=stripped_file_bytes
+#   BINARY_SIZE_REPORT_METRICS=text_bytes,data_bytes,bss_bytes,dec_bytes
+#   DECAY=0.5
+#   EXPERIMENT_SEED=464
+#   FEATURE_MODE=lite
+#   GA_ELITE=0.1
+#   GA_GEN=5
+#   GA_MUT=0.8
+#   GA_POP=200
+#   GA_TOUR=3
+#   ITERS=100
+#   LOOP_NESTING_POLICY=wrap
+#   MAX_SEQ_LEN=120
+#   MIN_VAL_PROGRAMS=5
+#   OBJECTIVE_BASELINE=oz
+#   OBJECTIVE_KIND=instrcount
+#   OBJ_HIGHVAR_W=0.0
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=auto
+#   RF_EXPLAIN_COUNTERFACTUAL_ENABLE=1
+#   RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS=20
+#   RF_EXPLAIN_COUNTERFACTUAL_SPLIT=selection
+#   RF_EXPLAIN_COUNTERFACTUAL_TOPK=5
+#   RF_EXPLAIN_ENABLE=1
+#   RF_EXPLAIN_HOLDOUT_RATIO=0.3
+#   RF_EXPLAIN_MIN_SAMPLES=20
+#   RF_EXPLAIN_MODE=final
+#   RF_EXPLAIN_PERM_REPEATS=10
+#   RF_EXPLAIN_TOPK=20
+#   RNUM=256
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=0
+#   SPLIT_SEED=464
+#   TEST_TOPK=50
+#   TRAIN_TOPK=200
+#   VAL_RATIO=0.5
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       200
+Loaded initial seed seqs:    79
+Loaded test programs:        50
+Objective kind:              instrcount
+Program pool kind:           tuning
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['function(gvn-sink)', 'module(iroutliner)', 'function(dce)', 'function(newgvn)', 'function(memcpyopt)', 'cgscc(attributor-cgscc)', 'module(attributor)', 'function(dse)', 'function(jump-threading)', 'function(instsimplify)', 'module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'module(globalopt)', 'function(mem2reg)', 'function(gvn-hoist)', 'function(reassociate)', 'loop(loop-simplifycfg)', 'module(inferattrs)', 'function(lower-switch)']
+Synergy edges: 176
+Self-loop passes: {'function(newgvn)', 'cgscc(attributor-cgscc)', 'module(attributor)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+目标类型:      instrcount
+目标基准:      -Oz
+基准指标:      -Oz 基准指令数
+优化指标:      归一化指令数
+输入程序数:    200
+输入次优序列数: 79
+测试程序数:    50
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  120
+Loop 合法化策略: wrap
+实验种子:      464
+划分种子:      464
+特征模式:      lite
+RF 特征维度:   31
+词表: ['function(gvn-sink)', 'module(iroutliner)', 'function(dce)', 'function(newgvn)', 'function(memcpyopt)', 'cgscc(attributor-cgscc)', 'module(attributor)', 'function(dse)', 'function(jump-threading)', 'function(instsimplify)', 'module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'module(globalopt)', 'function(mem2reg)', 'function(gvn-hoist)', 'function(reassociate)', 'loop(loop-simplifycfg)', 'module(inferattrs)', 'function(lower-switch)']
+多目标权重:    mean=1.0, worsen=0.15, highvar=0.0
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 100
+  validation 程序数:   100
+  split_signature(search_train): 970d4c58a65e92989b470435b5282d47ed413f04
+  split_signature(validation):   2cc8719b5a4c10f453ed23bdce5da6305b519000
+  split_signature(test):         36c96434fb9a7417c3a63fff5cc125c90ecf7387
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 79 条）...
+
+[Step 4] 开始贝叶斯优化（100 轮）...
+GA search time: 5.47s, candidates: 383
+  [iter   1/100] search_obj=1.0590  search_best=0.8091  validation_best=0.8025  EI=0.0267  rnum=183.2  len=35  syn_rate=0.62  mean=0.9855  worsen=49.00%  highvar=0.00%
+GA search time: 4.41s, candidates: 381
+  [iter   2/100] search_obj=0.9816  search_best=0.8091  validation_best=0.8025  EI=0.0197  rnum=181.1  len=13  syn_rate=0.17  mean=0.9531  worsen=19.00%  highvar=0.00%
+GA search time: 6.22s, candidates: 379
+  [iter   3/100] search_obj=1.1335  search_best=0.8091  validation_best=0.8025  EI=0.0166  rnum=179.0  len=61  syn_rate=0.78  mean=1.0600  worsen=49.00%  highvar=0.00%
+GA search time: 9.42s, candidates: 376
+  [iter   4/100] search_obj=0.8545  search_best=0.8091  validation_best=0.8025  EI=0.0137  rnum=176.9  len=43  syn_rate=0.50  mean=0.8005  worsen=36.00%  highvar=0.00%
+GA search time: 7.36s, candidates: 374
+  [iter   5/100] search_obj=0.9176  search_best=0.8091  validation_best=0.8025  EI=0.0152  rnum=174.8  len=21  syn_rate=0.45  mean=0.8921  worsen=17.00%  highvar=0.00%
+GA search time: 5.76s, candidates: 372
+  [iter   6/100] search_obj=0.9187  search_best=0.8091  validation_best=0.8025  EI=0.0160  rnum=172.7  len=24  syn_rate=0.37  mean=0.8977  worsen=14.00%  highvar=0.00%
+GA search time: 6.80s, candidates: 370
+  [iter   7/100] search_obj=1.0184  search_best=0.8091  validation_best=0.8025  EI=0.0160  rnum=170.6  len=45  syn_rate=0.62  mean=0.9509  worsen=45.00%  highvar=0.00%
+GA search time: 7.54s, candidates: 368
+  [iter   8/100] search_obj=0.9783  search_best=0.8091  validation_best=0.8025  EI=0.0121  rnum=168.4  len=28  syn_rate=0.23  mean=0.9513  worsen=18.00%  highvar=0.00%
+GA search time: 6.54s, candidates: 366
+  [iter   9/100] search_obj=1.0817  search_best=0.8091  validation_best=0.8025  EI=0.0165  rnum=166.3  len=23  syn_rate=0.33  mean=0.9932  worsen=59.00%  highvar=0.00%
+GA search time: 8.00s, candidates: 364
+  [iter  10/100] search_obj=1.1274  search_best=0.8091  validation_best=0.8025  EI=0.0110  rnum=164.2  len=50  syn_rate=0.41  mean=1.0224  worsen=70.00%  highvar=0.00%
+GA search time: 5.94s, candidates: 362
+  [iter  11/100] search_obj=0.8089  search_best=0.8089  validation_best=0.8025  EI=0.0105  rnum=162.0  len=15  syn_rate=0.29  mean=0.7864  worsen=15.00%  highvar=0.00%
+GA search time: 4.37s, candidates: 359
+  [iter  12/100] search_obj=0.8064  search_best=0.8064  validation_best=0.8025  EI=0.0182  rnum=159.9  len=17  syn_rate=0.31  mean=0.7854  worsen=14.00%  highvar=0.00%
+GA search time: 5.78s, candidates: 357
+  [iter  13/100] search_obj=0.9495  search_best=0.8064  validation_best=0.8025  EI=0.0238  rnum=157.7  len=17  syn_rate=0.16  mean=0.9060  worsen=29.00%  highvar=0.00%
+GA search time: 6.41s, candidates: 355
+  [iter  14/100] search_obj=1.1672  search_best=0.8064  validation_best=0.8025  EI=0.0159  rnum=155.6  len=17  syn_rate=0.24  mean=1.0457  worsen=81.00%  highvar=0.00%
+GA search time: 7.43s, candidates: 353
+  [iter  15/100] search_obj=1.0237  search_best=0.8064  validation_best=0.8025  EI=0.0187  rnum=153.4  len=32  syn_rate=0.45  mean=0.9937  worsen=20.00%  highvar=0.00%
+GA search time: 2.51s, candidates: 351
+  [iter  16/100] search_obj=0.7957  search_best=0.7957  validation_best=0.8025  EI=0.0171  rnum=151.3  len=18  syn_rate=0.37  mean=0.7762  worsen=13.00%  highvar=0.00%
+GA search time: 2.57s, candidates: 349
+  [iter  17/100] search_obj=0.8064  search_best=0.7957  validation_best=0.8025  EI=0.0186  rnum=149.1  len=18  syn_rate=0.33  mean=0.7854  worsen=14.00%  highvar=0.00%
+GA search time: 2.70s, candidates: 346
+  [iter  18/100] search_obj=0.8403  search_best=0.7957  validation_best=0.8025  EI=0.0166  rnum=147.0  len=20  syn_rate=0.26  mean=0.8013  worsen=26.00%  highvar=0.00%
+GA search time: 2.14s, candidates: 344
+  [iter  19/100] search_obj=1.1061  search_best=0.7957  validation_best=0.8025  EI=0.0217  rnum=144.8  len=17  syn_rate=0.23  mean=1.0191  worsen=58.00%  highvar=0.00%
+GA search time: 2.09s, candidates: 342
+  [iter  20/100] search_obj=1.0360  search_best=0.7957  validation_best=0.8025  EI=0.0159  rnum=142.7  len=35  syn_rate=0.41  mean=1.0030  worsen=22.00%  highvar=0.00%
+GA search time: 2.55s, candidates: 340
+  [iter  21/100] search_obj=0.8089  search_best=0.7957  validation_best=0.8025  EI=0.0125  rnum=140.5  len=16  syn_rate=0.29  mean=0.7864  worsen=15.00%  highvar=0.00%
+GA search time: 2.39s, candidates: 338
+  [iter  22/100] search_obj=1.1672  search_best=0.7957  validation_best=0.8025  EI=0.0205  rnum=138.4  len=18  syn_rate=0.28  mean=1.0457  worsen=81.00%  highvar=0.00%
+GA search time: 2.28s, candidates: 336
+  [iter  23/100] search_obj=1.0550  search_best=0.7957  validation_best=0.8025  EI=0.0165  rnum=136.3  len=18  syn_rate=0.35  mean=0.9605  worsen=63.00%  highvar=0.00%
+GA search time: 1.97s, candidates: 334
+  [iter  24/100] search_obj=0.8750  search_best=0.7957  validation_best=0.8025  EI=0.0217  rnum=134.2  len=17  syn_rate=0.29  mean=0.8210  worsen=36.00%  highvar=0.00%
+GA search time: 2.85s, candidates: 332
+  [iter  25/100] search_obj=0.7969  search_best=0.7957  validation_best=0.8025  EI=0.0166  rnum=132.1  len=19  syn_rate=0.32  mean=0.7774  worsen=13.00%  highvar=0.00%
+GA search time: 2.01s, candidates: 329
+  [iter  26/100] search_obj=0.8660  search_best=0.7957  validation_best=0.8025  EI=0.0194  rnum=130.0  len=19  syn_rate=0.38  mean=0.8420  worsen=16.00%  highvar=0.00%
+GA search time: 2.56s, candidates: 327
+  [iter  27/100] search_obj=0.7645  search_best=0.7645  validation_best=0.7319  EI=0.0208  rnum=127.9  len=17  syn_rate=0.34  mean=0.7465  worsen=12.00%  highvar=0.00%
+GA search time: 2.17s, candidates: 325
+  [iter  28/100] search_obj=1.0675  search_best=0.7645  validation_best=0.7319  EI=0.0185  rnum=125.8  len=15  syn_rate=0.30  mean=1.0030  worsen=43.00%  highvar=0.00%
+GA search time: 2.57s, candidates: 323
+  [iter  29/100] search_obj=1.1054  search_best=0.7645  validation_best=0.7319  EI=0.0171  rnum=123.7  len=18  syn_rate=0.30  mean=1.0184  worsen=58.00%  highvar=0.00%
+GA search time: 1.80s, candidates: 321
+  [iter  30/100] search_obj=0.9624  search_best=0.7645  validation_best=0.7319  EI=0.0155  rnum=121.6  len=17  syn_rate=0.32  mean=0.9399  worsen=15.00%  highvar=0.00%
+GA search time: 1.53s, candidates: 319
+  [iter  31/100] search_obj=0.8636  search_best=0.7645  validation_best=0.7319  EI=0.0150  rnum=119.6  len=18  syn_rate=0.31  mean=0.8396  worsen=16.00%  highvar=0.00%
+GA search time: 2.14s, candidates: 317
+  [iter  32/100] search_obj=0.7952  search_best=0.7645  validation_best=0.7319  EI=0.0100  rnum=117.5  len=19  syn_rate=0.30  mean=0.7772  worsen=12.00%  highvar=0.00%
+GA search time: 1.44s, candidates: 315
+  [iter  33/100] search_obj=0.8847  search_best=0.7645  validation_best=0.7319  EI=0.0110  rnum=115.5  len=17  syn_rate=0.35  mean=0.8637  worsen=14.00%  highvar=0.00%
+GA search time: 1.75s, candidates: 313
+  [iter  34/100] search_obj=0.7645  search_best=0.7645  validation_best=0.7319  EI=0.0100  rnum=113.5  len=18  syn_rate=0.34  mean=0.7465  worsen=12.00%  highvar=0.00%
+GA search time: 1.27s, candidates: 311
+  [iter  35/100] search_obj=1.1670  search_best=0.7645  validation_best=0.7319  EI=0.0127  rnum=111.5  len=21  syn_rate=0.29  mean=1.0455  worsen=81.00%  highvar=0.00%
+GA search time: 1.25s, candidates: 309
+  [iter  36/100] search_obj=0.7629  search_best=0.7629  validation_best=0.7319  EI=0.0156  rnum=109.5  len=19  syn_rate=0.36  mean=0.7464  worsen=11.00%  highvar=0.00%
+GA search time: 1.34s, candidates: 307
+  [iter  37/100] search_obj=0.7664  search_best=0.7629  validation_best=0.7319  EI=0.0176  rnum=107.6  len=20  syn_rate=0.35  mean=0.7484  worsen=12.00%  highvar=0.00%
+GA search time: 1.32s, candidates: 305
+  [iter  38/100] search_obj=1.0347  search_best=0.7629  validation_best=0.7319  EI=0.0217  rnum=105.6  len=20  syn_rate=0.32  mean=1.0017  worsen=22.00%  highvar=0.00%
+GA search time: 1.69s, candidates: 303
+  [iter  39/100] search_obj=1.0363  search_best=0.7629  validation_best=0.7319  EI=0.0191  rnum=103.7  len=18  syn_rate=0.32  mean=1.0018  worsen=23.00%  highvar=0.00%
+GA search time: 1.83s, candidates: 301
+  [iter  40/100] search_obj=0.8724  search_best=0.7629  validation_best=0.7319  EI=0.0165  rnum=101.7  len=19  syn_rate=0.30  mean=0.8199  worsen=35.00%  highvar=0.00%
+GA search time: 1.32s, candidates: 299
+  [iter  41/100] search_obj=1.1641  search_best=0.7629  validation_best=0.7319  EI=0.0184  rnum=99.8  len=19  syn_rate=0.34  mean=1.0441  worsen=80.00%  highvar=0.00%
+GA search time: 1.25s, candidates: 297
+  [iter  42/100] search_obj=1.0347  search_best=0.7629  validation_best=0.7319  EI=0.0227  rnum=97.9  len=19  syn_rate=0.34  mean=1.0017  worsen=22.00%  highvar=0.00%
+GA search time: 1.28s, candidates: 296
+  [iter  43/100] search_obj=0.7645  search_best=0.7629  validation_best=0.7319  EI=0.0210  rnum=96.1  len=17  syn_rate=0.34  mean=0.7465  worsen=12.00%  highvar=0.00%
+GA search time: 1.36s, candidates: 294
+  [iter  44/100] search_obj=1.0347  search_best=0.7629  validation_best=0.7319  EI=0.0184  rnum=94.2  len=20  syn_rate=0.38  mean=1.0017  worsen=22.00%  highvar=0.00%
+GA search time: 1.17s, candidates: 292
+  [iter  45/100] search_obj=0.7836  search_best=0.7629  validation_best=0.7319  EI=0.0144  rnum=92.4  len=19  syn_rate=0.34  mean=0.7596  worsen=16.00%  highvar=0.00%
+GA search time: 1.16s, candidates: 290
+  [iter  46/100] search_obj=0.8595  search_best=0.7629  validation_best=0.7319  EI=0.0137  rnum=90.5  len=20  syn_rate=0.36  mean=0.8415  worsen=12.00%  highvar=0.00%
+GA search time: 1.23s, candidates: 288
+  [iter  47/100] search_obj=0.7575  search_best=0.7575  validation_best=0.7291  EI=0.0155  rnum=88.7  len=18  syn_rate=0.34  mean=0.7410  worsen=11.00%  highvar=0.00%
+GA search time: 1.21s, candidates: 286
+  [iter  48/100] search_obj=0.7599  search_best=0.7575  validation_best=0.7291  EI=0.0123  rnum=87.0  len=15  syn_rate=0.30  mean=0.7419  worsen=12.00%  highvar=0.00%
+GA search time: 1.45s, candidates: 285
+  [iter  49/100] search_obj=0.8566  search_best=0.7575  validation_best=0.7291  EI=0.0173  rnum=85.2  len=17  syn_rate=0.31  mean=0.8371  worsen=13.00%  highvar=0.00%
+GA search time: 1.13s, candidates: 283
+  [iter  50/100] search_obj=0.7888  search_best=0.7575  validation_best=0.7291  EI=0.0143  rnum=83.5  len=17  syn_rate=0.33  mean=0.7648  worsen=16.00%  highvar=0.00%
+GA search time: 1.23s, candidates: 281
+  [iter  51/100] search_obj=0.8870  search_best=0.7575  validation_best=0.7291  EI=0.0253  rnum=81.7  len=20  syn_rate=0.34  mean=0.8630  worsen=16.00%  highvar=0.00%
+GA search time: 1.31s, candidates: 280
+  [iter  52/100] search_obj=0.7403  search_best=0.7403  validation_best=0.7029  EI=0.0196  rnum=80.0  len=23  syn_rate=0.35  mean=0.7223  worsen=12.00%  highvar=0.00%
+GA search time: 1.12s, candidates: 278
+  [iter  53/100] search_obj=1.0227  search_best=0.7403  validation_best=0.7029  EI=0.0162  rnum=78.4  len=26  syn_rate=0.37  mean=0.9942  worsen=19.00%  highvar=0.00%
+GA search time: 1.40s, candidates: 276
+  [iter  54/100] search_obj=1.0218  search_best=0.7403  validation_best=0.7029  EI=0.0137  rnum=76.7  len=23  syn_rate=0.40  mean=0.9933  worsen=19.00%  highvar=0.00%
+GA search time: 1.08s, candidates: 275
+  [iter  55/100] search_obj=1.3795  search_best=0.7403  validation_best=0.7029  EI=0.0200  rnum=75.1  len=19  syn_rate=0.37  mean=1.2610  worsen=79.00%  highvar=0.00%
+GA search time: 1.17s, candidates: 273
+  [iter  56/100] search_obj=1.0375  search_best=0.7403  validation_best=0.7029  EI=0.0138  rnum=73.4  len=15  syn_rate=0.28  mean=1.0030  worsen=23.00%  highvar=0.00%
+GA search time: 1.21s, candidates: 271
+  [iter  57/100] search_obj=0.8004  search_best=0.7403  validation_best=0.7029  EI=0.0146  rnum=71.8  len=29  syn_rate=0.34  mean=0.7554  worsen=30.00%  highvar=0.00%
+GA search time: 1.57s, candidates: 270
+  [iter  58/100] search_obj=0.7403  search_best=0.7403  validation_best=0.7029  EI=0.0207  rnum=70.3  len=24  syn_rate=0.35  mean=0.7223  worsen=12.00%  highvar=0.00%
+GA search time: 1.79s, candidates: 268
+  [iter  59/100] search_obj=0.8004  search_best=0.7403  validation_best=0.7029  EI=0.0176  rnum=68.7  len=33  syn_rate=0.35  mean=0.7554  worsen=30.00%  highvar=0.00%
+GA search time: 1.27s, candidates: 267
+  [iter  60/100] search_obj=0.8591  search_best=0.7403  validation_best=0.7029  EI=0.0149  rnum=67.2  len=22  syn_rate=0.34  mean=0.8381  worsen=14.00%  highvar=0.00%
+GA search time: 1.54s, candidates: 265
+  [iter  61/100] search_obj=0.7356  search_best=0.7356  validation_best=0.6996  EI=0.0188  rnum=65.7  len=25  syn_rate=0.35  mean=0.7161  worsen=13.00%  highvar=0.00%
+GA search time: 1.11s, candidates: 264
+  [iter  62/100] search_obj=0.9656  search_best=0.7356  validation_best=0.6996  EI=0.0164  rnum=64.2  len=33  syn_rate=0.36  mean=0.9401  worsen=17.00%  highvar=0.00%
+GA search time: 1.34s, candidates: 262
+  [iter  63/100] search_obj=0.7302  search_best=0.7302  validation_best=0.6895  EI=0.0128  rnum=62.7  len=23  syn_rate=0.34  mean=0.7137  worsen=11.00%  highvar=0.00%
+GA search time: 1.24s, candidates: 261
+  [iter  64/100] search_obj=1.0199  search_best=0.7302  validation_best=0.6895  EI=0.0176  rnum=61.3  len=23  syn_rate=0.32  mean=0.9929  worsen=18.00%  highvar=0.00%
+GA search time: 2.36s, candidates: 259
+  [iter  65/100] search_obj=0.7250  search_best=0.7250  validation_best=0.6755  EI=0.0179  rnum=59.8  len=24  syn_rate=0.34  mean=0.7085  worsen=11.00%  highvar=0.00%
+GA search time: 1.22s, candidates: 258
+  [iter  66/100] search_obj=0.7339  search_best=0.7250  validation_best=0.6755  EI=0.0184  rnum=58.4  len=26  syn_rate=0.35  mean=0.7159  worsen=12.00%  highvar=0.00%
+GA search time: 1.86s, candidates: 257
+  [iter  67/100] search_obj=0.7338  search_best=0.7250  validation_best=0.6755  EI=0.0183  rnum=57.0  len=32  syn_rate=0.35  mean=0.7158  worsen=12.00%  highvar=0.00%
+GA search time: 1.89s, candidates: 255
+  [iter  68/100] search_obj=0.7398  search_best=0.7250  validation_best=0.6755  EI=0.0163  rnum=55.7  len=49  syn_rate=0.35  mean=0.7218  worsen=12.00%  highvar=0.00%
+GA search time: 3.76s, candidates: 254
+  [iter  69/100] search_obj=1.0292  search_best=0.7250  validation_best=0.6755  EI=0.0186  rnum=54.3  len=52  syn_rate=0.35  mean=0.9977  worsen=21.00%  highvar=0.00%
+GA search time: 3.90s, candidates: 253
+  [iter  70/100] search_obj=0.9232  search_best=0.7250  validation_best=0.6755  EI=0.0228  rnum=53.0  len=27  syn_rate=0.33  mean=0.8992  worsen=16.00%  highvar=0.00%
+GA search time: 1.94s, candidates: 251
+  [iter  71/100] search_obj=0.7084  search_best=0.7084  validation_best=0.6755  EI=0.0192  rnum=51.7  len=26  syn_rate=0.34  mean=0.6949  worsen=9.00%  highvar=0.00%
+GA search time: 1.90s, candidates: 250
+  [iter  72/100] search_obj=0.8477  search_best=0.7084  validation_best=0.6755  EI=0.0147  rnum=50.5  len=32  syn_rate=0.35  mean=0.8282  worsen=13.00%  highvar=0.00%
+GA search time: 2.07s, candidates: 249
+  [iter  73/100] search_obj=0.8401  search_best=0.7084  validation_best=0.6755  EI=0.0131  rnum=49.2  len=46  syn_rate=0.35  mean=0.8221  worsen=12.00%  highvar=0.00%
+GA search time: 2.83s, candidates: 247
+  [iter  74/100] search_obj=0.7415  search_best=0.7084  validation_best=0.6755  EI=0.0132  rnum=48.0  len=24  syn_rate=0.35  mean=0.7265  worsen=10.00%  highvar=0.00%
+GA search time: 2.64s, candidates: 246
+  [iter  75/100] search_obj=0.7373  search_best=0.7084  validation_best=0.6755  EI=0.0089  rnum=46.8  len=58  syn_rate=0.35  mean=0.7208  worsen=11.00%  highvar=0.00%
+GA search time: 4.22s, candidates: 245
+  [iter  76/100] search_obj=0.8663  search_best=0.7084  validation_best=0.6755  EI=0.0126  rnum=45.6  len=97  syn_rate=0.34  mean=0.8453  worsen=14.00%  highvar=0.00%
+GA search time: 4.97s, candidates: 244
+  [iter  77/100] search_obj=0.7383  search_best=0.7084  validation_best=0.6755  EI=0.0111  rnum=44.4  len=64  syn_rate=0.35  mean=0.7203  worsen=12.00%  highvar=0.00%
+GA search time: 3.91s, candidates: 243
+  [iter  78/100] search_obj=0.7769  search_best=0.7084  validation_best=0.6755  EI=0.0135  rnum=43.3  len=23  syn_rate=0.34  mean=0.7574  worsen=13.00%  highvar=0.00%
+GA search time: 6.15s, candidates: 242
+  [iter  79/100] search_obj=0.7383  search_best=0.7084  validation_best=0.6755  EI=0.0121  rnum=42.2  len=67  syn_rate=0.35  mean=0.7203  worsen=12.00%  highvar=0.00%
+GA search time: 6.00s, candidates: 241
+  [iter  80/100] search_obj=1.0294  search_best=0.7084  validation_best=0.6755  EI=0.0133  rnum=41.1  len=35  syn_rate=0.34  mean=0.9979  worsen=21.00%  highvar=0.00%
+GA search time: 6.32s, candidates: 239
+  [iter  81/100] search_obj=1.1400  search_best=0.7084  validation_best=0.6755  EI=0.0138  rnum=40.0  len=26  syn_rate=0.34  mean=1.0620  worsen=52.00%  highvar=0.00%
+GA search time: 5.17s, candidates: 238
+  [iter  82/100] search_obj=0.7553  search_best=0.7084  validation_best=0.6755  EI=0.0171  rnum=38.9  len=25  syn_rate=0.35  mean=0.7403  worsen=10.00%  highvar=0.00%
+GA search time: 5.59s, candidates: 237
+  [iter  83/100] search_obj=1.4739  search_best=0.7084  validation_best=0.6755  EI=0.0138  rnum=37.9  len=29  syn_rate=0.34  mean=1.3419  worsen=88.00%  highvar=0.00%
+GA search time: 3.89s, candidates: 236
+  [iter  84/100] search_obj=0.7490  search_best=0.7084  validation_best=0.6755  EI=0.0204  rnum=36.9  len=29  syn_rate=0.35  mean=0.7310  worsen=12.00%  highvar=0.00%
+GA search time: 2.95s, candidates: 235
+  [iter  85/100] search_obj=1.0224  search_best=0.7084  validation_best=0.6755  EI=0.0116  rnum=35.9  len=54  syn_rate=0.36  mean=0.9939  worsen=19.00%  highvar=0.00%
+GA search time: 4.56s, candidates: 234
+  [iter  86/100] search_obj=0.7302  search_best=0.7084  validation_best=0.6755  EI=0.0158  rnum=34.9  len=25  syn_rate=0.34  mean=0.7137  worsen=11.00%  highvar=0.00%
+GA search time: 3.33s, candidates: 233
+  [iter  87/100] search_obj=0.8453  search_best=0.7084  validation_best=0.6755  EI=0.0165  rnum=33.9  len=26  syn_rate=0.34  mean=0.8273  worsen=12.00%  highvar=0.00%
+GA search time: 5.85s, candidates: 233
+  [iter  88/100] search_obj=1.0175  search_best=0.7084  validation_best=0.6755  EI=0.0144  rnum=33.0  len=29  syn_rate=0.34  mean=0.9920  worsen=17.00%  highvar=0.00%
+GA search time: 2.02s, candidates: 232
+  [iter  89/100] search_obj=0.7153  search_best=0.7084  validation_best=0.6687  EI=0.0105  rnum=32.1  len=38  syn_rate=0.35  mean=0.6988  worsen=11.00%  highvar=0.00%
+GA search time: 2.16s, candidates: 231
+  [iter  90/100] search_obj=0.8418  search_best=0.7084  validation_best=0.6687  EI=0.0132  rnum=31.2  len=48  syn_rate=0.35  mean=0.8208  worsen=14.00%  highvar=0.00%
+GA search time: 2.63s, candidates: 230
+  [iter  91/100] search_obj=0.8543  search_best=0.7084  validation_best=0.6687  EI=0.0112  rnum=30.3  len=31  syn_rate=0.36  mean=0.8348  worsen=13.00%  highvar=0.00%
+GA search time: 2.66s, candidates: 229
+  [iter  92/100] search_obj=0.7600  search_best=0.7084  validation_best=0.6687  EI=0.0113  rnum=29.5  len=16  syn_rate=0.34  mean=0.7420  worsen=12.00%  highvar=0.00%
+GA search time: 1.88s, candidates: 228
+  [iter  93/100] search_obj=1.1528  search_best=0.7084  validation_best=0.6687  EI=0.0106  rnum=28.6  len=60  syn_rate=0.35  mean=1.0358  worsen=78.00%  highvar=0.00%
+GA search time: 2.12s, candidates: 227
+  [iter  94/100] search_obj=1.0266  search_best=0.7084  validation_best=0.6687  EI=0.0156  rnum=27.8  len=70  syn_rate=0.35  mean=0.9966  worsen=20.00%  highvar=0.00%
+GA search time: 2.19s, candidates: 226
+  [iter  95/100] search_obj=0.7410  search_best=0.7084  validation_best=0.6687  EI=0.0160  rnum=27.0  len=50  syn_rate=0.35  mean=0.7215  worsen=13.00%  highvar=0.00%
+GA search time: 1.86s, candidates: 226
+  [iter  96/100] search_obj=0.7646  search_best=0.7084  validation_best=0.6687  EI=0.0098  rnum=26.2  len=19  syn_rate=0.35  mean=0.7466  worsen=12.00%  highvar=0.00%
+GA search time: 1.22s, candidates: 225
+  [iter  97/100] search_obj=0.8897  search_best=0.7084  validation_best=0.6687  EI=0.0172  rnum=25.4  len=30  syn_rate=0.34  mean=0.8387  worsen=34.00%  highvar=0.00%
+GA search time: 1.01s, candidates: 224
+  [iter  98/100] search_obj=0.8136  search_best=0.7084  validation_best=0.6687  EI=0.0124  rnum=24.7  len=25  syn_rate=0.34  mean=0.7686  worsen=30.00%  highvar=0.00%
+GA search time: 1.02s, candidates: 223
+  [iter  99/100] search_obj=1.0225  search_best=0.7084  validation_best=0.6687  EI=0.0120  rnum=24.0  len=30  syn_rate=0.35  mean=0.9940  worsen=19.00%  highvar=0.00%
+GA search time: 1.21s, candidates: 223
+  [iter 100/100] search_obj=0.8547  search_best=0.7084  validation_best=0.6687  EI=0.0138  rnum=23.3  len=25  syn_rate=0.35  mean=0.8352  worsen=13.00%  highvar=0.00%
+
+[Step 5] 按 validation 选择最终通用序列...
+  选择结果:
+    search_train_obj=0.7153, search_train_mean=0.6988, search_train_worsen=11.00%, search_train_highvar=0.00%
+    validation_obj=0.6687, validation_mean=0.6567, validation_worsen=8.00%, validation_highvar=0.00%
+
+[Step 6] 在 validation 上执行消融后处理...
+
+[Ablation-validation] 初始序列长度: 38, objective: 0.6687, mean_norm: 0.6567, worsen_rate: 8.00%
+  移除 [37] module(elim-avail-extern): objective 0.6687, mean_norm 0.6567, worsen_rate 8.00% (保留移除)
+  移除 [36] module(globalopt): objective 0.6687, mean_norm 0.6567, worsen_rate 8.00% (保留移除)
+  移除 [35] module(iroutliner): objective 0.6687, mean_norm 0.6567, worsen_rate 8.00% (保留移除)
+  移除 [34] module(iroutliner): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [33] module(attributor): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [32] module(globalopt): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [31] module(scc-oz-module-inliner): objective 0.6757 > 0.6683 (恢复)
+  移除 [30] cgscc(attributor-cgscc): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [29] module(globalopt): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [28] module(inferattrs): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [27] cgscc(attributor-cgscc): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [26] module(iroutliner): objective 0.6695 > 0.6683 (恢复)
+  移除 [25] module(globalopt): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [24] module(elim-avail-extern): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [23] module(elim-avail-extern): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [22] cgscc(attributor-cgscc): objective 0.6891 > 0.6683 (恢复)
+  移除 [21] module(globalopt): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [20] module(globalopt): objective 0.8104 > 0.6683 (恢复)
+  移除 [19] module(inferattrs): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [18] module(elim-avail-extern): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [17] function(newgvn): objective 0.6705 > 0.6683 (恢复)
+  移除 [16] function(gvn-sink): objective 0.6690 > 0.6683 (恢复)
+  移除 [15] module(scc-oz-module-inliner): objective 0.6721 > 0.6683 (恢复)
+  移除 [14] module(scc-oz-module-inliner): objective 0.6721 > 0.6683 (恢复)
+  移除 [13] module(attributor): objective 0.8241 > 0.6683 (恢复)
+  移除 [12] module(elim-avail-extern): objective 0.8846 > 0.6683 (恢复)
+  移除 [11] module(iroutliner): objective 0.6737 > 0.6683 (恢复)
+  移除 [10] function(dse): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [9] module(inferattrs): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [8] function(newgvn): objective 0.6977 > 0.6683 (恢复)
+  移除 [7] module(iroutliner): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [6] cgscc(attributor-cgscc): objective 0.6683, mean_norm 0.6563, worsen_rate 8.00% (保留移除)
+  移除 [5] cgscc(attributor-cgscc): objective 0.6750 > 0.6683 (恢复)
+  移除 [4] function(dse): objective 0.6824 > 0.6683 (恢复)
+  移除 [3] module(iroutliner): objective 0.6782 > 0.6683 (恢复)
+  移除 [2] module(iroutliner): objective 0.6782 > 0.6683 (恢复)
+  移除 [1] module(attributor): objective 0.6972 > 0.6683 (恢复)
+  移除 [0] module(globalopt): objective 0.6717 > 0.6683 (恢复)
+[Ablation-validation] 最终序列长度: 18, objective: 0.6683, mean_norm: 0.6563, worsen_rate: 8.00%, 移除了 20 个 pass
+  消融有效: 38 → 18 passes, validation_objective: 0.6687 → 0.6683
+
+最终通用 pass 序列（effective=18 个顶层 pass, raw=18 个 pass, syn_rate(raw)=0.32）:
+  module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(newgvn) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(globalopt) → cgscc(attributor-cgscc) → module(iroutliner) → module(scc-oz-module-inliner)
+  search_train_obj=0.7163, search_train_mean=0.6998, search_train_worsen=11.00%, search_train_highvar=0.00%
+  validation_obj=0.6683, validation_mean=0.6563, validation_worsen=8.00%, validation_highvar=0.00%
+  test_obj=0.7819, test_mean=0.7669, test_worsen=10.00%, test_highvar=0.00%
+
+Top-5 最佳序列（按 validation 多目标 objective 升序）:
+  #1: validation_obj=0.6687, validation_mean=0.6567, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7153, train_mean=0.6988, train_highvar=0.00%, len=38, syn_rate=0.35, test_obj=0.7733, test_mean=0.7643, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(inferattrs) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → cgscc(attributor-cgscc) → module(inferattrs) → module(globalopt) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → module(globalopt) → module(elim-avail-extern)
+  #2: validation_obj=0.6755, validation_mean=0.6635, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7250, train_mean=0.7085, train_highvar=0.00%, len=24, syn_rate=0.34, test_obj=0.7908, test_mean=0.7818, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(globalopt) → module(globalopt) → module(scc-oz-module-inliner) → cgscc(attributor-cgscc) → module(attributor)
+  #3: validation_obj=0.6811, validation_mean=0.6691, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7084, train_mean=0.6949, train_highvar=0.00%, len=26, syn_rate=0.34, test_obj=0.7735, test_mean=0.7645, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(inferattrs) → module(globalopt) → module(globalopt) → module(scc-oz-module-inliner) → cgscc(attributor-cgscc) → module(attributor)
+  #4: validation_obj=0.6895, validation_mean=0.6775, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7302, train_mean=0.7137, train_highvar=0.00%, len=25, syn_rate=0.34, test_obj=0.7940, test_mean=0.7850, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(attributor)
+  #5: validation_obj=0.6996, validation_mean=0.6861, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7339, train_mean=0.7159, train_highvar=0.00%, len=26, syn_rate=0.35, test_obj=0.7958, test_mean=0.7868, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(attributor) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → module(iroutliner) → function(gvn-sink) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(iroutliner) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(attributor)
+RF 解释性分析: ok  /root/exp/RFunipassLab/results/interpretability/20260505_072024_540076_feature_lite_seed464/run_0
+
+============================================================
+所有轮次中最优 validation objective: 0.6683
+最优通用 pass 序列 (18 passes):
+  module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(newgvn) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(globalopt) → cgscc(attributor-cgscc) → module(iroutliner) → module(scc-oz-module-inliner)
+  search_train_obj=0.7163, search_train_mean=0.6998, search_train_worsen=11.00%, search_train_highvar=0.00%
+  validation_obj=0.6683, validation_mean=0.6563, validation_worsen=8.00%, validation_highvar=0.00%
+  test_obj=0.7819, test_mean=0.7669, test_worsen=10.00%, test_highvar=0.00%
+
+最优轮次 Top-5 序列（含测试集效果，按 validation objective 升序）:
+  #1: validation_obj=0.6687, validation_mean=0.6567, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7153, train_mean=0.6988, train_highvar=0.00%, len=38, syn_rate=0.35, test_obj=0.7733, test_mean=0.7643, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(inferattrs) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → cgscc(attributor-cgscc) → module(inferattrs) → module(globalopt) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → module(globalopt) → module(elim-avail-extern)
+  #2: validation_obj=0.6755, validation_mean=0.6635, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7250, train_mean=0.7085, train_highvar=0.00%, len=24, syn_rate=0.34, test_obj=0.7908, test_mean=0.7818, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(globalopt) → module(globalopt) → module(scc-oz-module-inliner) → cgscc(attributor-cgscc) → module(attributor)
+  #3: validation_obj=0.6811, validation_mean=0.6691, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7084, train_mean=0.6949, train_highvar=0.00%, len=26, syn_rate=0.34, test_obj=0.7735, test_mean=0.7645, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(inferattrs) → module(globalopt) → module(globalopt) → module(scc-oz-module-inliner) → cgscc(attributor-cgscc) → module(attributor)
+  #4: validation_obj=0.6895, validation_mean=0.6775, validation_worsen=8.00%, validation_highvar=0.00%, train_obj=0.7302, train_mean=0.7137, train_highvar=0.00%, len=25, syn_rate=0.34, test_obj=0.7940, test_mean=0.7850, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(iroutliner) → module(iroutliner) → module(iroutliner) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(attributor)
+  #5: validation_obj=0.6996, validation_mean=0.6861, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7339, train_mean=0.7159, train_highvar=0.00%, len=26, syn_rate=0.35, test_obj=0.7958, test_mean=0.7868, test_worsen=6.00%, test_highvar=0.00%
+     module(globalopt) → module(attributor) → module(attributor) → cgscc(attributor-cgscc) → module(iroutliner) → function(newgvn) → function(dse) → cgscc(attributor-cgscc) → module(inferattrs) → module(inferattrs) → function(dse) → module(iroutliner) → module(elim-avail-extern) → module(attributor) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → module(iroutliner) → function(gvn-sink) → function(gvn-sink) → function(newgvn) → module(elim-avail-extern) → module(iroutliner) → module(globalopt) → module(globalopt) → cgscc(attributor-cgscc) → module(attributor)
+binarysize_test: vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%) [metric=stripped_file_bytes]
+binarysize_test[text_bytes]: vs_none=0.887 (+11.3%)  vs_oz=0.909 (+9.1%)  vs_o3=0.810 (+19.0%)
+binarysize_test[data_bytes]: vs_none=0.989 (+1.1%)  vs_oz=0.994 (+0.6%)  vs_o3=0.989 (+1.1%)
+binarysize_test[bss_bytes]: vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+binarysize_test[dec_bytes]: vs_none=0.907 (+9.3%)  vs_oz=0.928 (+7.2%)  vs_o3=0.844 (+15.6%)
+
+最优轮次 Top-5 binarysize_test 序列面板（primary=stripped_file_bytes）:
+  #1: len=38, syn_rate=0.35
+     stripped_file_bytes: obj=1.0086, mean=0.9996, worsen=6.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%)
+     text_bytes: obj=0.9359, mean=0.9089, worsen=18.00%, vs_none=0.887 (+11.3%)  vs_oz=0.909 (+9.1%)  vs_o3=0.810 (+19.0%)
+     data_bytes: obj=1.0029, mean=0.9939, worsen=6.00%, vs_none=0.989 (+1.1%)  vs_oz=0.994 (+0.6%)  vs_o3=0.989 (+1.1%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9550, mean=0.9280, worsen=18.00%, vs_none=0.907 (+9.3%)  vs_oz=0.928 (+7.2%)  vs_o3=0.844 (+15.6%)
+  #2: len=24, syn_rate=0.34
+     stripped_file_bytes: obj=1.0086, mean=0.9996, worsen=6.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%)
+     text_bytes: obj=0.9422, mean=0.9152, worsen=18.00%, vs_none=0.893 (+10.7%)  vs_oz=0.915 (+8.5%)  vs_o3=0.815 (+18.5%)
+     data_bytes: obj=1.0031, mean=0.9941, worsen=6.00%, vs_none=0.990 (+1.0%)  vs_oz=0.994 (+0.6%)  vs_o3=0.990 (+1.0%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9599, mean=0.9329, worsen=18.00%, vs_none=0.912 (+8.8%)  vs_oz=0.933 (+6.7%)  vs_o3=0.849 (+15.1%)
+  #3: len=26, syn_rate=0.34
+     stripped_file_bytes: obj=1.0086, mean=0.9996, worsen=6.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%)
+     text_bytes: obj=0.9367, mean=0.9097, worsen=18.00%, vs_none=0.888 (+11.2%)  vs_oz=0.910 (+9.0%)  vs_o3=0.810 (+19.0%)
+     data_bytes: obj=1.0031, mean=0.9941, worsen=6.00%, vs_none=0.990 (+1.0%)  vs_oz=0.994 (+0.6%)  vs_o3=0.990 (+1.0%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9557, mean=0.9287, worsen=18.00%, vs_none=0.908 (+9.2%)  vs_oz=0.929 (+7.1%)  vs_o3=0.845 (+15.5%)
+  #4: len=25, syn_rate=0.34
+     stripped_file_bytes: obj=1.0086, mean=0.9996, worsen=6.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%)
+     text_bytes: obj=0.9439, mean=0.9169, worsen=18.00%, vs_none=0.895 (+10.5%)  vs_oz=0.917 (+8.3%)  vs_o3=0.817 (+18.3%)
+     data_bytes: obj=1.0031, mean=0.9941, worsen=6.00%, vs_none=0.990 (+1.0%)  vs_oz=0.994 (+0.6%)  vs_o3=0.990 (+1.0%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9612, mean=0.9342, worsen=18.00%, vs_none=0.913 (+8.7%)  vs_oz=0.934 (+6.6%)  vs_o3=0.850 (+15.0%)
+  #5: len=26, syn_rate=0.35
+     stripped_file_bytes: obj=1.0086, mean=0.9996, worsen=6.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.995 (+0.5%)
+     text_bytes: obj=0.9436, mean=0.9166, worsen=18.00%, vs_none=0.894 (+10.6%)  vs_oz=0.917 (+8.3%)  vs_o3=0.816 (+18.4%)
+     data_bytes: obj=1.0029, mean=0.9939, worsen=6.00%, vs_none=0.989 (+1.1%)  vs_oz=0.994 (+0.6%)  vs_o3=0.989 (+1.1%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9609, mean=0.9339, worsen=18.00%, vs_none=0.913 (+8.7%)  vs_oz=0.934 (+6.6%)  vs_o3=0.849 (+15.1%)
+核心调优成本已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260505_072024_540076_feature_lite_seed464_core_tuning_cost.json
+结果已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260505_072024_540076_feature_lite_seed464.json
+总运行时间: 1208.62 秒

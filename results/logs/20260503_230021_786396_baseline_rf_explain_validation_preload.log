@@ -1,0 +1,213 @@
+# run_id: 20260503_230021_786396_baseline_rf_explain_validation_preload
+# name: baseline
+# group: baseline
+# description: 参考基线配置，不覆盖任何默认参数。
+# changed: baseline
+# result_json: /root/exp/RFunipassLab/results/instrcount/summaries/20260503_230021_786396_baseline_rf_explain_validation_preload.json
+# started_at: 2026-05-03T23:00:21
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   BINARY_SIZE_METRIC=stripped_file_bytes
+#   BINARY_SIZE_REPORT_METRICS=text_bytes,data_bytes,bss_bytes,dec_bytes
+#   DECAY=0.5
+#   EXPERIMENT_SEED=456
+#   FEATURE_MODE=lite
+#   GA_ELITE=0.1
+#   GA_GEN=1
+#   GA_MUT=0.8
+#   GA_POP=4
+#   GA_TOUR=3
+#   ITERS=1
+#   LOOP_NESTING_POLICY=wrap
+#   MAX_SEQ_LEN=60
+#   MIN_VAL_PROGRAMS=1
+#   OBJECTIVE_BASELINE=oz
+#   OBJECTIVE_KIND=instrcount
+#   OBJ_HIGHVAR_W=0.0
+#   OBJ_WORSEN_W=0.15
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=auto
+#   RF_EXPLAIN_COUNTERFACTUAL_ENABLE=1
+#   RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS=2
+#   RF_EXPLAIN_COUNTERFACTUAL_SPLIT=selection
+#   RF_EXPLAIN_COUNTERFACTUAL_TOPK=2
+#   RF_EXPLAIN_ENABLE=1
+#   RF_EXPLAIN_HOLDOUT_RATIO=0.3
+#   RF_EXPLAIN_MIN_SAMPLES=4
+#   RF_EXPLAIN_MODE=final
+#   RF_EXPLAIN_PERM_REPEATS=2
+#   RF_EXPLAIN_TOPK=5
+#   RNUM=4
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=4
+#   SPLIT_SEED=456
+#   TEST_TOPK=1
+#   TRAIN_TOPK=4
+#   VAL_RATIO=0.25
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       4
+Loaded initial seed seqs:    4
+Loaded test programs:        1
+Objective kind:              instrcount
+Program pool kind:           tuning
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(attributor)', 'function(gvn-sink)', 'function(jump-threading)', 'function(dce)', 'function(memcpyopt)', 'function(newgvn)', 'cgscc(attributor-cgscc)', 'module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'module(iroutliner)', 'function(dse)', 'module(globalopt)', 'function(reassociate)', 'function(instsimplify)', 'function(gvn-hoist)', 'function(mem2reg)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+Synergy edges: 176
+Self-loop passes: {'module(attributor)', 'cgscc(attributor-cgscc)', 'function(newgvn)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+目标类型:      instrcount
+目标基准:      -Oz
+基准指标:      -Oz 基准指令数
+优化指标:      归一化指令数
+输入程序数:    4
+输入次优序列数: 4
+测试程序数:    1
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  60
+Loop 合法化策略: wrap
+实验种子:      456
+划分种子:      456
+特征模式:      lite
+RF 特征维度:   31
+词表: ['module(attributor)', 'function(gvn-sink)', 'function(jump-threading)', 'function(dce)', 'function(memcpyopt)', 'function(newgvn)', 'cgscc(attributor-cgscc)', 'module(elim-avail-extern)', 'module(scc-oz-module-inliner)', 'module(iroutliner)', 'function(dse)', 'module(globalopt)', 'function(reassociate)', 'function(instsimplify)', 'function(gvn-hoist)', 'function(mem2reg)', 'function(lower-switch)', 'loop(loop-simplifycfg)', 'module(inferattrs)']
+多目标权重:    mean=1.0, worsen=0.15, highvar=0.0
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 3
+  validation 程序数:   1
+  split_signature(search_train): daf49497a6ddaa854ce2f62924ad706da02425a4
+  split_signature(validation):   6d594517882207288f41783af41e87bc4134bdad
+  split_signature(test):         4b1c5051aa42bf66cb97c7f171b0b5aeabdca7b1
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 4 条）...
+
+[Step 4] 开始贝叶斯优化（1 轮）...
+GA search time: 0.01s, candidates: 8
+  [iter   1/1] search_obj=0.6532  search_best=0.6532  validation_best=0.2258  EI=0.0243  rnum=4.0  len=19  syn_rate=0.40  mean=0.6532  worsen=0.00%  highvar=0.00%
+
+[Step 5] 按 validation 选择最终通用序列...
+  选择结果:
+    search_train_obj=0.7387, search_train_mean=0.7387, search_train_worsen=0.00%, search_train_highvar=0.00%
+    validation_obj=0.2258, validation_mean=0.2258, validation_worsen=0.00%, validation_highvar=0.00%
+
+[Step 6] 在 validation 上执行消融后处理...
+
+[Ablation-validation] 初始序列长度: 17, objective: 0.2258, mean_norm: 0.2258, worsen_rate: 0.00%
+  移除 [16] module(scc-oz-module-inliner): objective 0.9839 > 0.2258 (恢复)
+  移除 [15] module(elim-avail-extern): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [14] module(iroutliner): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [13] function(dce): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [12] module(attributor): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [11] module(globalopt): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [10] function(gvn-sink): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [9] function(newgvn): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [8] function(gvn-sink): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [7] module(globalopt): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [6] function(jump-threading): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [5] function(memcpyopt): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [4] module(attributor): objective 1.0000 > 0.2258 (恢复)
+  移除 [3] function(gvn-hoist): objective 0.9355 > 0.2258 (恢复)
+  移除 [2] function(instsimplify): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+  移除 [1] module(iroutliner): objective 1.0000 > 0.2258 (恢复)
+  移除 [0] module(elim-avail-extern): objective 0.2258, mean_norm 0.2258, worsen_rate 0.00% (保留移除)
+[Ablation-validation] 最终序列长度: 4, objective: 0.2258, mean_norm: 0.2258, worsen_rate: 0.00%, 移除了 13 个 pass
+  消融有效: 17 → 4 passes, validation_objective: 0.2258 → 0.2258
+
+最终通用 pass 序列（effective=4 个顶层 pass, raw=4 个 pass, syn_rate(raw)=0.02）:
+  module(iroutliner) → function(gvn-hoist) → module(attributor) → module(scc-oz-module-inliner)
+  search_train_obj=0.8114, search_train_mean=0.8114, search_train_worsen=0.00%, search_train_highvar=0.00%
+  validation_obj=0.2258, validation_mean=0.2258, validation_worsen=0.00%, validation_highvar=0.00%
+  test_obj=1.3107, test_mean=1.1607, test_worsen=100.00%, test_highvar=0.00%
+
+Top-5 最佳序列（按 validation 多目标 objective 升序）:
+  #1: validation_obj=0.2258, validation_mean=0.2258, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.7387, train_mean=0.7387, train_highvar=0.00%, len=17, syn_rate=0.35, test_obj=0.9762, test_mean=0.9762, test_worsen=0.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #2: validation_obj=0.5806, validation_mean=0.5806, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.7393, train_mean=0.7393, train_highvar=0.00%, len=16, syn_rate=0.43, test_obj=0.9762, test_mean=0.9762, test_worsen=0.00%, test_highvar=0.00%
+     function(gvn-sink) → module(iroutliner) → function(dce) → function(newgvn) → function(memcpyopt) → cgscc(attributor-cgscc) → module(attributor) → function(dse) → function(jump-threading) → function(instsimplify) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(globalopt) → function(mem2reg) → function(gvn-hoist)
+  #3: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=1.0694, train_mean=1.0194, train_highvar=0.00%, len=6, syn_rate=0.08, test_obj=1.2512, test_mean=1.1012, test_worsen=100.00%, test_highvar=0.00%
+     module(scc-oz-module-inliner) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(iroutliner) → module(attributor) → function(newgvn)
+  #4: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.6532, train_mean=0.6532, train_highvar=0.00%, len=18, syn_rate=0.40, test_obj=0.9524, test_mean=0.9524, test_worsen=0.00%, test_highvar=0.00%
+     module(attributor) → function(gvn-sink) → function(jump-threading) → function(dce) → function(memcpyopt) → function(newgvn) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(attributor) → module(scc-oz-module-inliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(dse) → module(globalopt) → module(attributor) → function(reassociate)
+  #5: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.6532, train_mean=0.6532, train_highvar=0.00%, len=19, syn_rate=0.40, test_obj=0.9524, test_mean=0.9524, test_worsen=0.00%, test_highvar=0.00%
+     module(attributor) → function(gvn-sink) → function(jump-threading) → function(dce) → function(memcpyopt) → function(newgvn) → function(newgvn) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(attributor) → module(scc-oz-module-inliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(dse) → module(globalopt) → module(attributor) → function(reassociate)
+RF 解释性分析: ok  /root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0
+
+============================================================
+所有轮次中最优 validation objective: 0.2258
+最优通用 pass 序列 (4 passes):
+  module(iroutliner) → function(gvn-hoist) → module(attributor) → module(scc-oz-module-inliner)
+  search_train_obj=0.8114, search_train_mean=0.8114, search_train_worsen=0.00%, search_train_highvar=0.00%
+  validation_obj=0.2258, validation_mean=0.2258, validation_worsen=0.00%, validation_highvar=0.00%
+  test_obj=1.3107, test_mean=1.1607, test_worsen=100.00%, test_highvar=0.00%
+
+最优轮次 Top-5 序列（含测试集效果，按 validation objective 升序）:
+  #1: validation_obj=0.2258, validation_mean=0.2258, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.7387, train_mean=0.7387, train_highvar=0.00%, len=17, syn_rate=0.35, test_obj=0.9762, test_mean=0.9762, test_worsen=0.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #2: validation_obj=0.5806, validation_mean=0.5806, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.7393, train_mean=0.7393, train_highvar=0.00%, len=16, syn_rate=0.43, test_obj=0.9762, test_mean=0.9762, test_worsen=0.00%, test_highvar=0.00%
+     function(gvn-sink) → module(iroutliner) → function(dce) → function(newgvn) → function(memcpyopt) → cgscc(attributor-cgscc) → module(attributor) → function(dse) → function(jump-threading) → function(instsimplify) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(globalopt) → function(mem2reg) → function(gvn-hoist)
+  #3: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=1.0694, train_mean=1.0194, train_highvar=0.00%, len=6, syn_rate=0.08, test_obj=1.2512, test_mean=1.1012, test_worsen=100.00%, test_highvar=0.00%
+     module(scc-oz-module-inliner) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(iroutliner) → module(attributor) → function(newgvn)
+  #4: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.6532, train_mean=0.6532, train_highvar=0.00%, len=18, syn_rate=0.40, test_obj=0.9524, test_mean=0.9524, test_worsen=0.00%, test_highvar=0.00%
+     module(attributor) → function(gvn-sink) → function(jump-threading) → function(dce) → function(memcpyopt) → function(newgvn) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(attributor) → module(scc-oz-module-inliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(dse) → module(globalopt) → module(attributor) → function(reassociate)
+  #5: validation_obj=1.0000, validation_mean=1.0000, validation_worsen=0.00%, validation_highvar=0.00%, train_obj=0.6532, train_mean=0.6532, train_highvar=0.00%, len=19, syn_rate=0.40, test_obj=0.9524, test_mean=0.9524, test_worsen=0.00%, test_highvar=0.00%
+     module(attributor) → function(gvn-sink) → function(jump-threading) → function(dce) → function(memcpyopt) → function(newgvn) → function(newgvn) → cgscc(attributor-cgscc) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(attributor) → module(scc-oz-module-inliner) → module(iroutliner) → function(dse) → cgscc(attributor-cgscc) → function(dse) → module(globalopt) → module(attributor) → function(reassociate)
+binarysize_test: vs_none=1.001 (-0.1%)  vs_oz=1.001 (-0.1%)  vs_o3=0.778 (+22.2%) [metric=stripped_file_bytes]
+binarysize_test[text_bytes]: vs_none=1.142 (-14.2%)  vs_oz=1.068 (-6.8%)  vs_o3=0.673 (+32.7%)
+binarysize_test[data_bytes]: vs_none=1.000 (+0.0%)  vs_oz=1.012 (-1.2%)  vs_o3=1.000 (+0.0%)
+binarysize_test[bss_bytes]: vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+binarysize_test[dec_bytes]: vs_none=1.008 (-0.8%)  vs_oz=1.004 (-0.4%)  vs_o3=0.970 (+3.0%)
+
+最优轮次 Top-5 binarysize_test 序列面板（primary=stripped_file_bytes）:
+  #1: len=17, syn_rate=0.35
+     stripped_file_bytes: obj=0.9989, mean=0.9989, worsen=0.00%, vs_none=0.999 (+0.1%)  vs_oz=0.999 (+0.1%)  vs_o3=0.776 (+22.4%)
+     text_bytes: obj=0.9751, mean=0.9751, worsen=0.00%, vs_none=1.043 (-4.3%)  vs_oz=0.975 (+2.5%)  vs_o3=0.614 (+38.6%)
+     data_bytes: obj=0.9884, mean=0.9884, worsen=0.00%, vs_none=0.977 (+2.3%)  vs_oz=0.988 (+1.2%)  vs_o3=0.977 (+2.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9984, mean=0.9984, worsen=0.00%, vs_none=1.002 (-0.2%)  vs_oz=0.998 (+0.2%)  vs_o3=0.964 (+3.6%)
+  #2: len=16, syn_rate=0.43
+     stripped_file_bytes: obj=0.9989, mean=0.9989, worsen=0.00%, vs_none=0.999 (+0.1%)  vs_oz=0.999 (+0.1%)  vs_o3=0.776 (+22.4%)
+     text_bytes: obj=0.9751, mean=0.9751, worsen=0.00%, vs_none=1.043 (-4.3%)  vs_oz=0.975 (+2.5%)  vs_o3=0.614 (+38.6%)
+     data_bytes: obj=0.9884, mean=0.9884, worsen=0.00%, vs_none=0.977 (+2.3%)  vs_oz=0.988 (+1.2%)  vs_o3=0.977 (+2.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9984, mean=0.9984, worsen=0.00%, vs_none=1.002 (-0.2%)  vs_oz=0.998 (+0.2%)  vs_o3=0.964 (+3.6%)
+  #3: len=6, syn_rate=0.08
+     stripped_file_bytes: obj=1.1506, mean=1.0006, worsen=100.00%, vs_none=1.001 (-0.1%)  vs_oz=1.001 (-0.1%)  vs_o3=0.778 (+22.2%)
+     text_bytes: obj=1.2136, mean=1.0636, worsen=100.00%, vs_none=1.137 (-13.7%)  vs_oz=1.064 (-6.4%)  vs_o3=0.670 (+33.0%)
+     data_bytes: obj=1.1616, mean=1.0116, worsen=100.00%, vs_none=1.000 (+0.0%)  vs_oz=1.012 (-1.2%)  vs_o3=1.000 (+0.0%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=1.1540, mean=1.0040, worsen=100.00%, vs_none=1.008 (-0.8%)  vs_oz=1.004 (-0.4%)  vs_o3=0.969 (+3.1%)
+  #4: len=18, syn_rate=0.40
+     stripped_file_bytes: obj=0.9989, mean=0.9989, worsen=0.00%, vs_none=0.999 (+0.1%)  vs_oz=0.999 (+0.1%)  vs_o3=0.776 (+22.4%)
+     text_bytes: obj=0.9666, mean=0.9666, worsen=0.00%, vs_none=1.033 (-3.3%)  vs_oz=0.967 (+3.3%)  vs_o3=0.609 (+39.1%)
+     data_bytes: obj=0.9884, mean=0.9884, worsen=0.00%, vs_none=0.977 (+2.3%)  vs_oz=0.988 (+1.2%)  vs_o3=0.977 (+2.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9978, mean=0.9978, worsen=0.00%, vs_none=1.002 (-0.2%)  vs_oz=0.998 (+0.2%)  vs_o3=0.963 (+3.7%)
+  #5: len=19, syn_rate=0.40
+     stripped_file_bytes: obj=0.9989, mean=0.9989, worsen=0.00%, vs_none=0.999 (+0.1%)  vs_oz=0.999 (+0.1%)  vs_o3=0.776 (+22.4%)
+     text_bytes: obj=0.9666, mean=0.9666, worsen=0.00%, vs_none=1.033 (-3.3%)  vs_oz=0.967 (+3.3%)  vs_o3=0.609 (+39.1%)
+     data_bytes: obj=0.9884, mean=0.9884, worsen=0.00%, vs_none=0.977 (+2.3%)  vs_oz=0.988 (+1.2%)  vs_o3=0.977 (+2.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9978, mean=0.9978, worsen=0.00%, vs_none=1.002 (-0.2%)  vs_oz=0.998 (+0.2%)  vs_o3=0.963 (+3.7%)
+核心调优成本已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260503_230021_786396_baseline_rf_explain_validation_preload_core_tuning_cost.json
+结果已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260503_230021_786396_baseline_rf_explain_validation_preload.json
+总运行时间: 14.60 秒

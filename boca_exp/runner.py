@@ -46,6 +46,7 @@ from .paths import (
 )
 from .runtime import format_pipeline_for_display, sequence_to_pipeline, split_pipeline_steps
 from .search import get_nd_solutions
+from .rf_interpretability import run_rf_interpretability
 from .selection import (
     _primary_metrics_for_selection,
     ablation_post_process,
@@ -705,6 +706,33 @@ def main(
         selection_split=primary_split_name,
     )
 
+    run_index = None
+    if getattr(core_cost_recorder, 'metadata', None):
+        raw_run_index = core_cost_recorder.metadata.get('run_index')
+        if raw_run_index is not None:
+            try:
+                run_index = int(raw_run_index)
+            except (TypeError, ValueError):
+                run_index = None
+
+    rf_interpretability = run_rf_interpretability(
+        run_id=os.environ.get('RUN_ID') or 'manual',
+        run_index=run_index,
+        evaluated_sequences=evaluated_sequences,
+        evaluated_scores=evaluated_scores,
+        selection_split=primary_split_name,
+        base_sequence=final_seq,
+        base_metrics=final_primary_metrics,
+        selection_programs=ablation_programs,
+        selection_baseline_values=ablation_baseline_values,
+    )
+    if rf_interpretability.get('enabled'):
+        print(
+            "RF 解释性分析: "
+            f"{rf_interpretability.get('status')}  "
+            f"{rf_interpretability.get('output_dir')}"
+        )
+
     return {
         'objective_kind': backend.objective_kind,
         'experiment_seed': EXPERIMENT_SEED,
@@ -729,6 +757,7 @@ def main(
         'fixed_baseline_summaries': fixed_baseline_summaries,
         'iteration_compare_history': iteration_compare_history,
         'core_tuning_cost': core_cost_recorder.to_row(),
+        'rf_interpretability': rf_interpretability,
     }
 
 
@@ -1165,6 +1194,7 @@ def cli_main() -> int:
             core_tuning_cost_rows[best_run]
             if 0 <= best_run < len(core_tuning_cost_rows) else None
         )
+        best_rf_interpretability = best_result.get('rf_interpretability')
         core_tuning_cost_json_path = result_json_path.with_name(
             f"{result_json_path.stem}_core_tuning_cost.json"
         )
@@ -1226,6 +1256,7 @@ def cli_main() -> int:
             'best_result': best_result,
             'core_tuning_costs': core_tuning_cost_rows,
             'best_core_tuning_cost': best_core_tuning_cost,
+            'best_rf_interpretability': best_rf_interpretability,
             'best_top_ranked_sequences': best_result.get('top_ranked_sequences'),
             'fixed_runtime_baselines': fixed_runtime_baselines,
             'best_runtime_sequence_instruction_test_metrics': cross_instrcount_metrics,

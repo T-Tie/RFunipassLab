@@ -14,6 +14,8 @@
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import asdict, dataclass
+from typing import Any
 
 import numpy as np
 
@@ -39,6 +41,23 @@ _VALID_FEATURE_MODES = {"full", "lite"}
 _SCOPE_NAMES = ("module", "function", "cgscc", "loop", "other")
 
 
+@dataclass(frozen=True)
+class FeatureSpec:
+    """Human-readable schema entry for one surrogate-model feature."""
+
+    index: int
+    name: str
+    group: str
+    feature_mode: str
+    pass_name: str | None = None
+    scope: str | None = None
+    edge_source: str | None = None
+    edge_target: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
 def get_feature_mode(mode: str | None = None) -> str:
     """解析并返回当前使用的特征模式。"""
     resolved = (mode or FEATURE_MODE).strip().lower()
@@ -54,6 +73,87 @@ def get_feature_dim(mode: str | None = None) -> int:
     if resolved == "full":
         return 2 * len(all_passes) + len(synergy_edges) + 2
     return len(all_passes) + _LITE_EXTRA_DIM
+
+
+def get_feature_specs(mode: str | None = None) -> list[FeatureSpec]:
+    """
+    Return the feature schema in the exact order used by extract_features().
+
+    The schema is intentionally explicit so RF importance, permutation
+    importance, and group-level reports can share one stable mapping.
+    """
+    resolved = get_feature_mode(mode)
+    specs: list[FeatureSpec] = []
+
+    for pass_name in all_passes:
+        specs.append(
+            FeatureSpec(
+                index=len(specs),
+                name=f"pass_freq:{pass_name}",
+                group="pass_freq",
+                feature_mode=resolved,
+                pass_name=pass_name,
+                scope=_pass_scope(pass_name),
+            )
+        )
+
+    if resolved == "full":
+        for source, target in synergy_edges:
+            specs.append(
+                FeatureSpec(
+                    index=len(specs),
+                    name=f"synergy_edge:{source}->{target}",
+                    group="synergy_edge",
+                    feature_mode=resolved,
+                    edge_source=source,
+                    edge_target=target,
+                )
+            )
+        specs.extend(
+            [
+                FeatureSpec(len(specs), "synergy_rate", "synergy", resolved),
+                FeatureSpec(len(specs) + 1, "seq_len_ratio", "sequence_shape", resolved),
+            ]
+        )
+        for pass_name in all_passes:
+            specs.append(
+                FeatureSpec(
+                    index=len(specs),
+                    name=f"first_pos:{pass_name}",
+                    group="position",
+                    feature_mode=resolved,
+                    pass_name=pass_name,
+                    scope=_pass_scope(pass_name),
+                )
+            )
+        return specs
+
+    lite_extras = (
+        ("seq_len_ratio", "sequence_shape"),
+        ("pass_coverage", "sequence_shape"),
+        ("repeat_mass_ratio", "sequence_shape"),
+        ("max_repeat_ratio", "sequence_shape"),
+        ("synergy_rate", "synergy"),
+        ("self_loop_hit_rate", "self_loop"),
+        ("self_loop_coverage", "self_loop"),
+        ("scope_ratio:module", "scope_ratio"),
+        ("scope_ratio:function", "scope_ratio"),
+        ("scope_ratio:cgscc", "scope_ratio"),
+        ("scope_ratio:loop", "scope_ratio"),
+        ("scope_ratio:other", "scope_ratio"),
+    )
+    for name, group in lite_extras:
+        scope = name.split(":", 1)[1] if name.startswith("scope_ratio:") else None
+        specs.append(
+            FeatureSpec(
+                index=len(specs),
+                name=name,
+                group=group,
+                feature_mode=resolved,
+                scope=scope,
+            )
+        )
+    return specs
 
 
 def _safe_div(numerator: float, denominator: float) -> float:

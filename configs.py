@@ -71,6 +71,17 @@ BASE_ENV: Dict[str, str] = {
     "SCALE": "10",
     "OFFSET": "20",
     "FEATURE_MODE": "lite",
+    # RF 代理模型解释性分析：默认关闭，作为事后分析，不计入 core tuning cost。
+    "RF_EXPLAIN_ENABLE": "0",
+    "RF_EXPLAIN_MODE": "final",
+    "RF_EXPLAIN_HOLDOUT_RATIO": "0.3",
+    "RF_EXPLAIN_PERM_REPEATS": "10",
+    "RF_EXPLAIN_TOPK": "20",
+    "RF_EXPLAIN_MIN_SAMPLES": "20",
+    "RF_EXPLAIN_COUNTERFACTUAL_ENABLE": "1",
+    "RF_EXPLAIN_COUNTERFACTUAL_TOPK": "5",
+    "RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS": "50",
+    "RF_EXPLAIN_COUNTERFACTUAL_SPLIT": "selection",
     # LLVM New PM loop pass 合法化策略：
     # - wrap: 默认推荐，保持 raw 顺序，把 loop(x) 原地包装为 function(loop(x))；
     # - legacy_previous_function: 复现实验用，沿用旧版挂到前一个 function 末尾；
@@ -228,6 +239,12 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
     "DECAY": {"type": float, "min": 0.0},
     "SCALE": {"type": float, "min": 0.0},
     "OFFSET": {"type": float, "min": 0.0},
+    "RF_EXPLAIN_HOLDOUT_RATIO": {"type": float, "min": 0.0, "max": 1.0},
+    "RF_EXPLAIN_PERM_REPEATS": {"type": int, "min": 1},
+    "RF_EXPLAIN_TOPK": {"type": int, "min": 1},
+    "RF_EXPLAIN_MIN_SAMPLES": {"type": int, "min": 2},
+    "RF_EXPLAIN_COUNTERFACTUAL_TOPK": {"type": int, "min": 0},
+    "RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS": {"type": int, "min": 0},
     "RUNTIME_TIMEOUT_SEC": {"type": float, "min": 0.1},
     "RUNTIME_SAMPLES": {"type": int, "min": 1},
     "RUNTIME_TARGET_SAMPLE_MS": {"type": float, "min": 0.0},
@@ -240,6 +257,10 @@ NUMERIC_RULES: Dict[str, Dict[str, Any]] = {
 
 CHOICE_RULES: Dict[str, set[str]] = {
     "FEATURE_MODE": {"full", "lite"},
+    "RF_EXPLAIN_ENABLE": {"0", "1", "false", "true", "no", "yes", "off", "on"},
+    "RF_EXPLAIN_MODE": {"final"},
+    "RF_EXPLAIN_COUNTERFACTUAL_ENABLE": {"0", "1", "false", "true", "no", "yes", "off", "on"},
+    "RF_EXPLAIN_COUNTERFACTUAL_SPLIT": {"selection"},
     "LOOP_NESTING_POLICY": {
         "wrap",
         "scope_preserving",

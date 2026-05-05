@@ -5,6 +5,15 @@ import random
 
 import numpy as np
 
+
+def _env_flag(name: str, default: bool = False) -> bool:
+    """Parse common boolean environment values."""
+    raw_value = os.environ.get(name)
+    if raw_value is None:
+        return default
+    return raw_value.strip().lower() in {'1', 'true', 'yes', 'on'}
+
+
 EXPERIMENT_SEED = int(os.environ.get('EXPERIMENT_SEED', 456))
 SPLIT_SEED = int(os.environ.get('SPLIT_SEED', EXPERIMENT_SEED))
 
@@ -38,6 +47,21 @@ OBJ_HIGHVAR_WEIGHT = float(os.environ.get('OBJ_HIGHVAR_W', 0.0))
 
 # 特征编码模式
 FEATURE_MODE = os.environ.get('FEATURE_MODE', 'lite').strip().lower()
+
+# RF 代理模型可解释性分析。默认关闭，作为事后分析产物，不参与 BO 搜索预算。
+RF_EXPLAIN_ENABLE = _env_flag('RF_EXPLAIN_ENABLE', False)
+RF_EXPLAIN_MODE = os.environ.get('RF_EXPLAIN_MODE', 'final').strip().lower()
+RF_EXPLAIN_HOLDOUT_RATIO = float(os.environ.get('RF_EXPLAIN_HOLDOUT_RATIO', 0.3))
+RF_EXPLAIN_PERM_REPEATS = int(os.environ.get('RF_EXPLAIN_PERM_REPEATS', 10))
+RF_EXPLAIN_TOPK = int(os.environ.get('RF_EXPLAIN_TOPK', 20))
+RF_EXPLAIN_MIN_SAMPLES = int(os.environ.get('RF_EXPLAIN_MIN_SAMPLES', 20))
+RF_EXPLAIN_COUNTERFACTUAL_ENABLE = _env_flag('RF_EXPLAIN_COUNTERFACTUAL_ENABLE', True)
+RF_EXPLAIN_COUNTERFACTUAL_TOPK = int(os.environ.get('RF_EXPLAIN_COUNTERFACTUAL_TOPK', 5))
+RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS = int(os.environ.get('RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS', 50))
+RF_EXPLAIN_COUNTERFACTUAL_SPLIT = os.environ.get(
+    'RF_EXPLAIN_COUNTERFACTUAL_SPLIT',
+    'selection',
+).strip().lower()
 
 
 # LLVM New Pass Manager 作用域合法化策略
@@ -177,6 +201,4 @@ RUNTIME_MAX_VARIANCE_PCT = float(os.environ.get('RUNTIME_MAX_VARIANCE_PCT', 10.0
 RUNTIME_EVAL_MAX_VARIANCE_PCT = float(os.environ.get('RUNTIME_EVAL_MAX_VARIANCE_PCT', 15.0))
 RUNTIME_MAX_INNER_REPEATS = int(os.environ.get('RUNTIME_MAX_INNER_REPEATS', 64))
 RUNTIME_REQUIRED_ROWS = int(os.environ.get('RUNTIME_REQUIRED_ROWS', 0))
-REBUILD_RUNTIME_MANIFEST = os.environ.get('REBUILD_RUNTIME_MANIFEST', '').strip().lower() in {
-    '1', 'true', 'yes', 'on'
-}
+REBUILD_RUNTIME_MANIFEST = _env_flag('REBUILD_RUNTIME_MANIFEST', False)

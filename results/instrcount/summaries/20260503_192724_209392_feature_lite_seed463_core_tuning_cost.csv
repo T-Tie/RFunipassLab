@@ -1,0 +1,2 @@
+method,tuning_type,program_count,target_program_count,total_tuning_time_s,ml_time_s,candidate_sequence_count,objective_eval_count,target_feedback_eval_count,run_index,objective_kind,loop_nesting_policy,iters,seed_topk,search_pool_programs,test_programs
+rfunipass,universal_offline,300,4717,1746.65929,274.049933,274,70900,0,0,instrcount,wrap,100,300,300,4717

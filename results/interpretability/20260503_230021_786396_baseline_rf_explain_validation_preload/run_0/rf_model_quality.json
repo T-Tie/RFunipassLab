@@ -1,0 +1,28 @@
+{
+  "analysis_id": "20260503_230021_786396_baseline_rf_explain_validation_preload_run0",
+  "quality": {
+    "train": {
+      "count": 3,
+      "rmse": 0.012690198353115013,
+      "mae": 0.011978021978022039,
+      "r2": 0.9010000000000001,
+      "pearson": 0.9971764649527378
+    },
+    "holdout": {
+      "count": 2,
+      "rmse": 0.27809730658881565,
+      "mae": 0.21862671564352226,
+      "r2": -1.8397094928271862,
+      "pearson": -1.0
+    }
+  },
+  "train_indices": [
+    1,
+    0,
+    4
+  ],
+  "holdout_indices": [
+    3,
+    2
+  ]
+}

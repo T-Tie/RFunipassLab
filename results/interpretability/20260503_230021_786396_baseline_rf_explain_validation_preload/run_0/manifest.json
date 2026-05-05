@@ -1,0 +1,37 @@
+{
+  "enabled": true,
+  "status": "ok",
+  "analysis_id": "20260503_230021_786396_baseline_rf_explain_validation_preload_run0",
+  "run_id": "20260503_230021_786396_baseline_rf_explain_validation_preload",
+  "run_index": 0,
+  "mode": "final",
+  "feature_mode": "lite",
+  "objective_kind": "instrcount",
+  "objective_baseline": "oz",
+  "loop_nesting_policy": "wrap",
+  "llvm_tools_path": "/root/llvm/llvm-project-21/build/bin",
+  "experiment_seed": 456,
+  "split_seed": 456,
+  "evaluated_sequence_count": 5,
+  "feature_count": 31,
+  "holdout_ratio": 0.3,
+  "permutation_repeats": 2,
+  "counterfactual_enabled": true,
+  "counterfactual_topk": 2,
+  "counterfactual_max_evals": 2,
+  "output_dir": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0",
+  "train_indices": [
+    1,
+    0,
+    4
+  ],
+  "holdout_indices": [
+    3,
+    2
+  ],
+  "model_quality_path": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0/rf_model_quality.json",
+  "feature_importance_csv_path": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0/rf_feature_importance.csv",
+  "group_importance_csv_path": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0/rf_group_importance.csv",
+  "counterfactual_csv_path": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0/rf_counterfactual.csv",
+  "report_md_path": "/root/exp/RFunipassLab/results/interpretability/20260503_230021_786396_baseline_rf_explain_validation_preload/run_0/REPORT.md"
+}
