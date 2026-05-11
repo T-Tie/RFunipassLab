@@ -1,0 +1,72 @@
+Run ID: 20260507_180222_333617_smoke_timeout_compilergym_mixed_seed456_split456
+Suites: cbench, chstone
+Manifest: /root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json
+Train pool: 4, test: 19
+Train quotas: {'cbench': 2, 'chstone': 2}
+Seed sequences: 3 (singletons)
+Using timeout-aware instruction backend: 20.0s per opt subprocess
+Preparing objective backend for 23 unique programs...
+============================================================
+目标类型:      instrcount
+目标基准:      -Oz
+基准指标:      -Oz 基准指令数
+优化指标:      归一化指令数
+输入程序数:    4
+输入次优序列数: 3
+测试程序数:    19
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  120
+Loop 合法化策略: wrap
+实验种子:      456
+划分种子:      456
+特征模式:      lite
+RF 特征维度:   31
+词表: ['module(attributor)', 'module(scc-oz-module-inliner)', 'cgscc(attributor-cgscc)', 'function(dce)', 'function(dse)', 'function(gvn-hoist)', 'function(gvn-sink)', 'function(instsimplify)', 'function(jump-threading)', 'function(lower-switch)', 'function(mem2reg)', 'function(memcpyopt)', 'function(newgvn)', 'function(reassociate)', 'loop(loop-simplifycfg)', 'module(elim-avail-extern)', 'module(globalopt)', 'module(inferattrs)', 'module(iroutliner)']
+多目标权重:    mean=1.0, worsen=0.15, highvar=0.0
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 1
+  validation 程序数:   3
+  split_signature(search_train): 30910a2dd0450adaf8a00246f5d3138b880357f1
+  split_signature(validation):   c24e6212f4177604c4589a429e6d84ecfc062228
+  split_signature(test):         23781f0ae436fbb6cac0643751b9fbd7267dd520
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 3 条）...
+
+[Step 4] 开始贝叶斯优化（1 轮）...
+GA search time: 0.45s, candidates: 266
+  [iter   1/1] search_obj=1.1506  search_best=1.1506  validation_best=1.1026  EI=0.0430  rnum=256.0  len=3  syn_rate=0.01  mean=1.0006  worsen=100.00%  highvar=0.00%
+
+[Step 5] 按 validation 选择最终通用序列...
+  选择结果:
+    search_train_obj=1.1506, search_train_mean=1.0006, search_train_worsen=100.00%, search_train_highvar=0.00%
+    validation_obj=1.1026, validation_mean=1.0026, validation_worsen=66.67%, validation_highvar=0.00%
+
+[Step 6] 在 validation 上执行消融后处理...
+
+[Ablation-validation] 初始序列长度: 3, objective: 1.1026, mean_norm: 1.0026, worsen_rate: 66.67%
+  移除 [2] function(dse): objective 1.1026, mean_norm 1.0026, worsen_rate 66.67% (保留移除)
+  移除 [1] module(scc-oz-module-inliner): objective 2.3370 > 1.1026 (恢复)
+  移除 [0] module(inferattrs): objective 1.1073 > 1.1026 (恢复)
+[Ablation-validation] 最终序列长度: 2, objective: 1.1026, mean_norm: 1.0026, worsen_rate: 66.67%, 移除了 1 个 pass
+  消融有效: 3 → 2 passes, validation_objective: 1.1026 → 1.1026
+
+最终通用 pass 序列（effective=2 个顶层 pass, raw=2 个 pass, syn_rate(raw)=0.01）:
+  module(inferattrs) → module(scc-oz-module-inliner)
+  search_train_obj=1.1506, search_train_mean=1.0006, search_train_worsen=100.00%, search_train_highvar=0.00%
+  validation_obj=1.1026, validation_mean=1.0026, validation_worsen=66.67%, validation_highvar=0.00%
+  test_obj=1.0738, test_mean=1.0185, test_worsen=36.84%, test_highvar=0.00%
+
+Top-1 最佳序列（按 validation 多目标 objective 升序）:
+  #1: validation_obj=1.1026, validation_mean=1.0026, validation_worsen=66.67%, validation_highvar=0.00%, train_obj=1.1506, train_mean=1.0006, train_highvar=0.00%, len=3, syn_rate=0.01, test_obj=1.0737, test_mean=1.0184, test_worsen=36.84%, test_highvar=0.00%
+     module(inferattrs) → module(scc-oz-module-inliner) → function(dse)
+
+[Post] Computing per-suite test metrics for final sequence...
+  cbench: objective=1.105380, mean_norm=1.038713, median_norm=1.000000, improved=1/9 (11.11%), worsened=4/9 (44.44%), invalid=0, timeout=0
+  chstone: objective=1.045310, mean_norm=1.000310, median_norm=1.000000, improved=1/10 (10.00%), worsened=3/10 (30.00%), invalid=0, timeout=0

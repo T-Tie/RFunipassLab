@@ -1,0 +1,137 @@
+{
+  "run_id": "20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456",
+  "created_at": "2026-05-07T20:30:18",
+  "command": "/root/miniconda3/bin/python3 run_compilergym_mixed_tuning.py --manifest /root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json --train-pool 300 --val-ratio 0.3333333333333333 --seed 456 --split-seed 456 --iters 100 --ga-pop 200 --ga-gen 5 --seed-seq-mode singletons --instrcount-timeout 60 --tag compilergym_mixed_main_timeout60 --results-root results/compilergym_mixed",
+  "manifest_path": "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json",
+  "synergy_csv": "data/Step3_EnumeratedPairs.csv",
+  "suite_order": [
+    "cbench",
+    "blas",
+    "opencv",
+    "mibench",
+    "chstone",
+    "tensorflow",
+    "npb"
+  ],
+  "suite_counts": {
+    "cbench": 11,
+    "blas": 162,
+    "opencv": 181,
+    "mibench": 40,
+    "chstone": 12,
+    "tensorflow": 505,
+    "npb": 121
+  },
+  "train_pool_target": 300,
+  "train_pool_quotas": {
+    "cbench": 3,
+    "blas": 47,
+    "opencv": 53,
+    "mibench": 12,
+    "chstone": 3,
+    "tensorflow": 147,
+    "npb": 35
+  },
+  "train_pool_counts_by_suite": {
+    "tensorflow": 147,
+    "npb": 35,
+    "opencv": 53,
+    "blas": 47,
+    "mibench": 12,
+    "cbench": 3,
+    "chstone": 3
+  },
+  "test_counts_by_suite": {
+    "blas": 115,
+    "cbench": 8,
+    "chstone": 9,
+    "mibench": 28,
+    "npb": 86,
+    "opencv": 128,
+    "tensorflow": 358
+  },
+  "search_train_counts_by_suite": {
+    "tensorflow": 100,
+    "opencv": 32,
+    "blas": 36,
+    "mibench": 10,
+    "npb": 19,
+    "chstone": 2,
+    "cbench": 1
+  },
+  "validation_counts_by_suite": {
+    "npb": 16,
+    "tensorflow": 47,
+    "opencv": 21,
+    "blas": 11,
+    "mibench": 2,
+    "cbench": 2,
+    "chstone": 1
+  },
+  "train_pool_signature": "0b2ab573d676da644756fed2425ed67f56f3d1db",
+  "search_train_signature": "e69cc42435e65d3211e48ee5ac8d43cab540f83b",
+  "validation_signature": "f321e3d496d37c262a9e891f50c438f47e7e092d",
+  "test_signature": "e884fd6c4c2163ea569d6c2c3f2d498bb53915fc",
+  "env": {
+    "EXPERIMENT_SEED": "456",
+    "SPLIT_SEED": "456",
+    "OBJECTIVE_KIND": "instrcount",
+    "OBJECTIVE_BASELINE": "oz",
+    "LOOP_NESTING_POLICY": "wrap",
+    "FEATURE_MODE": "lite",
+    "VAL_RATIO": "0.3333333333333333",
+    "MIN_VAL_PROGRAMS": "5",
+    "ITERS": "100",
+    "GA_POP": "200",
+    "GA_GEN": "5",
+    "MAX_SEQ_LEN": "120",
+    "RUNS": "1",
+    "SEED_TOPK": "0",
+    "LLVM_TOOLS_PATH": "/root/llvm/llvm-project-21/build/bin",
+    "RF_EXPLAIN_ENABLE": "0",
+    "RUN_ID": "20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456"
+  },
+  "instrcount_timeout": 60.0,
+  "seed_sequence_mode": "singletons",
+  "seed_sequence_count": 19,
+  "seed_sequences_preview": [
+    [
+      "module(attributor)"
+    ],
+    [
+      "module(scc-oz-module-inliner)"
+    ],
+    [
+      "cgscc(attributor-cgscc)"
+    ],
+    [
+      "function(dse)"
+    ],
+    [
+      "function(jump-threading)"
+    ],
+    [
+      "function(mem2reg)"
+    ],
+    [
+      "function(memcpyopt)"
+    ],
+    [
+      "function(newgvn)"
+    ],
+    [
+      "loop(loop-simplifycfg)"
+    ],
+    [
+      "module(iroutliner)"
+    ]
+  ],
+  "runner_wall_time_s": 8816.993881432107,
+  "outputs": {
+    "summary_json": "/root/exp/RFunipassLab/results/compilergym_mixed/summaries/20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456.json",
+    "manifest_json": "/root/exp/RFunipassLab/results/compilergym_mixed/manifests/20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456_manifest.json",
+    "split_csv": "/root/exp/RFunipassLab/results/compilergym_mixed/splits/20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456_split.csv",
+    "report_md": "/root/exp/RFunipassLab/results/compilergym_mixed/reports/20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456_report.md",
+    "log": "/root/exp/RFunipassLab/results/compilergym_mixed/logs/20260507_180321_193898_compilergym_mixed_main_timeout60_seed456_split456.log"
+  }
+}

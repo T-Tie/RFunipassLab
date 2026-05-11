@@ -1,0 +1,93 @@
+{
+  "tag": "poj_10seed_full_targets_20260507",
+  "kind": "rfunipass_cost_parity_targets",
+  "batch_manifest_path": "results/manifests/20260505_021422_538199_feature_lite_multiseed_rf_explain_formal_10seeds_20260505_021421.json",
+  "batch_id": "20260505_021422_538199_feature_lite_multiseed_rf_explain_formal_10seeds_20260505_021421",
+  "output_dir": "results/cost_parity/poj_10seed_full_targets_20260507",
+  "target_limit": null,
+  "seed_count": 10,
+  "seeds": [
+    456,
+    457,
+    458,
+    459,
+    460,
+    461,
+    462,
+    463,
+    464,
+    465
+  ],
+  "targets": [
+    {
+      "seed": 456,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed456_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed456_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 457,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed457_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed457_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 458,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed458_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed458_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 459,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed459_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed459_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 460,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed460_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed460_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 461,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed461_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed461_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 462,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed462_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed462_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 463,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed463_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed463_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 464,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed464_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed464_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    },
+    {
+      "seed": 465,
+      "target_csv_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed465_test_programs.csv",
+      "target_json_path": "results/cost_parity/poj_10seed_full_targets_20260507/seed465_rfunipass_target.json",
+      "target_program_count": 50,
+      "metrics_scope": "full_test"
+    }
+  ]
+}

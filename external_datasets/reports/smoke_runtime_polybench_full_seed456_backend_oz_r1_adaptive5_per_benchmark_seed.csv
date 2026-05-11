@@ -1,0 +1,3 @@
+seed,suite,benchmark,metric,matched_baseline,universal,oz,none,ratio_vs_oz,ratio_vs_none,censored,timeout,speedup_vs_oz,status_vs_baseline
+456,polybench_full,2mm,polybench_seconds,oz,11.700485,2.340097,5.787311,5.0,2.021748096827698,True,True,0.2,timeout
+456,polybench_full,gemm,polybench_seconds,oz,6.07824,1.215648,3.292183,5.0,1.8462643176275437,True,True,0.2,timeout

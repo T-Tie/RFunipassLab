@@ -1,0 +1,2 @@
+metric,matched_baseline,seed_count,program_count_per_seed,geomean_ratio_vs_oz_mean,geomean_ratio_vs_oz_std,geomean_ratio_vs_oz_ci95,speedup_vs_oz_mean,speedup_vs_oz_std,speedup_vs_oz_ci95,worsen_rate_mean,worsen_rate_std,worsen_rate_ci95,improved_total,tied_total,worsened_total,timeout_total
+polybench_seconds,oz,1,2,4.999999999999999,0.0,0.0,0.20000000000000004,0.0,0.0,1.0,0.0,0.0,0,0,2,2

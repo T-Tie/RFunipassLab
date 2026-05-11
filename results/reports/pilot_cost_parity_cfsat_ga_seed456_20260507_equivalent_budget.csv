@@ -1,0 +1,2 @@
+strategy,seed,matched,match_field,equivalent_budget,target_program_count,perprogram_eval_count_to_match,rfunipass_eval_count,eval_ratio_vs_rfunipass,perprogram_objective,rfunipass_objective,perprogram_mean_norm,rfunipass_mean_norm,perprogram_worsen_rate,rfunipass_worsen_rate
+cfsat_ga,456,False,matched_by_objective,>8,50,400.0,40600.0,0.009852216748768473,0.7758054929708141,0.7693366431157349,0.7608054929708141,0.7453366431157349,0.1,0.16

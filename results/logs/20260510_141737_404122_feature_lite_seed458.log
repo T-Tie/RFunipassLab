@@ -1,0 +1,93 @@
+# run_id: 20260510_141737_404122_feature_lite_seed458
+# name: feature_lite
+# group: feature_ablation
+# description: 切换到 Lite 特征编码，保留其余搜索流程不变。
+# changed: FEATURE_MODE=lite, GA_GEN=5, GA_POP=200, ITERS=100, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5
+# result_json: /root/exp/RFunipassLab/results/instrcount/summaries/20260510_141737_404122_feature_lite_seed458.json
+# started_at: 2026-05-10T14:17:37
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   BINARY_SIZE_METRIC=stripped_file_bytes
+#   BINARY_SIZE_REPORT_METRICS=text_bytes,data_bytes,bss_bytes,dec_bytes
+#   DECAY=0.5
+#   EXPERIMENT_SEED=458
+#   FEATURE_MODE=lite
+#   GA_ELITE=0.1
+#   GA_GEN=5
+#   GA_MUT=0.8
+#   GA_POP=200
+#   GA_TOUR=3
+#   ITERS=100
+#   LOOP_NESTING_POLICY=wrap
+#   MAX_SEQ_LEN=120
+#   MIN_VAL_PROGRAMS=5
+#   OBJECTIVE_BASELINE=oz
+#   OBJECTIVE_KIND=instrcount
+#   OBJ_HIGHVAR_W=0.0
+#   OBJ_WORSEN_W=0.60
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=auto
+#   RF_EXPLAIN_COUNTERFACTUAL_ENABLE=1
+#   RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS=50
+#   RF_EXPLAIN_COUNTERFACTUAL_SPLIT=selection
+#   RF_EXPLAIN_COUNTERFACTUAL_TOPK=5
+#   RF_EXPLAIN_ENABLE=0
+#   RF_EXPLAIN_HOLDOUT_RATIO=0.3
+#   RF_EXPLAIN_MIN_SAMPLES=20
+#   RF_EXPLAIN_MODE=final
+#   RF_EXPLAIN_PERM_REPEATS=10
+#   RF_EXPLAIN_TOPK=20
+#   RNUM=256
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=0
+#   SPLIT_SEED=458
+#   TEST_TOPK=50
+#   TRAIN_TOPK=200
+#   VAL_RATIO=0.5
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       200
+Loaded initial seed seqs:    79
+Loaded test programs:        50
+Objective kind:              instrcount
+Program pool kind:           tuning
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'function(mem2reg)', 'function(instsimplify)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(gvn-hoist)', 'function(dce)', 'function(jump-threading)', 'module(globalopt)', 'module(attributor)', 'cgscc(attributor-cgscc)', 'function(gvn-sink)', 'module(scc-oz-module-inliner)', 'function(dse)', 'function(newgvn)', 'module(inferattrs)', 'loop(loop-simplifycfg)', 'function(lower-switch)']
+Synergy edges: 176
+Self-loop passes: {'cgscc(attributor-cgscc)', 'function(newgvn)', 'module(attributor)'}
+Traceback (most recent call last):
+  File "/root/exp/RFunipassLab/boca.py", line 25, in <module>
+    raise SystemExit(cli_main())
+                     ~~~~~~~~^^
+  File "/root/exp/RFunipassLab/boca_exp/runner.py", line 1052, in cli_main
+    prepare_objective_backend(_unique_ordered(list(programs) + list(test_programs)))
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/objective.py", line 62, in prepare_objective_backend
+    get_objective_backend().prepare(programs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 51, in prepare
+    _ = self._baseline(program)
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 133, in _baseline
+    value = self._count_program(program, [self.baseline_pipeline])
+  File "/root/exp/RFunipassLab/boca_exp/objective_instr.py", line 146, in _count_program
+    value = int(get_instrcount(ir_text, list(pass_sequence), self.llvm_tools_path))
+                ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 405, in get_instrcount
+    return get_inst_count(optimized_ir)
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 44, in get_inst_count
+    autophase_lib = _load_autophase_lib()
+  File "/root/exp/RFunipassLab/boca_exp/runtime.py", line 37, in _load_autophase_lib
+    _AUTOPHASE_LIB = ctypes.CDLL(str(AUTOPHASE_LIB_PATH))
+  File "/root/miniconda3/lib/python3.13/ctypes/__init__.py", line 390, in __init__
+    self._handle = _dlopen(self._name, mode)
+                   ~~~~~~~^^^^^^^^^^^^^^^^^^
+OSError: /root/miniconda3/bin/../lib/libstdc++.so.6: version `GLIBCXX_3.4.30' not found (required by /root/exp/RFunipass/lib/libAutophase_21_1_8.so)

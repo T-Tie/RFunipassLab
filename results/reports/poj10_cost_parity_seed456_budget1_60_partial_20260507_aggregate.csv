@@ -1,0 +1,4 @@
+strategy,seed_count,matched_seed_count,equivalent_budget_median,perprogram_eval_count_mean,perprogram_eval_count_ci95_low,perprogram_eval_count_ci95_high,rfunipass_eval_count_mean,eval_ratio_mean,eval_ratio_ci95_low,eval_ratio_ci95_high,perprogram_objective_mean
+cfsat_ga,1,1,16,800.0,800.0,800.0,40600.0,0.019704433497536946,0.019704433497536946,0.019704433497536946,0.7262459278379039
+ga_bitvector,1,0,,3000.0,3000.0,3000.0,40600.0,0.07389162561576355,0.07389162561576355,0.07389162561576355,0.9593255291186562
+rio_random,1,0,,3000.0,3000.0,3000.0,40600.0,0.07389162561576355,0.07389162561576355,0.07389162561576355,0.9601396006899953

@@ -1,0 +1,492 @@
+# run_id: 20260508_004922_696663_feature_lite_seed456
+# name: feature_lite
+# group: feature_ablation
+# description: 切换到 Lite 特征编码，保留其余搜索流程不变。
+# changed: FEATURE_MODE=lite, GA_GEN=5, GA_POP=200, ITERS=100, MAX_SEQ_LEN=120, MIN_VAL_PROGRAMS=5, SEED_TOPK=0, TEST_TOPK=50, TRAIN_TOPK=200, VAL_RATIO=0.5
+# result_json: /root/exp/RFunipassLab/results/instrcount/summaries/20260508_004922_696663_feature_lite_seed456.json
+# started_at: 2026-05-08T00:49:22
+# control_env:
+#   BACKEND_OPT_LEVEL=-O0
+#   BINARY_SIZE_METRIC=stripped_file_bytes
+#   BINARY_SIZE_REPORT_METRICS=text_bytes,data_bytes,bss_bytes,dec_bytes
+#   DECAY=0.5
+#   EXPERIMENT_SEED=456
+#   FEATURE_MODE=lite
+#   GA_ELITE=0.1
+#   GA_GEN=5
+#   GA_MUT=0.8
+#   GA_POP=200
+#   GA_TOUR=3
+#   ITERS=100
+#   LOOP_NESTING_POLICY=wrap
+#   MAX_SEQ_LEN=120
+#   MIN_VAL_PROGRAMS=5
+#   OBJECTIVE_BASELINE=oz
+#   OBJECTIVE_KIND=instrcount
+#   OBJ_HIGHVAR_W=0.0
+#   OBJ_WORSEN_W=0.10
+#   OFFSET=20
+#   PROGRAM_POOL_KIND=auto
+#   RF_EXPLAIN_COUNTERFACTUAL_ENABLE=1
+#   RF_EXPLAIN_COUNTERFACTUAL_MAX_EVALS=50
+#   RF_EXPLAIN_COUNTERFACTUAL_SPLIT=selection
+#   RF_EXPLAIN_COUNTERFACTUAL_TOPK=5
+#   RF_EXPLAIN_ENABLE=0
+#   RF_EXPLAIN_HOLDOUT_RATIO=0.3
+#   RF_EXPLAIN_MIN_SAMPLES=20
+#   RF_EXPLAIN_MODE=final
+#   RF_EXPLAIN_PERM_REPEATS=10
+#   RF_EXPLAIN_TOPK=20
+#   RNUM=256
+#   RUNS=1
+#   RUNTIME_EVAL_MAX_VARIANCE_PCT=15.0
+#   RUNTIME_MAX_INNER_REPEATS=64
+#   RUNTIME_MAX_VARIANCE_PCT=10.0
+#   RUNTIME_REQUIRED_ROWS=0
+#   RUNTIME_SAMPLES=5
+#   RUNTIME_TARGET_SAMPLE_MS=30.0
+#   RUNTIME_TIMEOUT_SEC=2.0
+#   SCALE=10
+#   SEED_TOPK=0
+#   SPLIT_SEED=456
+#   TEST_TOPK=50
+#   TRAIN_TOPK=200
+#   VAL_RATIO=0.5
+
+Loading train/test rows from: /root/exp/RFunipassLab/data/tuning_results.csv
+Loaded train programs:       200
+Loaded initial seed seqs:    86
+Loaded test programs:        50
+Objective kind:              instrcount
+Program pool kind:           tuning
+
+Loading synergy graph from: /root/exp/RFunipassLab/data/Step3_EnumeratedPairs.csv
+All passes (19): ['module(elim-avail-extern)', 'module(globalopt)', 'cgscc(attributor-cgscc)', 'module(scc-oz-module-inliner)', 'function(mem2reg)', 'function(instsimplify)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(gvn-hoist)', 'function(dce)', 'function(jump-threading)', 'module(attributor)', 'function(dse)', 'function(newgvn)', 'function(gvn-sink)', 'module(inferattrs)', 'loop(loop-simplifycfg)', 'function(lower-switch)']
+Synergy edges: 176
+Self-loop passes: {'module(attributor)', 'cgscc(attributor-cgscc)', 'function(newgvn)'}
+
+============================================================
+实验轮次 1 / 1
+============================================================
+============================================================
+目标类型:      instrcount
+目标基准:      -Oz
+基准指标:      -Oz 基准指令数
+优化指标:      归一化指令数
+输入程序数:    200
+输入次优序列数: 86
+测试程序数:    50
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  120
+Loop 合法化策略: wrap
+实验种子:      456
+划分种子:      456
+特征模式:      lite
+RF 特征维度:   31
+词表: ['module(elim-avail-extern)', 'module(globalopt)', 'cgscc(attributor-cgscc)', 'module(scc-oz-module-inliner)', 'function(mem2reg)', 'function(instsimplify)', 'module(iroutliner)', 'function(reassociate)', 'function(memcpyopt)', 'function(gvn-hoist)', 'function(dce)', 'function(jump-threading)', 'module(attributor)', 'function(dse)', 'function(newgvn)', 'function(gvn-sink)', 'module(inferattrs)', 'loop(loop-simplifycfg)', 'function(lower-switch)']
+多目标权重:    mean=1.0, worsen=0.1, highvar=0.0
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 100
+  validation 程序数:   100
+  split_signature(search_train): 3ad90166bf9bd1af93680f15067615fd4f341481
+  split_signature(validation):   bd5a000b3f740ace9576f4dfa0d99ceaf5cd6247
+  split_signature(test):         42411d4d4c9d084430c688042fea453b6b352eea
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 86 条）...
+
+[Step 4] 开始贝叶斯优化（100 轮）...
+GA search time: 11.22s, candidates: 368
+  [iter   1/100] search_obj=0.8189  search_best=0.8088  validation_best=0.8077  EI=0.0122  rnum=168.4  len=19  syn_rate=0.36  mean=0.8109  worsen=8.00%  highvar=0.00%
+GA search time: 11.84s, candidates: 366
+  [iter   2/100] search_obj=0.9971  search_best=0.8088  validation_best=0.8077  EI=0.0140  rnum=166.3  len=24  syn_rate=0.40  mean=0.9781  worsen=19.00%  highvar=0.00%
+GA search time: 11.58s, candidates: 364
+  [iter   3/100] search_obj=0.8088  search_best=0.8088  validation_best=0.8077  EI=0.0126  rnum=164.2  len=20  syn_rate=0.38  mean=0.7998  worsen=9.00%  highvar=0.00%
+GA search time: 17.74s, candidates: 362
+  [iter   4/100] search_obj=0.8047  search_best=0.8047  validation_best=0.8077  EI=0.0157  rnum=162.0  len=26  syn_rate=0.41  mean=0.7957  worsen=9.00%  highvar=0.00%
+GA search time: 14.05s, candidates: 359
+  [iter   5/100] search_obj=0.9686  search_best=0.8047  validation_best=0.8077  EI=0.0174  rnum=159.9  len=22  syn_rate=0.33  mean=0.9316  worsen=37.00%  highvar=0.00%
+GA search time: 12.77s, candidates: 357
+  [iter   6/100] search_obj=0.7582  search_best=0.7582  validation_best=0.7935  EI=0.0129  rnum=157.7  len=37  syn_rate=0.51  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 18.72s, candidates: 355
+  [iter   7/100] search_obj=0.7582  search_best=0.7582  validation_best=0.7935  EI=0.0118  rnum=155.6  len=34  syn_rate=0.51  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 20.48s, candidates: 353
+  [iter   8/100] search_obj=0.7579  search_best=0.7579  validation_best=0.7920  EI=0.0199  rnum=153.4  len=72  syn_rate=0.61  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 17.76s, candidates: 351
+  [iter   9/100] search_obj=0.8150  search_best=0.7579  validation_best=0.7920  EI=0.0180  rnum=151.3  len=36  syn_rate=0.52  mean=0.8070  worsen=8.00%  highvar=0.00%
+GA search time: 21.60s, candidates: 349
+  [iter  10/100] search_obj=1.2280  search_best=0.7579  validation_best=0.7920  EI=0.0204  rnum=149.1  len=104  syn_rate=0.58  mean=1.1460  worsen=82.00%  highvar=0.00%
+GA search time: 21.93s, candidates: 346
+  [iter  11/100] search_obj=0.7579  search_best=0.7579  validation_best=0.7920  EI=0.0238  rnum=147.0  len=73  syn_rate=0.61  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 22.31s, candidates: 344
+  [iter  12/100] search_obj=1.1950  search_best=0.7579  validation_best=0.7920  EI=0.0315  rnum=144.8  len=120  syn_rate=0.70  mean=1.1140  worsen=81.00%  highvar=0.00%
+GA search time: 19.72s, candidates: 342
+  [iter  13/100] search_obj=0.8793  search_best=0.7579  validation_best=0.7920  EI=0.0312  rnum=142.7  len=119  syn_rate=0.74  mean=0.8663  worsen=13.00%  highvar=0.00%
+GA search time: 18.41s, candidates: 340
+  [iter  14/100] search_obj=0.9456  search_best=0.7579  validation_best=0.7920  EI=0.0265  rnum=140.5  len=120  syn_rate=0.61  mean=0.9336  worsen=12.00%  highvar=0.00%
+GA search time: 19.09s, candidates: 338
+  [iter  15/100] search_obj=1.2001  search_best=0.7579  validation_best=0.7920  EI=0.0217  rnum=138.4  len=92  syn_rate=0.53  mean=1.1181  worsen=82.00%  highvar=0.00%
+GA search time: 13.55s, candidates: 336
+  [iter  16/100] search_obj=0.7568  search_best=0.7568  validation_best=0.7920  EI=0.0266  rnum=136.3  len=86  syn_rate=0.61  mean=0.7498  worsen=7.00%  highvar=0.00%
+GA search time: 13.94s, candidates: 334
+  [iter  17/100] search_obj=1.0624  search_best=0.7568  validation_best=0.7920  EI=0.0294  rnum=134.2  len=86  syn_rate=0.43  mean=1.0424  worsen=20.00%  highvar=0.00%
+GA search time: 13.12s, candidates: 332
+  [iter  18/100] search_obj=0.7582  search_best=0.7568  validation_best=0.7920  EI=0.0244  rnum=132.1  len=38  syn_rate=0.52  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 13.59s, candidates: 329
+  [iter  19/100] search_obj=1.0575  search_best=0.7568  validation_best=0.7920  EI=0.0268  rnum=130.0  len=90  syn_rate=0.61  mean=1.0385  worsen=19.00%  highvar=0.00%
+GA search time: 12.31s, candidates: 327
+  [iter  20/100] search_obj=0.7717  search_best=0.7568  validation_best=0.7920  EI=0.0251  rnum=127.9  len=85  syn_rate=0.64  mean=0.7627  worsen=9.00%  highvar=0.00%
+GA search time: 12.60s, candidates: 325
+  [iter  21/100] search_obj=0.8420  search_best=0.7568  validation_best=0.7920  EI=0.0243  rnum=125.8  len=65  syn_rate=0.71  mean=0.8310  worsen=11.00%  highvar=0.00%
+GA search time: 13.43s, candidates: 323
+  [iter  22/100] search_obj=1.0992  search_best=0.7568  validation_best=0.7920  EI=0.0255  rnum=123.7  len=82  syn_rate=0.56  mean=1.0732  worsen=26.00%  highvar=0.00%
+GA search time: 12.78s, candidates: 321
+  [iter  23/100] search_obj=1.1244  search_best=0.7568  validation_best=0.7920  EI=0.0251  rnum=121.6  len=74  syn_rate=0.50  mean=1.0774  worsen=47.00%  highvar=0.00%
+GA search time: 11.61s, candidates: 319
+  [iter  24/100] search_obj=0.8144  search_best=0.7568  validation_best=0.7920  EI=0.0276  rnum=119.6  len=37  syn_rate=0.52  mean=0.8064  worsen=8.00%  highvar=0.00%
+GA search time: 11.03s, candidates: 317
+  [iter  25/100] search_obj=0.7581  search_best=0.7568  validation_best=0.7905  EI=0.0273  rnum=117.5  len=79  syn_rate=0.62  mean=0.7511  worsen=7.00%  highvar=0.00%
+GA search time: 12.79s, candidates: 315
+  [iter  26/100] search_obj=0.7713  search_best=0.7568  validation_best=0.7905  EI=0.0247  rnum=115.5  len=48  syn_rate=0.61  mean=0.7623  worsen=9.00%  highvar=0.00%
+GA search time: 13.93s, candidates: 313
+  [iter  27/100] search_obj=0.7703  search_best=0.7568  validation_best=0.7905  EI=0.0230  rnum=113.5  len=86  syn_rate=0.76  mean=0.7613  worsen=9.00%  highvar=0.00%
+GA search time: 13.51s, candidates: 311
+  [iter  28/100] search_obj=0.9968  search_best=0.7568  validation_best=0.7905  EI=0.0276  rnum=111.5  len=86  syn_rate=0.61  mean=0.9778  worsen=19.00%  highvar=0.00%
+GA search time: 11.18s, candidates: 309
+  [iter  29/100] search_obj=0.8955  search_best=0.7568  validation_best=0.7905  EI=0.0214  rnum=109.5  len=42  syn_rate=0.52  mean=0.8815  worsen=14.00%  highvar=0.00%
+GA search time: 13.92s, candidates: 307
+  [iter  30/100] search_obj=0.8140  search_best=0.7568  validation_best=0.7905  EI=0.0231  rnum=107.6  len=74  syn_rate=0.61  mean=0.8060  worsen=8.00%  highvar=0.00%
+GA search time: 10.77s, candidates: 305
+  [iter  31/100] search_obj=0.9971  search_best=0.7568  validation_best=0.7905  EI=0.0231  rnum=105.6  len=66  syn_rate=0.59  mean=0.9781  worsen=19.00%  highvar=0.00%
+GA search time: 14.86s, candidates: 303
+  [iter  32/100] search_obj=0.7581  search_best=0.7568  validation_best=0.7905  EI=0.0189  rnum=103.7  len=80  syn_rate=0.62  mean=0.7511  worsen=7.00%  highvar=0.00%
+GA search time: 13.52s, candidates: 301
+  [iter  33/100] search_obj=0.7615  search_best=0.7568  validation_best=0.7896  EI=0.0224  rnum=101.7  len=79  syn_rate=0.84  mean=0.7545  worsen=7.00%  highvar=0.00%
+GA search time: 15.20s, candidates: 299
+  [iter  34/100] search_obj=1.2019  search_best=0.7568  validation_best=0.7896  EI=0.0212  rnum=99.8  len=79  syn_rate=0.63  mean=1.1199  worsen=82.00%  highvar=0.00%
+GA search time: 13.62s, candidates: 297
+  [iter  35/100] search_obj=0.7615  search_best=0.7568  validation_best=0.7896  EI=0.0272  rnum=97.9  len=80  syn_rate=0.84  mean=0.7545  worsen=7.00%  highvar=0.00%
+GA search time: 14.24s, candidates: 296
+  [iter  36/100] search_obj=0.9550  search_best=0.7568  validation_best=0.7896  EI=0.0256  rnum=96.1  len=73  syn_rate=0.93  mean=0.9400  worsen=15.00%  highvar=0.00%
+GA search time: 13.77s, candidates: 294
+  [iter  37/100] search_obj=0.7844  search_best=0.7568  validation_best=0.7469  EI=0.0232  rnum=94.2  len=95  syn_rate=0.84  mean=0.7764  worsen=8.00%  highvar=0.00%
+GA search time: 16.86s, candidates: 292
+  [iter  38/100] search_obj=0.8328  search_best=0.7568  validation_best=0.7469  EI=0.0229  rnum=92.4  len=88  syn_rate=0.84  mean=0.8218  worsen=11.00%  highvar=0.00%
+GA search time: 15.18s, candidates: 290
+  [iter  39/100] search_obj=0.7794  search_best=0.7568  validation_best=0.7469  EI=0.0232  rnum=90.5  len=91  syn_rate=0.84  mean=0.7694  worsen=10.00%  highvar=0.00%
+GA search time: 15.95s, candidates: 288
+  [iter  40/100] search_obj=0.9683  search_best=0.7568  validation_best=0.7469  EI=0.0242  rnum=88.7  len=86  syn_rate=0.85  mean=0.9543  worsen=14.00%  highvar=0.00%
+GA search time: 13.57s, candidates: 286
+  [iter  41/100] search_obj=0.9497  search_best=0.7568  validation_best=0.7469  EI=0.0200  rnum=87.0  len=75  syn_rate=0.84  mean=0.9347  worsen=15.00%  highvar=0.00%
+GA search time: 18.09s, candidates: 285
+  [iter  42/100] search_obj=1.0352  search_best=0.7568  validation_best=0.7469  EI=0.0247  rnum=85.2  len=80  syn_rate=0.52  mean=1.0092  worsen=26.00%  highvar=0.00%
+GA search time: 15.96s, candidates: 283
+  [iter  43/100] search_obj=0.7582  search_best=0.7568  validation_best=0.7469  EI=0.0232  rnum=83.5  len=77  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 13.11s, candidates: 281
+  [iter  44/100] search_obj=0.7583  search_best=0.7568  validation_best=0.7469  EI=0.0244  rnum=81.7  len=68  syn_rate=0.65  mean=0.7513  worsen=7.00%  highvar=0.00%
+GA search time: 15.11s, candidates: 280
+  [iter  45/100] search_obj=1.0197  search_best=0.7568  validation_best=0.7469  EI=0.0220  rnum=80.0  len=58  syn_rate=0.76  mean=1.0037  worsen=16.00%  highvar=0.00%
+GA search time: 13.66s, candidates: 278
+  [iter  46/100] search_obj=0.7568  search_best=0.7568  validation_best=0.7469  EI=0.0206  rnum=78.4  len=87  syn_rate=0.61  mean=0.7498  worsen=7.00%  highvar=0.00%
+GA search time: 17.19s, candidates: 276
+  [iter  47/100] search_obj=0.7717  search_best=0.7568  validation_best=0.7469  EI=0.0240  rnum=76.7  len=106  syn_rate=0.66  mean=0.7627  worsen=9.00%  highvar=0.00%
+GA search time: 18.33s, candidates: 275
+  [iter  48/100] search_obj=0.7580  search_best=0.7568  validation_best=0.7469  EI=0.0240  rnum=75.1  len=100  syn_rate=0.65  mean=0.7510  worsen=7.00%  highvar=0.00%
+GA search time: 17.00s, candidates: 273
+  [iter  49/100] search_obj=0.7409  search_best=0.7409  validation_best=0.7469  EI=0.0226  rnum=73.4  len=92  syn_rate=0.65  mean=0.7339  worsen=7.00%  highvar=0.00%
+GA search time: 18.23s, candidates: 271
+  [iter  50/100] search_obj=0.8362  search_best=0.7409  validation_best=0.7469  EI=0.0217  rnum=71.8  len=85  syn_rate=0.62  mean=0.8252  worsen=11.00%  highvar=0.00%
+GA search time: 19.06s, candidates: 270
+  [iter  51/100] search_obj=0.7522  search_best=0.7409  validation_best=0.7469  EI=0.0182  rnum=70.3  len=83  syn_rate=0.61  mean=0.7452  worsen=7.00%  highvar=0.00%
+GA search time: 18.91s, candidates: 268
+  [iter  52/100] search_obj=0.9079  search_best=0.7409  validation_best=0.7469  EI=0.0191  rnum=68.7  len=76  syn_rate=0.71  mean=0.8969  worsen=11.00%  highvar=0.00%
+GA search time: 18.98s, candidates: 267
+  [iter  53/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0207  rnum=67.2  len=78  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 20.50s, candidates: 265
+  [iter  54/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0196  rnum=65.7  len=82  syn_rate=0.66  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 16.01s, candidates: 264
+  [iter  55/100] search_obj=0.7577  search_best=0.7409  validation_best=0.7469  EI=0.0164  rnum=64.2  len=92  syn_rate=0.62  mean=0.7507  worsen=7.00%  highvar=0.00%
+GA search time: 18.10s, candidates: 262
+  [iter  56/100] search_obj=0.8326  search_best=0.7409  validation_best=0.7469  EI=0.0194  rnum=62.7  len=97  syn_rate=0.79  mean=0.8226  worsen=10.00%  highvar=0.00%
+GA search time: 16.54s, candidates: 261
+  [iter  57/100] search_obj=0.7579  search_best=0.7409  validation_best=0.7469  EI=0.0185  rnum=61.3  len=98  syn_rate=0.83  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 20.12s, candidates: 259
+  [iter  58/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0199  rnum=59.8  len=79  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 19.31s, candidates: 258
+  [iter  59/100] search_obj=0.7581  search_best=0.7409  validation_best=0.7469  EI=0.0183  rnum=58.4  len=82  syn_rate=0.62  mean=0.7511  worsen=7.00%  highvar=0.00%
+GA search time: 17.99s, candidates: 257
+  [iter  60/100] search_obj=0.7579  search_best=0.7409  validation_best=0.7469  EI=0.0202  rnum=57.0  len=100  syn_rate=0.83  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 18.15s, candidates: 255
+  [iter  61/100] search_obj=0.7579  search_best=0.7409  validation_best=0.7469  EI=0.0249  rnum=55.7  len=108  syn_rate=0.83  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 19.08s, candidates: 254
+  [iter  62/100] search_obj=0.7679  search_best=0.7409  validation_best=0.7469  EI=0.0254  rnum=54.3  len=102  syn_rate=0.84  mean=0.7579  worsen=10.00%  highvar=0.00%
+GA search time: 15.08s, candidates: 253
+  [iter  63/100] search_obj=1.0316  search_best=0.7409  validation_best=0.7469  EI=0.0241  rnum=53.0  len=89  syn_rate=0.66  mean=0.9816  worsen=50.00%  highvar=0.00%
+GA search time: 16.43s, candidates: 251
+  [iter  64/100] search_obj=0.7707  search_best=0.7409  validation_best=0.7469  EI=0.0167  rnum=51.7  len=120  syn_rate=0.88  mean=0.7617  worsen=9.00%  highvar=0.00%
+GA search time: 20.17s, candidates: 250
+  [iter  65/100] search_obj=0.7634  search_best=0.7409  validation_best=0.7469  EI=0.0190  rnum=50.5  len=102  syn_rate=0.66  mean=0.7574  worsen=6.00%  highvar=0.00%
+GA search time: 19.19s, candidates: 249
+  [iter  66/100] search_obj=0.7579  search_best=0.7409  validation_best=0.7469  EI=0.0196  rnum=49.2  len=104  syn_rate=0.83  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 19.82s, candidates: 247
+  [iter  67/100] search_obj=0.7679  search_best=0.7409  validation_best=0.7469  EI=0.0197  rnum=48.0  len=109  syn_rate=0.85  mean=0.7579  worsen=10.00%  highvar=0.00%
+GA search time: 20.03s, candidates: 246
+  [iter  68/100] search_obj=0.7717  search_best=0.7409  validation_best=0.7469  EI=0.0185  rnum=46.8  len=98  syn_rate=0.64  mean=0.7627  worsen=9.00%  highvar=0.00%
+GA search time: 17.85s, candidates: 245
+  [iter  69/100] search_obj=0.8311  search_best=0.7409  validation_best=0.7469  EI=0.0236  rnum=45.6  len=83  syn_rate=0.69  mean=0.8231  worsen=8.00%  highvar=0.00%
+GA search time: 18.71s, candidates: 244
+  [iter  70/100] search_obj=1.0150  search_best=0.7409  validation_best=0.7469  EI=0.0218  rnum=44.4  len=101  syn_rate=0.78  mean=0.9870  worsen=28.00%  highvar=0.00%
+GA search time: 18.72s, candidates: 243
+  [iter  71/100] search_obj=1.0363  search_best=0.7409  validation_best=0.7469  EI=0.0217  rnum=43.3  len=103  syn_rate=0.63  mean=0.9933  worsen=43.00%  highvar=0.00%
+GA search time: 19.27s, candidates: 242
+  [iter  72/100] search_obj=0.7580  search_best=0.7409  validation_best=0.7469  EI=0.0190  rnum=42.2  len=81  syn_rate=0.61  mean=0.7510  worsen=7.00%  highvar=0.00%
+GA search time: 17.01s, candidates: 241
+  [iter  73/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0164  rnum=41.1  len=96  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 17.44s, candidates: 239
+  [iter  74/100] search_obj=1.0990  search_best=0.7409  validation_best=0.7469  EI=0.0170  rnum=40.0  len=87  syn_rate=0.62  mean=1.0730  worsen=26.00%  highvar=0.00%
+GA search time: 18.82s, candidates: 238
+  [iter  75/100] search_obj=0.9919  search_best=0.7409  validation_best=0.7469  EI=0.0178  rnum=38.9  len=91  syn_rate=0.65  mean=0.9769  worsen=15.00%  highvar=0.00%
+GA search time: 19.35s, candidates: 237
+  [iter  76/100] search_obj=0.9856  search_best=0.7409  validation_best=0.7469  EI=0.0177  rnum=37.9  len=109  syn_rate=0.83  mean=0.9726  worsen=13.00%  highvar=0.00%
+GA search time: 17.21s, candidates: 236
+  [iter  77/100] search_obj=0.9986  search_best=0.7409  validation_best=0.7469  EI=0.0176  rnum=36.9  len=112  syn_rate=0.69  mean=0.9786  worsen=20.00%  highvar=0.00%
+GA search time: 15.82s, candidates: 235
+  [iter  78/100] search_obj=0.9876  search_best=0.7409  validation_best=0.7469  EI=0.0171  rnum=35.9  len=100  syn_rate=0.65  mean=0.9756  worsen=12.00%  highvar=0.00%
+GA search time: 17.32s, candidates: 234
+  [iter  79/100] search_obj=0.7487  search_best=0.7409  validation_best=0.7469  EI=0.0182  rnum=34.9  len=90  syn_rate=0.62  mean=0.7417  worsen=7.00%  highvar=0.00%
+GA search time: 16.26s, candidates: 233
+  [iter  80/100] search_obj=0.9433  search_best=0.7409  validation_best=0.7469  EI=0.0175  rnum=33.9  len=84  syn_rate=0.68  mean=0.9333  worsen=10.00%  highvar=0.00%
+GA search time: 17.06s, candidates: 233
+  [iter  81/100] search_obj=0.7579  search_best=0.7409  validation_best=0.7469  EI=0.0176  rnum=33.0  len=107  syn_rate=0.83  mean=0.7509  worsen=7.00%  highvar=0.00%
+GA search time: 16.15s, candidates: 232
+  [iter  82/100] search_obj=0.9463  search_best=0.7409  validation_best=0.7469  EI=0.0203  rnum=32.1  len=81  syn_rate=0.66  mean=0.9353  worsen=11.00%  highvar=0.00%
+GA search time: 16.91s, candidates: 231
+  [iter  83/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0155  rnum=31.2  len=81  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 15.60s, candidates: 230
+  [iter  84/100] search_obj=0.7569  search_best=0.7409  validation_best=0.7469  EI=0.0158  rnum=30.3  len=95  syn_rate=0.62  mean=0.7499  worsen=7.00%  highvar=0.00%
+GA search time: 14.75s, candidates: 229
+  [iter  85/100] search_obj=0.7592  search_best=0.7409  validation_best=0.7469  EI=0.0167  rnum=29.5  len=88  syn_rate=0.67  mean=0.7512  worsen=8.00%  highvar=0.00%
+GA search time: 15.53s, candidates: 228
+  [iter  86/100] search_obj=0.7580  search_best=0.7409  validation_best=0.7469  EI=0.0165  rnum=28.6  len=77  syn_rate=0.79  mean=0.7510  worsen=7.00%  highvar=0.00%
+GA search time: 15.95s, candidates: 227
+  [iter  87/100] search_obj=1.1624  search_best=0.7409  validation_best=0.7469  EI=0.0150  rnum=27.8  len=80  syn_rate=0.61  mean=1.0834  worsen=79.00%  highvar=0.00%
+GA search time: 12.99s, candidates: 226
+  [iter  88/100] search_obj=0.7583  search_best=0.7409  validation_best=0.7469  EI=0.0248  rnum=27.0  len=80  syn_rate=0.66  mean=0.7513  worsen=7.00%  highvar=0.00%
+GA search time: 16.55s, candidates: 226
+  [iter  89/100] search_obj=0.7581  search_best=0.7409  validation_best=0.7469  EI=0.0195  rnum=26.2  len=82  syn_rate=0.77  mean=0.7511  worsen=7.00%  highvar=0.00%
+GA search time: 13.83s, candidates: 225
+  [iter  90/100] search_obj=0.7582  search_best=0.7409  validation_best=0.7469  EI=0.0205  rnum=25.4  len=80  syn_rate=0.65  mean=0.7512  worsen=7.00%  highvar=0.00%
+GA search time: 14.63s, candidates: 224
+  [iter  91/100] search_obj=0.8234  search_best=0.7409  validation_best=0.7469  EI=0.0168  rnum=24.7  len=89  syn_rate=0.64  mean=0.8144  worsen=9.00%  highvar=0.00%
+GA search time: 14.53s, candidates: 223
+  [iter  92/100] search_obj=0.9336  search_best=0.7409  validation_best=0.7469  EI=0.0195  rnum=24.0  len=78  syn_rate=0.79  mean=0.9206  worsen=13.00%  highvar=0.00%
+GA search time: 14.60s, candidates: 223
+  [iter  93/100] search_obj=1.0618  search_best=0.7409  validation_best=0.7469  EI=0.0135  rnum=23.3  len=37  syn_rate=0.34  mean=1.0418  worsen=20.00%  highvar=0.00%
+GA search time: 15.08s, candidates: 222
+  [iter  94/100] search_obj=0.9712  search_best=0.7409  validation_best=0.7469  EI=0.0175  rnum=22.6  len=86  syn_rate=0.74  mean=0.9612  worsen=10.00%  highvar=0.00%
+GA search time: 16.44s, candidates: 221
+  [iter  95/100] search_obj=0.7475  search_best=0.7409  validation_best=0.7469  EI=0.0199  rnum=21.9  len=74  syn_rate=0.65  mean=0.7415  worsen=6.00%  highvar=0.00%
+GA search time: 15.87s, candidates: 221
+  [iter  96/100] search_obj=0.7516  search_best=0.7409  validation_best=0.7469  EI=0.0170  rnum=21.2  len=93  syn_rate=0.74  mean=0.7446  worsen=7.00%  highvar=0.00%
+GA search time: 12.94s, candidates: 220
+  [iter  97/100] search_obj=0.7712  search_best=0.7409  validation_best=0.7469  EI=0.0170  rnum=20.6  len=106  syn_rate=0.76  mean=0.7622  worsen=9.00%  highvar=0.00%
+GA search time: 14.75s, candidates: 219
+  [iter  98/100] search_obj=0.8097  search_best=0.7409  validation_best=0.7469  EI=0.0176  rnum=19.9  len=77  syn_rate=0.65  mean=0.8017  worsen=8.00%  highvar=0.00%
+GA search time: 14.27s, candidates: 219
+  [iter  99/100] search_obj=0.8634  search_best=0.7409  validation_best=0.7469  EI=0.0181  rnum=19.3  len=73  syn_rate=0.65  mean=0.8544  worsen=9.00%  highvar=0.00%
+GA search time: 15.60s, candidates: 218
+  [iter 100/100] search_obj=0.7714  search_best=0.7409  validation_best=0.7469  EI=0.0152  rnum=18.7  len=78  syn_rate=0.64  mean=0.7624  worsen=9.00%  highvar=0.00%
+
+[Step 5] 按 validation 选择最终通用序列...
+  选择结果:
+    search_train_obj=0.7844, search_train_mean=0.7764, search_train_worsen=8.00%, search_train_highvar=0.00%
+    validation_obj=0.7469, validation_mean=0.7379, validation_worsen=9.00%, validation_highvar=0.00%
+
+[Step 6] 在 validation 上执行消融后处理...
+
+[Ablation-validation] 初始序列长度: 95, objective: 0.7469, mean_norm: 0.7379, worsen_rate: 9.00%
+  移除 [94] module(scc-oz-module-inliner): objective 0.7485 > 0.7469 (恢复)
+  移除 [93] module(elim-avail-extern): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [92] module(iroutliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [91] function(dce): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [90] module(attributor): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [89] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [88] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [87] module(iroutliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [86] function(newgvn): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [85] function(memcpyopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [84] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [83] function(newgvn): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [82] function(gvn-sink): objective 0.7479 > 0.7469 (恢复)
+  移除 [81] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [80] function(jump-threading): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [79] function(gvn-hoist): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [78] module(attributor): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [77] module(inferattrs): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [76] function(gvn-hoist): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [75] module(iroutliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [74] module(attributor): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [73] module(inferattrs): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [72] function(dce): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [71] function(mem2reg): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [70] function(dce): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [69] function(reassociate): objective 0.7470 > 0.7469 (恢复)
+  移除 [68] function(newgvn): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [67] module(scc-oz-module-inliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [66] function(instsimplify): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [65] module(scc-oz-module-inliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [64] function(instsimplify): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [63] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [62] function(memcpyopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [61] function(gvn-hoist): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [60] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [59] function(gvn-hoist): objective 0.7470 > 0.7469 (恢复)
+  移除 [58] module(scc-oz-module-inliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [57] function(gvn-sink): objective 0.7479 > 0.7469 (恢复)
+  移除 [56] module(scc-oz-module-inliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [55] module(scc-oz-module-inliner): objective 0.7485 > 0.7469 (恢复)
+  移除 [54] cgscc(attributor-cgscc): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [53] module(attributor): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [52] function(gvn-hoist): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [51] module(iroutliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [50] module(elim-avail-extern): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [49] function(jump-threading): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [48] module(iroutliner): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [47] function(reassociate): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [46] function(mem2reg): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [45] function(newgvn): objective 0.7552 > 0.7469 (恢复)
+  移除 [44] cgscc(attributor-cgscc): objective 0.7477 > 0.7469 (恢复)
+  移除 [43] module(attributor): objective 0.7489 > 0.7469 (恢复)
+  移除 [42] function(gvn-hoist): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [41] function(gvn-hoist): objective 0.7470 > 0.7469 (恢复)
+  移除 [40] module(scc-oz-module-inliner): objective 0.7958 > 0.7469 (恢复)
+  移除 [39] cgscc(attributor-cgscc): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [38] module(elim-avail-extern): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [37] function(newgvn): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [36] module(inferattrs): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [35] function(lower-switch): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [34] function(dce): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [33] function(memcpyopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [32] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [31] function(mem2reg): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [30] cgscc(attributor-cgscc): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [29] module(inferattrs): objective 0.7583 > 0.7469 (恢复)
+  移除 [28] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [27] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [26] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [25] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [24] module(globalopt): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [23] module(attributor): objective 0.7588 > 0.7469 (恢复)
+  移除 [22] module(globalopt): objective 0.9063 > 0.7469 (恢复)
+  移除 [21] function(gvn-sink): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [20] function(jump-threading): objective 0.7469, mean_norm 0.7379, worsen_rate 9.00% (保留移除)
+  移除 [19] function(newgvn): objective 0.7659 > 0.7469 (恢复)
+  移除 [18] function(gvn-hoist): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [17] function(gvn-sink): objective 0.7469 > 0.7465 (恢复)
+  移除 [16] function(mem2reg): objective 0.7517 > 0.7465 (恢复)
+  移除 [15] function(dce): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [14] module(attributor): objective 0.7513 > 0.7465 (恢复)
+  移除 [13] function(gvn-sink): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [12] function(instsimplify): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [11] module(iroutliner): objective 0.7558 > 0.7465 (恢复)
+  移除 [10] module(iroutliner): objective 0.7558 > 0.7465 (恢复)
+  移除 [9] function(instsimplify): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [8] function(memcpyopt): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [7] module(attributor): objective 0.7543 > 0.7465 (恢复)
+  移除 [6] function(gvn-hoist): objective 0.7547 > 0.7465 (恢复)
+  移除 [5] function(dce): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [4] function(memcpyopt): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [3] function(instsimplify): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [2] function(instsimplify): objective 0.7465, mean_norm 0.7375, worsen_rate 9.00% (保留移除)
+  移除 [1] module(iroutliner): objective 0.7461, mean_norm 0.7371, worsen_rate 9.00% (保留移除)
+  移除 [0] module(elim-avail-extern): objective 1.0215 > 0.7461 (恢复)
+[Ablation-validation] 最终序列长度: 23, objective: 0.7461, mean_norm: 0.7371, worsen_rate: 9.00%, 移除了 72 个 pass
+  消融有效: 95 → 23 passes, validation_objective: 0.7469 → 0.7461
+
+最终通用 pass 序列（effective=23 个顶层 pass, raw=23 个 pass, syn_rate(raw)=0.34）:
+  module(elim-avail-extern) → function(gvn-hoist) → module(attributor) → module(iroutliner) → module(iroutliner) → module(attributor) → function(mem2reg) → function(gvn-sink) → function(newgvn) → module(globalopt) → module(attributor) → module(inferattrs) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → function(newgvn) → module(scc-oz-module-inliner) → function(gvn-sink) → function(gvn-hoist) → function(reassociate) → function(gvn-sink) → module(scc-oz-module-inliner)
+  search_train_obj=0.7469, search_train_mean=0.7399, search_train_worsen=7.00%, search_train_highvar=0.00%
+  validation_obj=0.7461, validation_mean=0.7371, validation_worsen=9.00%, validation_highvar=0.00%
+  test_obj=0.7594, test_mean=0.7434, test_worsen=16.00%, test_highvar=0.00%
+
+Top-5 最佳序列（按 validation 多目标 objective 升序）:
+  #1: validation_obj=0.7469, validation_mean=0.7379, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7844, train_mean=0.7764, train_highvar=0.00%, len=95, syn_rate=0.84, test_obj=0.7607, test_mean=0.7427, test_worsen=18.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(instsimplify) → module(iroutliner) → module(iroutliner) → function(instsimplify) → function(gvn-sink) → module(attributor) → function(dce) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → function(newgvn) → function(jump-threading) → function(gvn-sink) → module(globalopt) → module(attributor) → module(globalopt) → function(gvn-sink) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(inferattrs) → cgscc(attributor-cgscc) → function(mem2reg) → function(gvn-sink) → function(memcpyopt) → function(dce) → function(lower-switch) → module(inferattrs) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → function(gvn-hoist) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → function(newgvn) → function(mem2reg) → function(reassociate) → module(iroutliner) → function(jump-threading) → module(elim-avail-extern) → module(iroutliner) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(globalopt) → function(gvn-hoist) → function(memcpyopt) → module(globalopt) → function(instsimplify) → module(scc-oz-module-inliner) → function(instsimplify) → module(scc-oz-module-inliner) → function(newgvn) → function(reassociate) → function(dce) → function(mem2reg) → function(dce) → module(inferattrs) → module(attributor) → module(iroutliner) → function(gvn-hoist) → module(inferattrs) → module(attributor) → function(gvn-hoist) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(globalopt) → function(memcpyopt) → function(newgvn) → module(iroutliner) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #2: validation_obj=0.7497, validation_mean=0.7407, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7409, train_mean=0.7339, train_highvar=0.00%, len=92, syn_rate=0.65, test_obj=0.7099, test_mean=0.6959, test_worsen=14.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(dce) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(memcpyopt) → function(gvn-hoist) → module(scc-oz-module-inliner) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → function(instsimplify) → function(memcpyopt) → module(scc-oz-module-inliner) → function(newgvn) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → module(iroutliner) → function(dce) → function(instsimplify) → module(inferattrs) → function(loop(loop-simplifycfg)) → function(newgvn) → module(attributor) → function(memcpyopt) → function(memcpyopt) → function(memcpyopt) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → module(attributor) → function(gvn-sink) → module(attributor) → function(memcpyopt) → function(newgvn) → module(globalopt) → function(newgvn) → module(elim-avail-extern) → module(attributor) → module(elim-avail-extern) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → function(newgvn) → function(instsimplify) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(elim-avail-extern) → module(iroutliner) → function(gvn-sink) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner)
+     raw: module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(dce) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(memcpyopt) → function(gvn-hoist) → module(scc-oz-module-inliner) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → function(instsimplify) → function(memcpyopt) → module(scc-oz-module-inliner) → function(newgvn) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → module(iroutliner) → function(dce) → function(instsimplify) → module(inferattrs) → loop(loop-simplifycfg) → function(newgvn) → module(attributor) → function(memcpyopt) → function(memcpyopt) → function(memcpyopt) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → module(attributor) → function(gvn-sink) → module(attributor) → function(memcpyopt) → function(newgvn) → module(globalopt) → function(newgvn) → module(elim-avail-extern) → module(attributor) → module(elim-avail-extern) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → function(newgvn) → function(instsimplify) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(elim-avail-extern) → module(iroutliner) → function(gvn-sink) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner)
+  #3: validation_obj=0.7715, validation_mean=0.7625, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7569, train_mean=0.7499, train_highvar=0.00%, len=95, syn_rate=0.62, test_obj=0.7533, test_mean=0.7373, test_worsen=16.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(globalopt) → function(mem2reg) → function(gvn-hoist) → module(attributor) → function(dce) → function(gvn-sink) → function(memcpyopt) → module(iroutliner) → function(gvn-hoist) → module(inferattrs) → function(newgvn) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #4: validation_obj=0.7767, validation_mean=0.7677, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7634, train_mean=0.7574, train_highvar=0.00%, len=102, syn_rate=0.66, test_obj=0.7496, test_mean=0.7356, test_worsen=14.00%, test_highvar=0.00%
+     module(iroutliner) → module(iroutliner) → function(instsimplify) → function(loop(loop-simplifycfg)) → function(instsimplify) → function(memcpyopt) → function(dce) → module(inferattrs) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(elim-avail-extern) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(attributor) → function(gvn-sink) → module(globalopt) → module(attributor) → function(mem2reg) → module(globalopt) → function(instsimplify) → function(dce) → module(globalopt) → module(inferattrs) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+     raw: module(iroutliner) → module(iroutliner) → function(instsimplify) → loop(loop-simplifycfg) → function(instsimplify) → function(memcpyopt) → function(dce) → module(inferattrs) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(elim-avail-extern) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(attributor) → function(gvn-sink) → module(globalopt) → module(attributor) → function(mem2reg) → module(globalopt) → function(instsimplify) → function(dce) → module(globalopt) → module(inferattrs) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #5: validation_obj=0.7778, validation_mean=0.7678, validation_worsen=10.00%, validation_highvar=0.00%, train_obj=0.7487, train_mean=0.7417, train_highvar=0.00%, len=90, syn_rate=0.62, test_obj=0.7497, test_mean=0.7357, test_worsen=14.00%, test_highvar=0.00%
+     module(elim-avail-extern) → function(gvn-hoist) → module(elim-avail-extern) → function(memcpyopt) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → module(inferattrs) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+
+============================================================
+所有轮次中最优 validation objective: 0.7461
+最优通用 pass 序列 (23 passes):
+  module(elim-avail-extern) → function(gvn-hoist) → module(attributor) → module(iroutliner) → module(iroutliner) → module(attributor) → function(mem2reg) → function(gvn-sink) → function(newgvn) → module(globalopt) → module(attributor) → module(inferattrs) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → function(newgvn) → module(scc-oz-module-inliner) → function(gvn-sink) → function(gvn-hoist) → function(reassociate) → function(gvn-sink) → module(scc-oz-module-inliner)
+  search_train_obj=0.7469, search_train_mean=0.7399, search_train_worsen=7.00%, search_train_highvar=0.00%
+  validation_obj=0.7461, validation_mean=0.7371, validation_worsen=9.00%, validation_highvar=0.00%
+  test_obj=0.7594, test_mean=0.7434, test_worsen=16.00%, test_highvar=0.00%
+
+最优轮次 Top-5 序列（含测试集效果，按 validation objective 升序）:
+  #1: validation_obj=0.7469, validation_mean=0.7379, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7844, train_mean=0.7764, train_highvar=0.00%, len=95, syn_rate=0.84, test_obj=0.7607, test_mean=0.7427, test_worsen=18.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(instsimplify) → module(iroutliner) → module(iroutliner) → function(instsimplify) → function(gvn-sink) → module(attributor) → function(dce) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → function(newgvn) → function(jump-threading) → function(gvn-sink) → module(globalopt) → module(attributor) → module(globalopt) → function(gvn-sink) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(inferattrs) → cgscc(attributor-cgscc) → function(mem2reg) → function(gvn-sink) → function(memcpyopt) → function(dce) → function(lower-switch) → module(inferattrs) → function(newgvn) → module(elim-avail-extern) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → function(gvn-hoist) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → function(newgvn) → function(mem2reg) → function(reassociate) → module(iroutliner) → function(jump-threading) → module(elim-avail-extern) → module(iroutliner) → function(gvn-hoist) → module(attributor) → cgscc(attributor-cgscc) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner) → function(gvn-sink) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(globalopt) → function(gvn-hoist) → function(memcpyopt) → module(globalopt) → function(instsimplify) → module(scc-oz-module-inliner) → function(instsimplify) → module(scc-oz-module-inliner) → function(newgvn) → function(reassociate) → function(dce) → function(mem2reg) → function(dce) → module(inferattrs) → module(attributor) → module(iroutliner) → function(gvn-hoist) → module(inferattrs) → module(attributor) → function(gvn-hoist) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(globalopt) → function(memcpyopt) → function(newgvn) → module(iroutliner) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #2: validation_obj=0.7497, validation_mean=0.7407, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7409, train_mean=0.7339, train_highvar=0.00%, len=92, syn_rate=0.65, test_obj=0.7099, test_mean=0.6959, test_worsen=14.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(dce) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(memcpyopt) → function(gvn-hoist) → module(scc-oz-module-inliner) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → function(instsimplify) → function(memcpyopt) → module(scc-oz-module-inliner) → function(newgvn) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → module(iroutliner) → function(dce) → function(instsimplify) → module(inferattrs) → function(loop(loop-simplifycfg)) → function(newgvn) → module(attributor) → function(memcpyopt) → function(memcpyopt) → function(memcpyopt) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → module(attributor) → function(gvn-sink) → module(attributor) → function(memcpyopt) → function(newgvn) → module(globalopt) → function(newgvn) → module(elim-avail-extern) → module(attributor) → module(elim-avail-extern) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → function(newgvn) → function(instsimplify) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(elim-avail-extern) → module(iroutliner) → function(gvn-sink) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner)
+     raw: module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(dce) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(memcpyopt) → function(gvn-hoist) → module(scc-oz-module-inliner) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(globalopt) → module(iroutliner) → function(instsimplify) → function(memcpyopt) → module(scc-oz-module-inliner) → function(newgvn) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → module(iroutliner) → function(dce) → function(instsimplify) → module(inferattrs) → loop(loop-simplifycfg) → function(newgvn) → module(attributor) → function(memcpyopt) → function(memcpyopt) → function(memcpyopt) → function(mem2reg) → function(gvn-sink) → function(gvn-hoist) → module(attributor) → function(gvn-sink) → module(attributor) → function(memcpyopt) → function(newgvn) → module(globalopt) → function(newgvn) → module(elim-avail-extern) → module(attributor) → module(elim-avail-extern) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → function(newgvn) → function(instsimplify) → function(gvn-hoist) → function(mem2reg) → module(iroutliner) → module(scc-oz-module-inliner) → function(gvn-hoist) → module(elim-avail-extern) → module(iroutliner) → function(gvn-sink) → module(scc-oz-module-inliner) → module(scc-oz-module-inliner)
+  #3: validation_obj=0.7715, validation_mean=0.7625, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7569, train_mean=0.7499, train_highvar=0.00%, len=95, syn_rate=0.62, test_obj=0.7533, test_mean=0.7373, test_worsen=16.00%, test_highvar=0.00%
+     module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(globalopt) → function(mem2reg) → function(gvn-hoist) → module(attributor) → function(dce) → function(gvn-sink) → function(memcpyopt) → module(iroutliner) → function(gvn-hoist) → module(inferattrs) → function(newgvn) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #4: validation_obj=0.7767, validation_mean=0.7677, validation_worsen=9.00%, validation_highvar=0.00%, train_obj=0.7634, train_mean=0.7574, train_highvar=0.00%, len=102, syn_rate=0.66, test_obj=0.7496, test_mean=0.7356, test_worsen=14.00%, test_highvar=0.00%
+     module(iroutliner) → module(iroutliner) → function(instsimplify) → function(loop(loop-simplifycfg)) → function(instsimplify) → function(memcpyopt) → function(dce) → module(inferattrs) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(elim-avail-extern) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(attributor) → function(gvn-sink) → module(globalopt) → module(attributor) → function(mem2reg) → module(globalopt) → function(instsimplify) → function(dce) → module(globalopt) → module(inferattrs) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+     raw: module(iroutliner) → module(iroutliner) → function(instsimplify) → loop(loop-simplifycfg) → function(instsimplify) → function(memcpyopt) → function(dce) → module(inferattrs) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(elim-avail-extern) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → module(attributor) → function(gvn-sink) → module(globalopt) → module(attributor) → function(mem2reg) → module(globalopt) → function(instsimplify) → function(dce) → module(globalopt) → module(inferattrs) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+  #5: validation_obj=0.7778, validation_mean=0.7678, validation_worsen=10.00%, validation_highvar=0.00%, train_obj=0.7487, train_mean=0.7417, train_highvar=0.00%, len=90, syn_rate=0.62, test_obj=0.7497, test_mean=0.7357, test_worsen=14.00%, test_highvar=0.00%
+     module(elim-avail-extern) → function(gvn-hoist) → module(elim-avail-extern) → function(memcpyopt) → module(iroutliner) → function(instsimplify) → function(instsimplify) → function(memcpyopt) → function(dce) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(dce) → module(elim-avail-extern) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → function(gvn-hoist) → module(attributor) → module(inferattrs) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(iroutliner) → function(instsimplify) → function(newgvn) → function(gvn-hoist) → function(mem2reg) → function(jump-threading) → function(newgvn) → function(newgvn) → function(mem2reg) → function(mem2reg) → function(newgvn) → module(iroutliner) → module(attributor) → function(memcpyopt) → function(jump-threading) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(iroutliner) → module(attributor) → function(dce) → module(globalopt) → module(elim-avail-extern) → module(scc-oz-module-inliner) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner) → module(elim-avail-extern) → module(iroutliner) → function(instsimplify) → function(gvn-hoist) → module(attributor) → function(memcpyopt) → function(jump-threading) → module(globalopt) → function(gvn-sink) → function(newgvn) → function(gvn-sink) → module(globalopt) → module(attributor) → function(dce) → module(iroutliner) → module(elim-avail-extern) → module(scc-oz-module-inliner)
+binarysize_test: vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.981 (+1.9%) [metric=stripped_file_bytes]
+binarysize_test[text_bytes]: vs_none=0.892 (+10.8%)  vs_oz=0.913 (+8.7%)  vs_o3=0.791 (+20.9%)
+binarysize_test[data_bytes]: vs_none=0.986 (+1.4%)  vs_oz=0.994 (+0.6%)  vs_o3=0.988 (+1.2%)
+binarysize_test[bss_bytes]: vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+binarysize_test[dec_bytes]: vs_none=0.909 (+9.1%)  vs_oz=0.932 (+6.8%)  vs_o3=0.837 (+16.3%)
+
+最优轮次 Top-5 binarysize_test 序列面板（primary=stripped_file_bytes）:
+  #1: len=95, syn_rate=0.84
+     stripped_file_bytes: obj=1.0075, mean=0.9995, worsen=8.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.981 (+1.9%)
+     text_bytes: obj=0.9294, mean=0.9054, worsen=24.00%, vs_none=0.885 (+11.5%)  vs_oz=0.905 (+9.5%)  vs_o3=0.785 (+21.5%)
+     data_bytes: obj=1.0013, mean=0.9933, worsen=8.00%, vs_none=0.985 (+1.5%)  vs_oz=0.993 (+0.7%)  vs_o3=0.987 (+1.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9496, mean=0.9256, worsen=24.00%, vs_none=0.904 (+9.6%)  vs_oz=0.926 (+7.4%)  vs_o3=0.832 (+16.8%)
+  #2: len=92, syn_rate=0.65
+     stripped_file_bytes: obj=1.0074, mean=0.9994, worsen=8.00%, vs_none=0.995 (+0.5%)  vs_oz=0.999 (+0.1%)  vs_o3=0.981 (+1.9%)
+     text_bytes: obj=0.9069, mean=0.8849, worsen=22.00%, vs_none=0.866 (+13.4%)  vs_oz=0.885 (+11.5%)  vs_o3=0.768 (+23.2%)
+     data_bytes: obj=0.9983, mean=0.9903, worsen=8.00%, vs_none=0.982 (+1.8%)  vs_oz=0.990 (+1.0%)  vs_o3=0.984 (+1.6%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9339, mean=0.9119, worsen=22.00%, vs_none=0.890 (+11.0%)  vs_oz=0.912 (+8.8%)  vs_o3=0.821 (+17.9%)
+  #3: len=95, syn_rate=0.62
+     stripped_file_bytes: obj=1.0075, mean=0.9995, worsen=8.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.981 (+1.9%)
+     text_bytes: obj=0.9335, mean=0.9095, worsen=24.00%, vs_none=0.890 (+11.0%)  vs_oz=0.910 (+9.0%)  vs_o3=0.787 (+21.3%)
+     data_bytes: obj=1.0013, mean=0.9933, worsen=8.00%, vs_none=0.985 (+1.5%)  vs_oz=0.993 (+0.7%)  vs_o3=0.987 (+1.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9531, mean=0.9291, worsen=24.00%, vs_none=0.908 (+9.2%)  vs_oz=0.929 (+7.1%)  vs_o3=0.834 (+16.6%)
+  #4: len=102, syn_rate=0.66
+     stripped_file_bytes: obj=1.0075, mean=0.9995, worsen=8.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.981 (+1.9%)
+     text_bytes: obj=0.9311, mean=0.9091, worsen=22.00%, vs_none=0.890 (+11.0%)  vs_oz=0.909 (+9.1%)  vs_o3=0.787 (+21.3%)
+     data_bytes: obj=1.0013, mean=0.9933, worsen=8.00%, vs_none=0.985 (+1.5%)  vs_oz=0.993 (+0.7%)  vs_o3=0.987 (+1.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9509, mean=0.9289, worsen=22.00%, vs_none=0.907 (+9.3%)  vs_oz=0.929 (+7.1%)  vs_o3=0.834 (+16.6%)
+  #5: len=90, syn_rate=0.62
+     stripped_file_bytes: obj=1.0075, mean=0.9995, worsen=8.00%, vs_none=0.995 (+0.5%)  vs_oz=1.000 (+0.0%)  vs_o3=0.981 (+1.9%)
+     text_bytes: obj=0.9313, mean=0.9093, worsen=22.00%, vs_none=0.890 (+11.0%)  vs_oz=0.909 (+9.1%)  vs_o3=0.787 (+21.3%)
+     data_bytes: obj=1.0013, mean=0.9933, worsen=8.00%, vs_none=0.985 (+1.5%)  vs_oz=0.993 (+0.7%)  vs_o3=0.987 (+1.3%)
+     bss_bytes: obj=1.0000, mean=1.0000, worsen=0.00%, vs_none=1.000 (+0.0%)  vs_oz=1.000 (+0.0%)  vs_o3=1.000 (+0.0%)
+     dec_bytes: obj=0.9510, mean=0.9290, worsen=22.00%, vs_none=0.907 (+9.3%)  vs_oz=0.929 (+7.1%)  vs_o3=0.834 (+16.6%)
+核心调优成本已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260508_004922_696663_feature_lite_seed456_core_tuning_cost.json
+结果已写入: /root/exp/RFunipassLab/results/instrcount/summaries/20260508_004922_696663_feature_lite_seed456.json
+总运行时间: 4142.98 秒

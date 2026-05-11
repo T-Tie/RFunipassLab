@@ -1,0 +1,69 @@
+[sweep] started_at=2026-05-10T14:20:26+08:00
+[sweep] LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+[sweep] running OBJ_WORSEN_W=0.60 tag=objw_060_3seeds
+[1/3] running feature_lite with EXPERIMENT_SEED=456, SPLIT_SEED=456
+[done] name=feature_lite exit=0 runtime=2277.26s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_142027_843602_feature_lite_seed456.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_142027_843602_feature_lite_seed456.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_142027_843602_feature_lite_seed456.json
+[2/3] running feature_lite with EXPERIMENT_SEED=457, SPLIT_SEED=457
+[done] name=feature_lite exit=0 runtime=6216.26s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_145825_170219_feature_lite_seed457.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_145825_170219_feature_lite_seed457.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_145825_170219_feature_lite_seed457.json
+[3/3] running feature_lite with EXPERIMENT_SEED=458, SPLIT_SEED=458
+[done] name=feature_lite exit=0 runtime=914.78s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_164201_491950_feature_lite_seed458.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_164201_491950_feature_lite_seed458.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_164201_491950_feature_lite_seed458.json
+[batch] manifest=/root/exp/RFunipassLab/results/manifests/20260510_142027_843333_feature_lite_multiseed_objw_060_3seeds.json
+[batch] csv=/root/exp/RFunipassLab/results/reports/20260510_142027_843333_feature_lite_multiseed_objw_060_3seeds.csv
+[batch] md=/root/exp/RFunipassLab/results/reports/20260510_142027_843333_feature_lite_multiseed_objw_060_3seeds.md
+[summary] csv=/root/exp/RFunipassLab/results/reports/summary.csv
+[summary] md=/root/exp/RFunipassLab/results/reports/summary.md
+[sweep] completed OBJ_WORSEN_W=0.60 exit=0 at=2026-05-10T16:57:16+08:00
+[sweep] running OBJ_WORSEN_W=0.75 tag=objw_075_3seeds
+[1/3] running feature_lite with EXPERIMENT_SEED=456, SPLIT_SEED=456
+[done] name=feature_lite exit=0 runtime=2209.21s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_165717_670185_feature_lite_seed456.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_165717_670185_feature_lite_seed456.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_165717_670185_feature_lite_seed456.json
+[2/3] running feature_lite with EXPERIMENT_SEED=457, SPLIT_SEED=457
+[done] name=feature_lite exit=0 runtime=2407.43s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_173406_941469_feature_lite_seed457.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_173406_941469_feature_lite_seed457.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_173406_941469_feature_lite_seed457.json
+[3/3] running feature_lite with EXPERIMENT_SEED=458, SPLIT_SEED=458
+[done] name=feature_lite exit=0 runtime=964.30s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_181414_425950_feature_lite_seed458.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_181414_425950_feature_lite_seed458.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_181414_425950_feature_lite_seed458.json
+[batch] manifest=/root/exp/RFunipassLab/results/manifests/20260510_165717_669915_feature_lite_multiseed_objw_075_3seeds.json
+[batch] csv=/root/exp/RFunipassLab/results/reports/20260510_165717_669915_feature_lite_multiseed_objw_075_3seeds.csv
+[batch] md=/root/exp/RFunipassLab/results/reports/20260510_165717_669915_feature_lite_multiseed_objw_075_3seeds.md
+[summary] csv=/root/exp/RFunipassLab/results/reports/summary.csv
+[summary] md=/root/exp/RFunipassLab/results/reports/summary.md
+[sweep] completed OBJ_WORSEN_W=0.75 exit=0 at=2026-05-10T18:30:19+08:00
+[sweep] running OBJ_WORSEN_W=1.00 tag=objw_100_3seeds
+[1/3] running feature_lite with EXPERIMENT_SEED=456, SPLIT_SEED=456
+[done] name=feature_lite exit=0 runtime=2581.20s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_183020_137491_feature_lite_seed456.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_183020_137491_feature_lite_seed456.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_183020_137491_feature_lite_seed456.json
+[2/3] running feature_lite with EXPERIMENT_SEED=457, SPLIT_SEED=457
+[done] name=feature_lite exit=0 runtime=2367.07s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_191321_401631_feature_lite_seed457.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_191321_401631_feature_lite_seed457.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_191321_401631_feature_lite_seed457.json
+[3/3] running feature_lite with EXPERIMENT_SEED=458, SPLIT_SEED=458
+[done] name=feature_lite exit=0 runtime=1555.80s
+[done] log=/root/exp/RFunipassLab/results/logs/20260510_195248_525320_feature_lite_seed458.log
+[done] result_json=/root/exp/RFunipassLab/results/instrcount/summaries/20260510_195248_525320_feature_lite_seed458.json
+[done] manifest=/root/exp/RFunipassLab/results/manifests/20260510_195248_525320_feature_lite_seed458.json
+[batch] manifest=/root/exp/RFunipassLab/results/manifests/20260510_183020_137229_feature_lite_multiseed_objw_100_3seeds.json
+[batch] csv=/root/exp/RFunipassLab/results/reports/20260510_183020_137229_feature_lite_multiseed_objw_100_3seeds.csv
+[batch] md=/root/exp/RFunipassLab/results/reports/20260510_183020_137229_feature_lite_multiseed_objw_100_3seeds.md
+[summary] csv=/root/exp/RFunipassLab/results/reports/summary.csv
+[summary] md=/root/exp/RFunipassLab/results/reports/summary.md
+[sweep] completed OBJ_WORSEN_W=1.00 exit=0 at=2026-05-10T20:18:44+08:00
+[sweep] finished_at=2026-05-10T20:18:44+08:00

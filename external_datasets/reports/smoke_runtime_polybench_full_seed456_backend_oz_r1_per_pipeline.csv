@@ -1,0 +1,5 @@
+seed,suite,benchmark,pipeline_label,repeat_count,polybench_seconds_mean,polybench_seconds_median,polybench_seconds_std,polybench_seconds_ci95,wall_seconds_mean,wall_seconds_median
+,polybench_full,2mm,none,1,5.815986,5.815986,0.0,0.0,5.867949604056776,5.867949604056776
+,polybench_full,2mm,oz,1,2.265627,2.265627,0.0,0.0,2.2878765740897506,2.2878765740897506
+,polybench_full,gemm,none,1,3.409812,3.409812,0.0,0.0,3.4596464349888265,3.4596464349888265
+,polybench_full,gemm,oz,1,1.227673,1.227673,0.0,0.0,1.250562797067687,1.250562797067687

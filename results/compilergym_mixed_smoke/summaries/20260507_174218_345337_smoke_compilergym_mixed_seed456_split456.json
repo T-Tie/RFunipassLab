@@ -1,0 +1,788 @@
+{
+  "manifest": {
+    "run_id": "20260507_174218_345337_smoke_compilergym_mixed_seed456_split456",
+    "created_at": "2026-05-07T17:43:04",
+    "command": "/root/miniconda3/bin/python3 run_compilergym_mixed_tuning.py --suite cbench --suite chstone --train-pool 4 --val-ratio 0.5 --iters 1 --ga-pop 10 --ga-gen 1 --seed-seq-limit 3 --tag smoke_compilergym_mixed --results-root results/compilergym_mixed_smoke",
+    "manifest_path": "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json",
+    "synergy_csv": "data/Step3_EnumeratedPairs.csv",
+    "suite_order": [
+      "cbench",
+      "chstone"
+    ],
+    "suite_counts": {
+      "cbench": 11,
+      "chstone": 12
+    },
+    "train_pool_target": 4,
+    "train_pool_quotas": {
+      "cbench": 2,
+      "chstone": 2
+    },
+    "train_pool_counts_by_suite": {
+      "cbench": 2,
+      "chstone": 2
+    },
+    "test_counts_by_suite": {
+      "cbench": 9,
+      "chstone": 10
+    },
+    "search_train_counts_by_suite": {
+      "cbench": 1
+    },
+    "validation_counts_by_suite": {
+      "cbench": 1,
+      "chstone": 2
+    },
+    "train_pool_signature": "b23e08054065fca3c1aea71e1f21496c3bae63be",
+    "search_train_signature": "30910a2dd0450adaf8a00246f5d3138b880357f1",
+    "validation_signature": "c24e6212f4177604c4589a429e6d84ecfc062228",
+    "test_signature": "23781f0ae436fbb6cac0643751b9fbd7267dd520",
+    "env": {
+      "EXPERIMENT_SEED": "456",
+      "SPLIT_SEED": "456",
+      "OBJECTIVE_KIND": "instrcount",
+      "OBJECTIVE_BASELINE": "oz",
+      "LOOP_NESTING_POLICY": "wrap",
+      "FEATURE_MODE": "lite",
+      "VAL_RATIO": "0.5",
+      "MIN_VAL_PROGRAMS": "5",
+      "ITERS": "1",
+      "GA_POP": "10",
+      "GA_GEN": "1",
+      "MAX_SEQ_LEN": "120",
+      "RUNS": "1",
+      "SEED_TOPK": "0",
+      "LLVM_TOOLS_PATH": "/root/llvm/llvm-project-21/build/bin",
+      "RF_EXPLAIN_ENABLE": "0",
+      "RUN_ID": "20260507_174218_345337_smoke_compilergym_mixed_seed456_split456"
+    },
+    "seed_sequence_mode": "singletons",
+    "seed_sequence_count": 3,
+    "seed_sequences_preview": [
+      [
+        "module(attributor)"
+      ],
+      [
+        "module(scc-oz-module-inliner)"
+      ],
+      [
+        "cgscc(attributor-cgscc)"
+      ]
+    ],
+    "runner_wall_time_s": 45.885867395903915,
+    "outputs": {
+      "summary_json": "/root/exp/RFunipassLab/results/compilergym_mixed_smoke/summaries/20260507_174218_345337_smoke_compilergym_mixed_seed456_split456.json",
+      "manifest_json": "/root/exp/RFunipassLab/results/compilergym_mixed_smoke/manifests/20260507_174218_345337_smoke_compilergym_mixed_seed456_split456_manifest.json",
+      "split_csv": "/root/exp/RFunipassLab/results/compilergym_mixed_smoke/splits/20260507_174218_345337_smoke_compilergym_mixed_seed456_split456_split.csv",
+      "report_md": "/root/exp/RFunipassLab/results/compilergym_mixed_smoke/reports/20260507_174218_345337_smoke_compilergym_mixed_seed456_split456_report.md",
+      "log": "/root/exp/RFunipassLab/results/compilergym_mixed_smoke/logs/20260507_174218_345337_smoke_compilergym_mixed_seed456_split456.log"
+    }
+  },
+  "result": {
+    "objective_kind": "instrcount",
+    "experiment_seed": 456,
+    "split_seed": 456,
+    "search_programs": [
+      "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/rijndael.ll"
+    ],
+    "validation_programs": [
+      "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch2.ll",
+      "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfsin.ll",
+      "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/sha.ll"
+    ],
+    "split_summary": {
+      "split_seed": 456,
+      "train_pool_count": 4,
+      "search_train_count": 1,
+      "validation_count": 3,
+      "test_count": 19,
+      "train_pool_signature": "b23e08054065fca3c1aea71e1f21496c3bae63be",
+      "search_train_signature": "30910a2dd0450adaf8a00246f5d3138b880357f1",
+      "validation_signature": "c24e6212f4177604c4589a429e6d84ecfc062228",
+      "test_signature": "23781f0ae436fbb6cac0643751b9fbd7267dd520"
+    },
+    "objective_history": [
+      1.805055225148683,
+      1.150566411781365,
+      1.805055225148683,
+      1.150566411781365
+    ],
+    "timestamps": [
+      6.096068382263184,
+      9.439564228057861,
+      15.559283018112183,
+      19.460227012634277
+    ],
+    "search_best_objective": 1.150566411781365,
+    "search_best_sequence": [
+      "module(scc-oz-module-inliner)"
+    ],
+    "final_sequence": [
+      "module(inferattrs)",
+      "module(scc-oz-module-inliner)"
+    ],
+    "final_sequence_raw": [
+      "module(inferattrs)",
+      "module(scc-oz-module-inliner)"
+    ],
+    "final_pipeline_effective": "module(inferattrs),module(scc-oz-module-inliner)",
+    "final_train_metrics": {
+      "count": 1,
+      "mean_norm": 1.000566411781365,
+      "median_norm": 1.000566411781365,
+      "improved": 0,
+      "tied": 0,
+      "worsened": 1,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.0,
+      "tie_rate": 0.0,
+      "worsen_rate": 1.0,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.016666666666666666,
+      "per_program": {
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/rijndael.ll": {
+          "ratio": 1.000566411781365,
+          "raw_value": 3533.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.150566411781365
+    },
+    "final_val_metrics": {
+      "count": 3,
+      "mean_norm": 1.0026382764150235,
+      "median_norm": 1.00125,
+      "improved": 1,
+      "tied": 0,
+      "worsened": 2,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.3333333333333333,
+      "tie_rate": 0.0,
+      "worsen_rate": 0.6666666666666666,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.016666666666666666,
+      "per_program": {
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch2.ll": {
+          "ratio": 1.0093457943925233,
+          "raw_value": 216.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfsin.ll": {
+          "ratio": 1.00125,
+          "raw_value": 801.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/sha.ll": {
+          "ratio": 0.9973190348525469,
+          "raw_value": 372.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.1026382764150235
+    },
+    "final_test_metrics": {
+      "count": 19,
+      "mean_norm": 1.0185007747514263,
+      "median_norm": 1.0,
+      "improved": 2,
+      "tied": 10,
+      "worsened": 7,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.10526315789473684,
+      "tie_rate": 0.5263157894736842,
+      "worsen_rate": 0.3684210526315789,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.016666666666666666,
+      "per_program": {
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/adpcm.ll": {
+          "ratio": 1.0,
+          "raw_value": 196.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/bitcount.ll": {
+          "ratio": 1.0,
+          "raw_value": 496.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/blowfish.ll": {
+          "ratio": 1.0010245901639345,
+          "raw_value": 1954.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/crc32.ll": {
+          "ratio": 1.0,
+          "raw_value": 111.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/dijkstra.ll": {
+          "ratio": 1.0,
+          "raw_value": 247.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/patricia.ll": {
+          "ratio": 1.470059880239521,
+          "raw_value": 491.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/qsort.ll": {
+          "ratio": 1.0032786885245901,
+          "raw_value": 306.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/sha.ll": {
+          "ratio": 0.8421052631578947,
+          "raw_value": 400.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch.ll": {
+          "ratio": 1.0319488817891374,
+          "raw_value": 646.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/adpcm.ll": {
+          "ratio": 1.0,
+          "raw_value": 1022.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/aes.ll": {
+          "ratio": 1.003982080637133,
+          "raw_value": 2017.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/blowfish.ll": {
+          "ratio": 1.0,
+          "raw_value": 1200.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfadd.ll": {
+          "ratio": 1.0026455026455026,
+          "raw_value": 379.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfdiv.ll": {
+          "ratio": 1.0,
+          "raw_value": 416.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfmul.ll": {
+          "ratio": 1.0,
+          "raw_value": 330.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/gsm.ll": {
+          "ratio": 0.993421052631579,
+          "raw_value": 906.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/jpeg.ll": {
+          "ratio": 1.0030487804878048,
+          "raw_value": 1645.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/mips.ll": {
+          "ratio": 1.0,
+          "raw_value": 388.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/motion.ll": {
+          "ratio": 1.0,
+          "raw_value": 372.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.0737639326461632
+    },
+    "selection_split": "validation",
+    "selection_objective": 1.1026382764150235,
+    "topn_requested": 5,
+    "top_ranked_sequences": [
+      {
+        "rank": 1,
+        "selection_split": "validation",
+        "selection_metrics": {
+          "count": 3,
+          "mean_norm": 1.0026382764150235,
+          "median_norm": 1.00125,
+          "improved": 1,
+          "tied": 0,
+          "worsened": 2,
+          "invalid": 0,
+          "high_variance": 0,
+          "improved_rate": 0.3333333333333333,
+          "tie_rate": 0.0,
+          "worsen_rate": 0.6666666666666666,
+          "high_variance_rate": 0.0,
+          "len_ratio": 0.025,
+          "per_program": {
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch2.ll": {
+              "ratio": 1.0093457943925233,
+              "raw_value": 216.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfsin.ll": {
+              "ratio": 1.00125,
+              "raw_value": 801.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/sha.ll": {
+              "ratio": 0.9973190348525469,
+              "raw_value": 372.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            }
+          },
+          "objective": 1.1026382764150235
+        },
+        "train_metrics": {
+          "count": 1,
+          "mean_norm": 1.000566411781365,
+          "median_norm": 1.000566411781365,
+          "improved": 0,
+          "tied": 0,
+          "worsened": 1,
+          "invalid": 0,
+          "high_variance": 0,
+          "improved_rate": 0.0,
+          "tie_rate": 0.0,
+          "worsen_rate": 1.0,
+          "high_variance_rate": 0.0,
+          "len_ratio": 0.025,
+          "per_program": {
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/rijndael.ll": {
+              "ratio": 1.000566411781365,
+              "raw_value": 3533.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            }
+          },
+          "objective": 1.150566411781365
+        },
+        "validation_metrics": {
+          "count": 3,
+          "mean_norm": 1.0026382764150235,
+          "median_norm": 1.00125,
+          "improved": 1,
+          "tied": 0,
+          "worsened": 2,
+          "invalid": 0,
+          "high_variance": 0,
+          "improved_rate": 0.3333333333333333,
+          "tie_rate": 0.0,
+          "worsen_rate": 0.6666666666666666,
+          "high_variance_rate": 0.0,
+          "len_ratio": 0.025,
+          "per_program": {
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch2.ll": {
+              "ratio": 1.0093457943925233,
+              "raw_value": 216.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfsin.ll": {
+              "ratio": 1.00125,
+              "raw_value": 801.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/sha.ll": {
+              "ratio": 0.9973190348525469,
+              "raw_value": 372.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            }
+          },
+          "objective": 1.1026382764150235
+        },
+        "test_metrics": {
+          "count": 19,
+          "mean_norm": 1.0184430646867908,
+          "median_norm": 1.0,
+          "improved": 2,
+          "tied": 10,
+          "worsened": 7,
+          "invalid": 0,
+          "high_variance": 0,
+          "improved_rate": 0.10526315789473684,
+          "tie_rate": 0.5263157894736842,
+          "worsen_rate": 0.3684210526315789,
+          "high_variance_rate": 0.0,
+          "len_ratio": 0.025,
+          "per_program": {
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/adpcm.ll": {
+              "ratio": 1.0,
+              "raw_value": 196.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/bitcount.ll": {
+              "ratio": 1.0,
+              "raw_value": 496.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/blowfish.ll": {
+              "ratio": 1.0010245901639345,
+              "raw_value": 1954.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/crc32.ll": {
+              "ratio": 1.0,
+              "raw_value": 111.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/dijkstra.ll": {
+              "ratio": 1.0,
+              "raw_value": 247.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/patricia.ll": {
+              "ratio": 1.470059880239521,
+              "raw_value": 491.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/qsort.ll": {
+              "ratio": 1.0032786885245901,
+              "raw_value": 306.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/sha.ll": {
+              "ratio": 0.8421052631578947,
+              "raw_value": 400.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch.ll": {
+              "ratio": 1.0319488817891374,
+              "raw_value": 646.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/adpcm.ll": {
+              "ratio": 1.0,
+              "raw_value": 1022.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/aes.ll": {
+              "ratio": 1.003982080637133,
+              "raw_value": 2017.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/blowfish.ll": {
+              "ratio": 1.0,
+              "raw_value": 1200.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfadd.ll": {
+              "ratio": 1.0026455026455026,
+              "raw_value": 379.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfdiv.ll": {
+              "ratio": 1.0,
+              "raw_value": 416.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfmul.ll": {
+              "ratio": 1.0,
+              "raw_value": 330.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/gsm.ll": {
+              "ratio": 0.9923245614035088,
+              "raw_value": 905.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/jpeg.ll": {
+              "ratio": 1.0030487804878048,
+              "raw_value": 1645.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/mips.ll": {
+              "ratio": 1.0,
+              "raw_value": 388.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            },
+            "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/motion.ll": {
+              "ratio": 1.0,
+              "raw_value": 372.0,
+              "status": "ok",
+              "variance_pct": 0.0
+            }
+          },
+          "objective": 1.0737062225815277
+        },
+        "length_raw": 3,
+        "length_effective": 3,
+        "syn_rate_raw": 0.011363636363636364,
+        "sequence_raw": [
+          "module(inferattrs)",
+          "module(scc-oz-module-inliner)",
+          "function(dse)"
+        ],
+        "sequence_effective": [
+          "module(inferattrs)",
+          "module(scc-oz-module-inliner)",
+          "function(dse)"
+        ],
+        "pipeline_effective": "module(inferattrs),module(scc-oz-module-inliner),function(dse)",
+        "display_effective": "module(inferattrs) → module(scc-oz-module-inliner) → function(dse)"
+      }
+    ],
+    "fixed_baseline_summaries": {},
+    "iteration_compare_history": [
+      {
+        "iter": 1,
+        "sequence": [
+          "module(inferattrs)",
+          "module(scc-oz-module-inliner)",
+          "function(dse)"
+        ],
+        "search_objective": 1.150566411781365,
+        "search_train": {},
+        "validation": {}
+      }
+    ],
+    "core_tuning_cost": {
+      "method": "rfunipass",
+      "tuning_type": "universal_offline_external_mixed",
+      "program_count": 4,
+      "target_program_count": 19,
+      "total_tuning_time_s": 22.986372,
+      "ml_time_s": 0.470787,
+      "candidate_sequence_count": 8,
+      "objective_eval_count": 32,
+      "target_feedback_eval_count": 0,
+      "run_id": "20260507_174218_345337_smoke_compilergym_mixed_seed456_split456",
+      "dataset": "compiler_gym_llvm21_mixed_7suite",
+      "split_seed": 456,
+      "experiment_seed": 456,
+      "train_pool_count": 4,
+      "test_count": 19,
+      "seed_sequence_mode": "singletons",
+      "seed_sequence_count": 3
+    },
+    "rf_interpretability": {
+      "enabled": false
+    }
+  },
+  "per_suite_test_metrics": {
+    "cbench": {
+      "count": 9,
+      "mean_norm": 1.0387130337638975,
+      "median_norm": 1.0,
+      "improved": 1,
+      "tied": 4,
+      "worsened": 4,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.1111111111111111,
+      "tie_rate": 0.4444444444444444,
+      "worsen_rate": 0.4444444444444444,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.016666666666666666,
+      "per_program": {
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/adpcm.ll": {
+          "ratio": 1.0,
+          "raw_value": 196.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/bitcount.ll": {
+          "ratio": 1.0,
+          "raw_value": 496.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/blowfish.ll": {
+          "ratio": 1.0010245901639345,
+          "raw_value": 1954.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/crc32.ll": {
+          "ratio": 1.0,
+          "raw_value": 111.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/dijkstra.ll": {
+          "ratio": 1.0,
+          "raw_value": 247.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/patricia.ll": {
+          "ratio": 1.470059880239521,
+          "raw_value": 491.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/qsort.ll": {
+          "ratio": 1.0032786885245901,
+          "raw_value": 306.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/sha.ll": {
+          "ratio": 0.8421052631578947,
+          "raw_value": 400.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/cbench/stringsearch.ll": {
+          "ratio": 1.0319488817891374,
+          "raw_value": 646.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.105379700430564
+    },
+    "chstone": {
+      "count": 10,
+      "mean_norm": 1.0003097416402018,
+      "median_norm": 1.0,
+      "improved": 1,
+      "tied": 6,
+      "worsened": 3,
+      "invalid": 0,
+      "high_variance": 0,
+      "improved_rate": 0.1,
+      "tie_rate": 0.6,
+      "worsen_rate": 0.3,
+      "high_variance_rate": 0.0,
+      "len_ratio": 0.016666666666666666,
+      "per_program": {
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/adpcm.ll": {
+          "ratio": 1.0,
+          "raw_value": 1022.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/aes.ll": {
+          "ratio": 1.003982080637133,
+          "raw_value": 2017.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/blowfish.ll": {
+          "ratio": 1.0,
+          "raw_value": 1200.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfadd.ll": {
+          "ratio": 1.0026455026455026,
+          "raw_value": 379.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfdiv.ll": {
+          "ratio": 1.0,
+          "raw_value": 416.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/dfmul.ll": {
+          "ratio": 1.0,
+          "raw_value": 330.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/gsm.ll": {
+          "ratio": 0.993421052631579,
+          "raw_value": 906.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/jpeg.ll": {
+          "ratio": 1.0030487804878048,
+          "raw_value": 1645.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/mips.ll": {
+          "ratio": 1.0,
+          "raw_value": 388.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        },
+        "/root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/ir/chstone/motion.ll": {
+          "ratio": 1.0,
+          "raw_value": 372.0,
+          "status": "ok",
+          "variance_pct": 0.0
+        }
+      },
+      "objective": 1.0453097416402017
+    }
+  },
+  "per_suite_test_metrics_compact": {
+    "cbench": {
+      "count": 9,
+      "objective": 1.105379700430564,
+      "mean_norm": 1.0387130337638975,
+      "median_norm": 1.0,
+      "improved": 1,
+      "tied": 4,
+      "worsened": 4,
+      "invalid": 0,
+      "improved_rate": 0.1111111111111111,
+      "worsen_rate": 0.4444444444444444
+    },
+    "chstone": {
+      "count": 10,
+      "objective": 1.0453097416402017,
+      "mean_norm": 1.0003097416402018,
+      "median_norm": 1.0,
+      "improved": 1,
+      "tied": 6,
+      "worsened": 3,
+      "invalid": 0,
+      "improved_rate": 0.1,
+      "worsen_rate": 0.3
+    }
+  }
+}

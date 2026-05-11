@@ -1,0 +1,4 @@
+strategy,seed,matched,match_field,equivalent_budget,target_program_count,perprogram_eval_count_to_match,rfunipass_eval_count,eval_ratio_vs_rfunipass,perprogram_objective,rfunipass_objective,perprogram_mean_norm,rfunipass_mean_norm,perprogram_worsen_rate,rfunipass_worsen_rate
+cfsat_ga,456,True,matched_by_objective,16,50,800.0,40600.0,0.019704433497536946,0.7262459278379039,0.7693366431157349,0.7112459278379039,0.7453366431157349,0.1,0.16
+ga_bitvector,456,False,matched_by_objective,>60,50,3000.0,40600.0,0.07389162561576355,0.9593255291186562,0.7693366431157349,0.9323255291186562,0.7453366431157349,0.18,0.16
+rio_random,456,False,matched_by_objective,>60,50,3000.0,40600.0,0.07389162561576355,0.9601396006899953,0.7693366431157349,0.9331396006899952,0.7453366431157349,0.18,0.16

@@ -1,0 +1,15 @@
+{
+  "target_manifest_path": "results/cost_parity/poj_10seed_full_targets_20260507/rfunipass_targets_manifest.json",
+  "sweep_manifest_paths": [
+    "results/cost_parity/poj_10seed_full_targets_20260507/perprogram_budget_sweep_poj10_cost_parity_all_with_cfsat_ga_20260507_preresume_seed456_budget1_30.json",
+    "results/cost_parity/poj_10seed_full_targets_20260507/perprogram_budget_sweep_poj10_cost_parity_all_with_cfsat_ga_20260507_resume_seed456_budget60.json"
+  ],
+  "match_field": "matched_by_objective",
+  "epsilon": 0.005,
+  "worsen_slack": 0.02,
+  "curve_csv": "results/reports/poj10_cost_parity_seed456_budget1_60_partial_20260507_curve.csv",
+  "equivalent_budget_csv": "results/reports/poj10_cost_parity_seed456_budget1_60_partial_20260507_equivalent_budget.csv",
+  "aggregate_csv": "results/reports/poj10_cost_parity_seed456_budget1_60_partial_20260507_aggregate.csv",
+  "summary_md": "results/reports/poj10_cost_parity_seed456_budget1_60_partial_20260507_summary.md",
+  "curve_svg": "results/reports/poj10_cost_parity_seed456_budget1_60_partial_20260507_curve.svg"
+}

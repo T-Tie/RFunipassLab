@@ -1,0 +1,2 @@
+seed,program_count,geomean_ratio_vs_oz,mean_ratio_vs_oz,median_ratio_vs_oz,speedup_vs_oz,geomean_ratio_vs_none,improved,tied,worsened,timeout,worsen_rate
+456,2,4.999999999999999,5.0,5.0,0.20000000000000004,1.9320148473560899,0,0,2,2,1.0

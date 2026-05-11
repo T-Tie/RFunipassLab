@@ -1,0 +1,12 @@
+{
+  "target_manifest_path": "results/cost_parity/smoke_seed456_limit2/rfunipass_targets_manifest.json",
+  "sweep_manifest_path": "results/cost_parity/smoke_seed456_limit2/perprogram_budget_sweep_manifest.json",
+  "match_field": "matched_by_objective",
+  "epsilon": 0.005,
+  "worsen_slack": 0.02,
+  "curve_csv": "results/cost_parity/smoke_seed456_limit2/smoke_cost_parity_curve.csv",
+  "equivalent_budget_csv": "results/cost_parity/smoke_seed456_limit2/smoke_cost_parity_equivalent_budget.csv",
+  "aggregate_csv": "results/cost_parity/smoke_seed456_limit2/smoke_cost_parity_aggregate.csv",
+  "summary_md": "results/cost_parity/smoke_seed456_limit2/smoke_cost_parity_summary.md",
+  "curve_svg": "results/cost_parity/smoke_seed456_limit2/smoke_cost_parity_curve.svg"
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<style>text{font-family:Arial,sans-serif;font-size:13px;fill:#222}.title{font-size:20px;font-weight:700}.axis{stroke:#444;stroke-width:1}.grid{stroke:#ddd;stroke-width:1}.line{fill:none;stroke-width:2.5}.rfun{stroke:#111;stroke-width:2;stroke-dasharray:6 4}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="28" class="title">Cost-to-Match Budget Curve</text>
+<line x1="80" y1="40" x2="80" y2="450" class="axis"/>
+<line x1="80" y1="450" x2="870" y2="450" class="axis"/>
+<line x1="475.00" y1="40" x2="475.00" y2="450" class="grid"/>
+<text x="467.00" y="474">1</text>
+<line x1="80" y1="429.77" x2="870" y2="429.77" class="rfun"/>
+<text x="710" y="421.77">RFunipass objective=0.769</text>
+<polyline points="475.00,60.23" class="line" stroke="#2f6f9f"/>
+<circle cx="475.00" cy="60.23" r="4" fill="#2f6f9f"/>
+<text x="92" y="62" fill="#2f6f9f">cfsat_ga</text>
+<text x="415.00" y="500">Per-program budget per target program</text>
+<text transform="translate(22,285) rotate(-90)">Target objective (lower is better)</text>
+</svg>

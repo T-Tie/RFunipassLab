@@ -1,0 +1,2 @@
+metric,matched_baseline,seed_count,program_count_per_seed,geomean_ratio_vs_o3_mean,geomean_ratio_vs_o3_std,geomean_ratio_vs_o3_ci95,speedup_vs_o3_mean,speedup_vs_o3_std,speedup_vs_o3_ci95,worsen_rate_mean,worsen_rate_std,worsen_rate_ci95,invalid_rate_mean,invalid_rate_std,invalid_rate_ci95,worsen_or_invalid_rate_mean,worsen_or_invalid_rate_std,worsen_or_invalid_rate_ci95,improved_total,tied_total,worsened_total,timeout_total,invalid_total
+polybench_seconds,o3,1,2,2.3305504051926986,0.0,0.0,0.42908318900629666,0.0,0.0,1.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0,0,2,1,0

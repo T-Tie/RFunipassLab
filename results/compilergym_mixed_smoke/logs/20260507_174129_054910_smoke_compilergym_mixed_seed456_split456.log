@@ -1,0 +1,7 @@
+Run ID: 20260507_174129_054910_smoke_compilergym_mixed_seed456_split456
+Suites: cbench, chstone
+Manifest: /root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json
+Train pool: 4, test: 19
+Train quotas: {'cbench': 2, 'chstone': 2}
+Seed sequences: 3 (singletons)
+Preparing objective backend for 23 unique programs...

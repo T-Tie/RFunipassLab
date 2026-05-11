@@ -1,0 +1,21 @@
+{
+  "tag": "smoke_seed456_limit2",
+  "kind": "rfunipass_cost_parity_targets",
+  "batch_manifest_path": "results/manifests/20260505_021422_538199_feature_lite_multiseed_rf_explain_formal_10seeds_20260505_021421.json",
+  "batch_id": "20260505_021422_538199_feature_lite_multiseed_rf_explain_formal_10seeds_20260505_021421",
+  "output_dir": "results/cost_parity/smoke_seed456_limit2",
+  "target_limit": 2,
+  "seed_count": 1,
+  "seeds": [
+    456
+  ],
+  "targets": [
+    {
+      "seed": 456,
+      "target_csv_path": "results/cost_parity/smoke_seed456_limit2/seed456_test_programs.csv",
+      "target_json_path": "results/cost_parity/smoke_seed456_limit2/seed456_rfunipass_target.json",
+      "target_program_count": 2,
+      "metrics_scope": "full_test_metrics_for_limited_smoke_targets"
+    }
+  ]
+}

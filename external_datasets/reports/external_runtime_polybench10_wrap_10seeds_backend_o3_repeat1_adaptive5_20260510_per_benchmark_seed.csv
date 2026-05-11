@@ -1,0 +1,101 @@
+seed,suite,benchmark,metric,matched_baseline,universal,o3,none,ratio_vs_o3,ratio_vs_none,censored,timeout,invalid,speedup_vs_o3,status_vs_baseline,error
+456,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+456,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+456,polybench,correlation,polybench_seconds,o3,5.360234,5.504184,4.482164,0.9738471678999103,1.195903139644154,False,False,False,1.0268551708750029,improved,
+456,polybench,covariance,polybench_seconds,o3,5.709034,5.42674,4.421603,1.0520190759092936,1.2911683839548689,False,False,False,0.9505531058319149,worsened,
+456,polybench,heat-3d,polybench_seconds,o3,10.372625,2.074525,5.396519,5.0,1.922095521205429,True,True,False,0.2,timeout,
+456,polybench,jacobi-2d,polybench_seconds,o3,7.449635,1.489927,4.040696,5.0,1.843651440246928,True,True,False,0.2,timeout,
+456,polybench,nussinov,polybench_seconds,o3,3.612365,3.236877,9.149958,1.1160031721934445,0.3947958012484866,False,False,False,0.896054800663831,worsened,
+457,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+457,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+457,polybench,cholesky,polybench_seconds,o3,5.532865,1.106573,4.177749,5.0,1.3243651066638995,True,True,False,0.2,timeout,
+457,polybench,correlation,polybench_seconds,o3,5.457594,5.504184,4.482164,0.9915355300622217,1.2176247901683206,False,False,False,1.0085367288222613,tied,
+457,polybench,covariance,polybench_seconds,o3,27.133699999999997,5.42674,4.421603,5.0,6.1366205876013735,True,True,False,0.2,timeout,
+457,polybench,heat-3d,polybench_seconds,o3,10.372625,2.074525,5.396519,5.0,1.922095521205429,True,True,False,0.2,timeout,
+457,polybench,lu,polybench_seconds,o3,22.504179999999998,4.500836,9.295741,5.0,2.420912975092572,True,True,False,0.2,timeout,
+457,polybench,nussinov,polybench_seconds,o3,3.40053,3.236877,9.149958,1.0505589183648314,0.37164432885921445,False,False,False,0.9518742666584326,worsened,
+458,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+458,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+458,polybench,correlation,polybench_seconds,o3,5.779097,5.504184,4.482164,1.0499461863920245,1.289354204799289,False,False,False,0.9524297654114476,worsened,
+458,polybench,covariance,polybench_seconds,o3,27.133699999999997,5.42674,4.421603,5.0,6.1366205876013735,True,True,False,0.2,timeout,
+458,polybench,nussinov,polybench_seconds,o3,3.429958,3.236877,9.149958,1.0596503975900229,0.37486051848544005,False,False,False,0.9437074739690688,worsened,
+459,polybench,2mm,polybench_seconds,o3,2.309758,2.282356,5.77807,1.0120060148372996,0.39974558979036257,False,False,False,0.9881364194863705,worsened,
+459,polybench,3mm,polybench_seconds,o3,3.022745,3.005272,9.544342,1.0058141159934941,0.316705436582218,False,False,False,0.9942194925473369,tied,
+459,polybench,correlation,polybench_seconds,o3,5.465412,5.504184,4.482164,0.9929559040904155,1.2193690369205588,False,False,False,1.0070940671993256,tied,
+459,polybench,covariance,polybench_seconds,o3,5.77802,5.42674,4.421603,1.0647313119847275,1.30677041787786,False,False,False,0.9392040872132669,worsened,
+459,polybench,nussinov,polybench_seconds,o3,3.492979,3.236877,9.149958,1.079120090136264,0.38174809108413393,False,False,False,0.9266809219293903,worsened,
+460,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+460,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+460,polybench,correlation,polybench_seconds,o3,5.737968,5.504184,4.482164,1.0424738707862964,1.2801780568493255,False,False,False,0.9592566567119231,worsened,
+460,polybench,nussinov,polybench_seconds,o3,3.395117,3.236877,9.149958,1.0488866274498536,0.3710527414442777,False,False,False,0.9533918860528224,worsened,
+461,polybench,2mm,polybench_seconds,o3,2.305357,2.282356,5.77807,1.0100777442257036,0.3989839167749785,False,False,False,0.9900228034096238,worsened,
+461,polybench,3mm,polybench_seconds,o3,3.024763,3.005272,9.544342,1.0064856026343039,0.3169168707491831,False,False,False,0.9935561893609517,tied,
+461,polybench,cholesky,polybench_seconds,o3,5.532865,1.106573,4.177749,5.0,1.3243651066638995,True,True,False,0.2,timeout,
+461,polybench,correlation,polybench_seconds,o3,5.563325,5.504184,4.482164,1.010744735277745,1.2412140653487913,False,False,False,0.9893694867727484,worsened,
+461,polybench,covariance,polybench_seconds,o3,5.709261,5.42674,4.421603,1.0520609058108552,1.2912197228018887,False,False,False,0.9505153118766159,worsened,
+461,polybench,heat-3d,polybench_seconds,o3,3.253252,2.074525,5.396519,1.5681912727009797,0.6028426843303989,False,False,False,0.6376773148836918,worsened,
+461,polybench,lu,polybench_seconds,o3,22.504179999999998,4.500836,9.295741,5.0,2.420912975092572,True,True,False,0.2,timeout,
+461,polybench,nussinov,polybench_seconds,o3,3.384292,3.236877,9.149958,1.0455423545596574,0.36986967590452324,False,False,False,0.9564414063561891,worsened,
+462,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+462,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+462,polybench,correlation,polybench_seconds,o3,5.801018,5.504184,4.482164,1.0539287930781382,1.294244922764986,False,False,False,0.9488307052313922,worsened,
+462,polybench,heat-3d,polybench_seconds,o3,10.372625,2.074525,5.396519,5.0,1.922095521205429,True,True,False,0.2,timeout,
+462,polybench,nussinov,polybench_seconds,o3,3.251497,3.236877,9.149958,1.0045166992752583,0.3553564945325432,False,False,False,0.9955036095681465,tied,
+463,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+463,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+463,polybench,cholesky,polybench_seconds,o3,5.532865,1.106573,4.177749,5.0,1.3243651066638995,True,True,False,0.2,timeout,
+463,polybench,correlation,polybench_seconds,o3,27.520920000000004,5.504184,4.482164,5.0,6.140096614046252,True,True,False,0.2,timeout,
+463,polybench,covariance,polybench_seconds,o3,27.133699999999997,5.42674,4.421603,5.0,6.1366205876013735,True,True,False,0.2,timeout,
+463,polybench,heat-3d,polybench_seconds,o3,10.372625,2.074525,5.396519,5.0,1.922095521205429,True,True,False,0.2,timeout,
+463,polybench,jacobi-2d,polybench_seconds,o3,7.449635,1.489927,4.040696,5.0,1.843651440246928,True,True,False,0.2,timeout,
+463,polybench,lu,polybench_seconds,o3,22.504179999999998,4.500836,9.295741,5.0,2.420912975092572,True,True,False,0.2,timeout,
+463,polybench,nussinov,polybench_seconds,o3,3.481121,3.236877,9.149958,1.0754566824751142,0.3804521288513018,False,False,False,0.9298375437107759,worsened,
+463,polybench,symm,polybench_seconds,o3,9.923404999999999,1.984681,3.136742,5.0,3.16360255322242,True,True,False,0.2,timeout,
+464,polybench,2mm,polybench_seconds,o3,11.41178,2.282356,5.77807,5.0,1.9750158790045813,True,True,False,0.2,timeout,
+464,polybench,3mm,polybench_seconds,o3,15.02636,3.005272,9.544342,5.0,1.574373592228778,True,True,False,0.2,timeout,
+464,polybench,correlation,polybench_seconds,o3,5.429835,5.504184,4.482164,0.9864922756942718,1.2114315763546357,False,False,False,1.0136926812693203,improved,
+464,polybench,covariance,polybench_seconds,o3,5.397623,5.42674,4.421603,0.9946345319657843,1.2207389492000977,False,False,False,1.005394411577096,tied,
+464,polybench,heat-3d,polybench_seconds,o3,10.372625,2.074525,5.396519,5.0,1.922095521205429,True,True,False,0.2,timeout,
+464,polybench,jacobi-2d,polybench_seconds,o3,7.449635,1.489927,4.040696,5.0,1.843651440246928,True,True,False,0.2,timeout,
+464,polybench,nussinov,polybench_seconds,o3,3.442804,3.236877,9.149958,1.0636190377329755,0.37626445935598835,False,False,False,0.9401862551571334,worsened,
+465,polybench,2mm,polybench_seconds,o3,1778380910.045309,2.282356,5.77807,779186467.86273,307781129.3468769,False,False,False,1.2833898447222146e-09,worsened,
+465,polybench,3mm,polybench_seconds,o3,1778381058.277038,3.005272,9.544342,591753777.4541,186328304.06507206,False,False,False,1.689892043110052e-09,worsened,
+465,polybench,correlation,polybench_seconds,o3,5.388151,5.504184,4.482164,0.9789191277035796,1.2021316042875718,False,False,False,1.0215348456270064,improved,
+465,polybench,covariance,polybench_seconds,o3,27.133699999999997,5.42674,4.421603,5.0,6.1366205876013735,True,True,False,0.2,timeout,
+465,polybench,heat-3d,polybench_seconds,o3,1778381592.547463,2.074525,5.396519,857247607.306474,329542357.31356883,False,False,False,1.1665241074770252e-09,worsened,
+465,polybench,nussinov,polybench_seconds,o3,3.455229,3.236877,9.149958,1.067457614237427,0.37762238908637613,False,False,False,0.9368053463316035,worsened,
+456,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+458,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+459,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+462,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+464,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+465,polybench,cholesky,polybench_seconds,o3,,1.106573,4.177749,,,False,False,True,,invalid,binary exited with returncode=-11
+457,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+458,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+459,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+461,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+462,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+465,polybench,jacobi-2d,polybench_seconds,o3,,1.489927,4.040696,,,False,False,True,,invalid,binary exited with returncode=-11
+456,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+458,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+459,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+462,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+464,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+465,polybench,lu,polybench_seconds,o3,,4.500836,9.295741,,,False,False,True,,invalid,binary exited with returncode=-11
+456,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+457,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+458,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+459,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+461,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+462,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+464,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+465,polybench,symm,polybench_seconds,o3,,1.984681,3.136742,,,False,False,True,,invalid,binary exited with returncode=-11
+458,polybench,heat-3d,polybench_seconds,o3,,2.074525,5.396519,,,False,False,True,,invalid,binary exited with returncode=-11
+459,polybench,heat-3d,polybench_seconds,o3,,2.074525,5.396519,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,heat-3d,polybench_seconds,o3,,2.074525,5.396519,,,False,False,True,,invalid,binary exited with returncode=-11
+460,polybench,covariance,polybench_seconds,o3,,5.42674,4.421603,,,False,False,True,,invalid,binary exited with returncode=-11
+462,polybench,covariance,polybench_seconds,o3,,5.42674,4.421603,,,False,False,True,,invalid,binary exited with returncode=-11

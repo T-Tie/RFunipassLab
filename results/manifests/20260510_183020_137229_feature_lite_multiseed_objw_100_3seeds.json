@@ -1,0 +1,47 @@
+{
+  "batch_id": "20260510_183020_137229_feature_lite_multiseed_objw_100_3seeds",
+  "runner_kind": "multi_seed",
+  "experiment_name": "feature_lite",
+  "batch_started_at": "2026-05-10T18:30:20",
+  "batch_finished_at": "2026-05-10T20:18:44",
+  "dry_run": false,
+  "continue_on_error": true,
+  "seed_start": 456,
+  "seed_count": 3,
+  "seeds": [
+    456,
+    457,
+    458
+  ],
+  "split_seed_offset": 0,
+  "members": [
+    {
+      "run_id": "20260510_183020_137491_feature_lite_seed456",
+      "experiment_seed": 456,
+      "split_seed": 456,
+      "exit_code": 0,
+      "manifest_path": "/root/exp/RFunipassLab/results/manifests/20260510_183020_137491_feature_lite_seed456.json",
+      "log_path": "/root/exp/RFunipassLab/results/logs/20260510_183020_137491_feature_lite_seed456.log",
+      "result_json_path": "/root/exp/RFunipassLab/results/instrcount/summaries/20260510_183020_137491_feature_lite_seed456.json"
+    },
+    {
+      "run_id": "20260510_191321_401631_feature_lite_seed457",
+      "experiment_seed": 457,
+      "split_seed": 457,
+      "exit_code": 0,
+      "manifest_path": "/root/exp/RFunipassLab/results/manifests/20260510_191321_401631_feature_lite_seed457.json",
+      "log_path": "/root/exp/RFunipassLab/results/logs/20260510_191321_401631_feature_lite_seed457.log",
+      "result_json_path": "/root/exp/RFunipassLab/results/instrcount/summaries/20260510_191321_401631_feature_lite_seed457.json"
+    },
+    {
+      "run_id": "20260510_195248_525320_feature_lite_seed458",
+      "experiment_seed": 458,
+      "split_seed": 458,
+      "exit_code": 0,
+      "manifest_path": "/root/exp/RFunipassLab/results/manifests/20260510_195248_525320_feature_lite_seed458.json",
+      "log_path": "/root/exp/RFunipassLab/results/logs/20260510_195248_525320_feature_lite_seed458.log",
+      "result_json_path": "/root/exp/RFunipassLab/results/instrcount/summaries/20260510_195248_525320_feature_lite_seed458.json"
+    }
+  ],
+  "failed_run_ids": []
+}

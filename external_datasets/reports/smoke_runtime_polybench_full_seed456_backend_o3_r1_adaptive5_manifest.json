@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-05-09T18:29:30",
+  "started_at": "2026-05-09T18:28:57",
+  "finished_at": "2026-05-09T18:29:30",
+  "runner_kind": "external_runtime_multi_seed_matched_backend",
+  "tag": "smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5",
+  "source_batch_csv": "results/reports/20260423_181846_348878_feature_lite_multiseed_instrcount_lite_wrap_10seeds.csv",
+  "suite": "polybench_full",
+  "benchmarks": [
+    "2mm",
+    "gemm"
+  ],
+  "benchmark_count": 2,
+  "seeds": [
+    456
+  ],
+  "backend_profile": "o3",
+  "backend_flag": "-O3",
+  "matched_baseline": "o3",
+  "matched_baseline_pipeline": "-O3",
+  "compile_command_template": "clang -x ir <optimized.ll> <backend_flag> -Xclang -disable-llvm-passes -lm -o <binary>",
+  "post_ir_llvm_passes_disabled": true,
+  "repeat": 1,
+  "timeout": 300.0,
+  "adaptive_timeout_factor": 5.0,
+  "min_runtime_timeout": 5.0,
+  "opt_timeout": 180.0,
+  "compile_timeout": 180.0,
+  "tie_threshold": 0.01,
+  "metric": "polybench_seconds",
+  "frontend_mode": "canonical",
+  "llvm_tools_path": "/root/llvm/llvm-project-21/build/bin",
+  "llvm_versions": {
+    "clang": "clang version 21.1.8 (https://github.com/llvm/llvm-project.git 2078da43e25a4623cab2d0d60decddf709aaea28)",
+    "opt": "LLVM (http://llvm.org/):"
+  },
+  "host": {
+    "platform": "Linux-6.8.0-110-generic-x86_64-with-glibc2.39",
+    "machine": "x86_64",
+    "processor": "x86_64",
+    "python": "3.13.5",
+    "cpu_model": "Intel(R) Xeon(R) Gold 6430",
+    "meminfo_memtotal": "1056483912 kB"
+  },
+  "source_roots": {
+    "external_sources": "/root/exp/RFunipassLab/external_datasets/sources",
+    "external_ir": "/root/exp/RFunipassLab/external_datasets/ir/polybench_full",
+    "build_root": "/root/exp/RFunipassLab/external_datasets/build/runtime_matched/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5"
+  },
+  "outputs": {
+    "raw_timings_csv": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_raw_timings.csv",
+    "per_pipeline_csv": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_per_pipeline.csv",
+    "per_benchmark_seed_csv": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_per_benchmark_seed.csv",
+    "per_seed_csv": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_per_seed.csv",
+    "aggregate_csv": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_aggregate.csv",
+    "summary_md": "/root/exp/RFunipassLab/external_datasets/reports/smoke_runtime_polybench_full_seed456_backend_o3_r1_adaptive5_summary.md"
+  },
+  "failures": [
+    {
+      "stage": "run",
+      "benchmark": "2mm",
+      "seed": "456",
+      "pipeline_label": "universal",
+      "repeat_index": 1,
+      "error": "runtime timeout after 11.68267s"
+    },
+    {
+      "stage": "run",
+      "benchmark": "gemm",
+      "seed": "456",
+      "pipeline_label": "universal",
+      "repeat_index": 1,
+      "error": "runtime timeout after 5.0s"
+    }
+  ]
+}

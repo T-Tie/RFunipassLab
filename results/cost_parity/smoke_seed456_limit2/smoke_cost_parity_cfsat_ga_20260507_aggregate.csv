@@ -1,0 +1,2 @@
+strategy,seed_count,matched_seed_count,equivalent_budget_median,perprogram_eval_count_mean,perprogram_eval_count_ci95_low,perprogram_eval_count_ci95_high,rfunipass_eval_count_mean,eval_ratio_mean,eval_ratio_ci95_low,eval_ratio_ci95_high,perprogram_objective_mean
+cfsat_ga,1,0,,2.0,2.0,2.0,40600.0,4.926108374384237e-05,4.926108374384237e-05,4.926108374384237e-05,1.1346213895394224

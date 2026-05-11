@@ -1,0 +1,2 @@
+seed,program_count,finite_ratio_count,geomean_ratio_vs_o3,mean_ratio_vs_o3,median_ratio_vs_o3,speedup_vs_o3,geomean_ratio_vs_none,improved,tied,worsened,timeout,invalid,worsen_rate,invalid_rate,worsen_or_invalid_rate
+456,2,2,2.3305504051926986,3.0431465191143854,3.0431465191143854,0.42908318900629666,1.5615660054773983,0,0,2,1,0,1.0,0.0,1.0

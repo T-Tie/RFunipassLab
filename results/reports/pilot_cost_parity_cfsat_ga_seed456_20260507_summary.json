@@ -1,0 +1,14 @@
+{
+  "target_manifest_path": "results/cost_parity/poj_10seed_full_targets_20260507/rfunipass_targets_manifest.json",
+  "sweep_manifest_paths": [
+    "results/cost_parity/poj_10seed_full_targets_20260507/perprogram_budget_sweep_pilot_cost_parity_cfsat_ga_seed456_20260507.json"
+  ],
+  "match_field": "matched_by_objective",
+  "epsilon": 0.005,
+  "worsen_slack": 0.02,
+  "curve_csv": "results/reports/pilot_cost_parity_cfsat_ga_seed456_20260507_curve.csv",
+  "equivalent_budget_csv": "results/reports/pilot_cost_parity_cfsat_ga_seed456_20260507_equivalent_budget.csv",
+  "aggregate_csv": "results/reports/pilot_cost_parity_cfsat_ga_seed456_20260507_aggregate.csv",
+  "summary_md": "results/reports/pilot_cost_parity_cfsat_ga_seed456_20260507_summary.md",
+  "curve_svg": "results/reports/pilot_cost_parity_cfsat_ga_seed456_20260507_curve.svg"
+}

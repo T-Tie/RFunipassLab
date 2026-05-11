@@ -1,0 +1,64 @@
+Run ID: 20260507_174316_161538_compilergym_mixed_main_seed456_split456
+Suites: cbench, blas, opencv, mibench, chstone, tensorflow, npb
+Manifest: /root/exp/PerProgramAutoTune/datasets/compiler_gym_llvm21/manifests/compilergym_baseline_ir_manifest.json
+Train pool: 300, test: 732
+Train quotas: {'cbench': 3, 'blas': 47, 'opencv': 53, 'mibench': 12, 'chstone': 3, 'tensorflow': 147, 'npb': 35}
+Seed sequences: 19 (singletons)
+Preparing objective backend for 1032 unique programs...
+============================================================
+目标类型:      instrcount
+目标基准:      -Oz
+基准指标:      -Oz 基准指令数
+优化指标:      归一化指令数
+输入程序数:    300
+输入次优序列数: 19
+测试程序数:    732
+Pass 词表大小: 19
+协同边数:      176
+自环 pass 数:  3
+序列长度上限:  120
+Loop 合法化策略: wrap
+实验种子:      456
+划分种子:      456
+特征模式:      lite
+RF 特征维度:   31
+词表: ['module(attributor)', 'module(scc-oz-module-inliner)', 'cgscc(attributor-cgscc)', 'function(dse)', 'function(jump-threading)', 'function(mem2reg)', 'function(memcpyopt)', 'function(newgvn)', 'loop(loop-simplifycfg)', 'module(iroutliner)', 'function(dce)', 'function(instsimplify)', 'function(reassociate)', 'function(gvn-hoist)', 'module(elim-avail-extern)', 'module(globalopt)', 'function(lower-switch)', 'function(gvn-sink)', 'module(inferattrs)']
+多目标权重:    mean=1.0, worsen=0.15, highvar=0.0
+
+[Step 1.5] 训练程序切分...
+  search_train 程序数: 200
+  validation 程序数:   100
+  split_signature(search_train): e69cc42435e65d3211e48ee5ac8d43cab540f83b
+  split_signature(validation):   f321e3d496d37c262a9e891f50c438f47e7e092d
+  split_signature(test):         e884fd6c4c2163ea569d6c2c3f2d498bb53915fc
+
+[Step 2] 计算 search_train 程序 -Oz 基准指令数...
+[Step 2b] 计算 validation 程序 -Oz 基准指令数...
+[Step 2c] 计算测试集程序 -Oz 基准指令数...
+
+[Step 3] 评估初始 seed 序列（共 19 条）...
+
+[Step 4] 开始贝叶斯优化（100 轮）...
+GA search time: 4.15s, candidates: 456
+  [iter   1/100] search_obj=1.1207  search_best=1.0295  validation_best=1.0364  EI=0.0214  rnum=256.0  len=7  syn_rate=0.02  mean=1.0269  worsen=62.50%  highvar=0.00%
+GA search time: 2.40s, candidates: 456
+  [iter   2/100] search_obj=1.0600  search_best=1.0295  validation_best=1.0364  EI=0.0214  rnum=256.0  len=4  syn_rate=0.00  mean=1.0157  worsen=29.50%  highvar=0.00%
+GA search time: 1.72s, candidates: 455
+  [iter   3/100] search_obj=1.0273  search_best=1.0273  validation_best=1.0362  EI=0.0301  rnum=256.0  len=3  syn_rate=0.00  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 0.77s, candidates: 455
+  [iter   4/100] search_obj=1.0236  search_best=1.0236  validation_best=1.0312  EI=0.0329  rnum=255.9  len=2  syn_rate=0.01  mean=0.9974  worsen=17.50%  highvar=0.00%
+GA search time: 1.06s, candidates: 455
+  [iter   5/100] search_obj=1.0273  search_best=1.0236  validation_best=1.0312  EI=0.0301  rnum=255.8  len=9  syn_rate=0.01  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 1.13s, candidates: 455
+  [iter   6/100] search_obj=1.0295  search_best=1.0236  validation_best=1.0312  EI=0.0316  rnum=255.6  len=2  syn_rate=0.00  mean=0.9980  worsen=21.00%  highvar=0.00%
+GA search time: 0.92s, candidates: 455
+  [iter   7/100] search_obj=1.0084  search_best=1.0084  validation_best=1.0147  EI=0.0304  rnum=255.4  len=24  syn_rate=0.01  mean=0.9829  worsen=17.00%  highvar=0.00%
+GA search time: 1.16s, candidates: 455
+  [iter   8/100] search_obj=1.0273  search_best=1.0084  validation_best=1.0147  EI=0.0313  rnum=255.1  len=23  syn_rate=0.00  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 1.44s, candidates: 454
+  [iter   9/100] search_obj=1.0273  search_best=1.0084  validation_best=1.0147  EI=0.0320  rnum=254.8  len=24  syn_rate=0.00  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 1.52s, candidates: 454
+  [iter  10/100] search_obj=1.0272  search_best=1.0084  validation_best=1.0147  EI=0.0156  rnum=254.4  len=52  syn_rate=0.01  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 2.06s, candidates: 454
+  [iter  11/100] search_obj=1.0273  search_best=1.0084  validation_best=1.0147  EI=0.0207  rnum=254.0  len=43  syn_rate=0.00  mean=0.9980  worsen=19.50%  highvar=0.00%
+GA search time: 2.86s, candidates: 453

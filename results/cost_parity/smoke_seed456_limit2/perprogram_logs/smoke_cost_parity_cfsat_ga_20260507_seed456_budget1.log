@@ -1,0 +1,5 @@
+$ /root/miniconda3/bin/python run_per_program_autotune.py --program-csv /root/exp/RFunipassLab/results/cost_parity/smoke_seed456_limit2/seed456_test_programs.csv --program-csv-column filename --program-csv-suite rfunipass_seed456_test --program-csv-mode plain --budget 1 --seed 456 --baseline oz --llvm-tools /root/llvm/llvm-project-21/build/bin --loop-policy wrap --max-seq-len 120 --jobs 1 --tag smoke_cost_parity_cfsat_ga_20260507_seed456_budget1 --strategy cfsat_ga
+[1/2][1/1] rfunipass_seed456_test/7_984 strategy=cfsat_ga seed=1596558639
+[2/2][1/1] rfunipass_seed456_test/94_2260 strategy=cfsat_ga seed=1181584549
+[done] run_dir=/root/exp/PerProgramAutoTune/results/20260507_150104_632394_smoke_cost_parity_cfsat_ga_20260507_seed456_budget1
+[done] report=/root/exp/PerProgramAutoTune/results/20260507_150104_632394_smoke_cost_parity_cfsat_ga_20260507_seed456_budget1/REPORT.md

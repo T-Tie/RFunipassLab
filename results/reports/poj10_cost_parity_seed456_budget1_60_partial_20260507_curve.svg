@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<style>text{font-family:Arial,sans-serif;font-size:13px;fill:#222}.title{font-size:20px;font-weight:700}.axis{stroke:#444;stroke-width:1}.grid{stroke:#ddd;stroke-width:1}.line{fill:none;stroke-width:2.5}.rfun{stroke:#111;stroke-width:2;stroke-dasharray:6 4}</style>
+<rect width="100%" height="100%" fill="white"/>
+<text x="30" y="28" class="title">Cost-to-Match Budget Curve</text>
+<line x1="80" y1="40" x2="80" y2="450" class="axis"/>
+<line x1="80" y1="450" x2="870" y2="450" class="axis"/>
+<line x1="80.00" y1="40" x2="80.00" y2="450" class="grid"/>
+<text x="72.00" y="474">1</text>
+<line x1="211.67" y1="40" x2="211.67" y2="450" class="grid"/>
+<text x="203.67" y="474">2</text>
+<line x1="343.33" y1="40" x2="343.33" y2="450" class="grid"/>
+<text x="335.33" y="474">4</text>
+<line x1="475.00" y1="40" x2="475.00" y2="450" class="grid"/>
+<text x="467.00" y="474">8</text>
+<line x1="606.67" y1="40" x2="606.67" y2="450" class="grid"/>
+<text x="598.67" y="474">16</text>
+<line x1="738.33" y1="40" x2="738.33" y2="450" class="grid"/>
+<text x="730.33" y="474">30</text>
+<line x1="870.00" y1="40" x2="870.00" y2="450" class="grid"/>
+<text x="862.00" y="474">60</text>
+<line x1="80" y1="397.53" x2="870" y2="397.53" class="rfun"/>
+<text x="710" y="389.53">RFunipass objective=0.769</text>
+<polyline points="80.00,300.97 211.67,342.49 343.33,370.22 475.00,394.47 606.67,417.91 738.33,430.97 870.00,440.54" class="line" stroke="#2f6f9f"/>
+<circle cx="80.00" cy="300.97" r="4" fill="#2f6f9f"/>
+<circle cx="211.67" cy="342.49" r="4" fill="#2f6f9f"/>
+<circle cx="343.33" cy="370.22" r="4" fill="#2f6f9f"/>
+<circle cx="475.00" cy="394.47" r="4" fill="#2f6f9f"/>
+<circle cx="606.67" cy="417.91" r="4" fill="#2f6f9f"/>
+<circle cx="738.33" cy="430.97" r="4" fill="#2f6f9f"/>
+<circle cx="870.00" cy="440.54" r="4" fill="#2f6f9f"/>
+<text x="92" y="62" fill="#2f6f9f">cfsat_ga</text>
+<polyline points="80.00,68.42 211.67,163.55 343.33,242.04 475.00,269.38 606.67,286.79 738.33,298.04 870.00,307.66" class="line" stroke="#b35c1e"/>
+<circle cx="80.00" cy="68.42" r="4" fill="#b35c1e"/>
+<circle cx="211.67" cy="163.55" r="4" fill="#b35c1e"/>
+<circle cx="343.33" cy="242.04" r="4" fill="#b35c1e"/>
+<circle cx="475.00" cy="269.38" r="4" fill="#b35c1e"/>
+<circle cx="606.67" cy="286.79" r="4" fill="#b35c1e"/>
+<circle cx="738.33" cy="298.04" r="4" fill="#b35c1e"/>
+<circle cx="870.00" cy="307.66" r="4" fill="#b35c1e"/>
+<text x="92" y="82" fill="#b35c1e">ga_bitvector</text>
+<polyline points="80.00,49.46 211.67,153.66 343.33,225.73 475.00,266.78 606.67,286.96 738.33,297.30 870.00,307.27" class="line" stroke="#4b8f29"/>
+<circle cx="80.00" cy="49.46" r="4" fill="#4b8f29"/>
+<circle cx="211.67" cy="153.66" r="4" fill="#4b8f29"/>
+<circle cx="343.33" cy="225.73" r="4" fill="#4b8f29"/>
+<circle cx="475.00" cy="266.78" r="4" fill="#4b8f29"/>
+<circle cx="606.67" cy="286.96" r="4" fill="#4b8f29"/>
+<circle cx="738.33" cy="297.30" r="4" fill="#4b8f29"/>
+<circle cx="870.00" cy="307.27" r="4" fill="#4b8f29"/>
+<text x="92" y="102" fill="#4b8f29">rio_random</text>
+<text x="415.00" y="500">Per-program budget per target program</text>
+<text transform="translate(22,285) rotate(-90)">Target objective (lower is better)</text>
+</svg>
